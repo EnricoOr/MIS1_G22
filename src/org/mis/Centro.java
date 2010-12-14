@@ -1,4 +1,4 @@
-package org.mis;
+package mis;
 
 
 public class Centro {

@@ -1,4 +1,4 @@
-package org.mis;
+package mis;
 
 import java.util.*;
 import java.io.*;
