@@ -1,4 +1,4 @@
-package mis;
+package org.mis;
 //librerie per il log grafico
 import java.awt.Component;
 import javax.swing.JOptionPane;//*/

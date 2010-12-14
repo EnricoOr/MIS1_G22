@@ -1,4 +1,4 @@
-package mis;
+package org.mis;
 
 public class Job {
 	private int rif;

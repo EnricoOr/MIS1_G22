@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mis;
+package org.mis;
 
 /**
  *

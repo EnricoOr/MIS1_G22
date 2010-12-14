@@ -1,4 +1,4 @@
-package mis;
+package org.mis;
 
 public class Osservazione extends Evento{
 

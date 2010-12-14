@@ -1,4 +1,4 @@
-package mis;
+package org.mis;
 
 public abstract class Generatore {
     

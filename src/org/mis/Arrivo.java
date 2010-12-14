@@ -1,5 +1,5 @@
 
-package mis;
+package org.mis;
 
 
 public class Arrivo extends Evento{
