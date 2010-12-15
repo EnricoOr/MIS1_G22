@@ -3,6 +3,8 @@ package org.mis;
 import java.util.*;
 import java.io.*;
 
+import org.mis.gen.GeneratoreUniforme;
+
 public class Main {
 	       
 	public static double calcolaMediaCampionaria(ArrayList<Integer> v){

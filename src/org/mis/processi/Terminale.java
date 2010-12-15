@@ -3,7 +3,9 @@
  * and open the template in the editor.
  */
 
-package org.mis;
+package org.mis.processi;
+
+import org.mis.gen.GeneratorePoissoniano;
 
 /**
  *

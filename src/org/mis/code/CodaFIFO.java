@@ -1,4 +1,6 @@
-package org.mis;
+package org.mis.code;
+
+import org.mis.processi.Job;
 
 
 public class CodaFIFO extends Coda {

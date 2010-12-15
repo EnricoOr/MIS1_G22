@@ -1,4 +1,4 @@
-package org.mis;
+package org.mis.gen;
 
 public class GeneratoreKerlangiano extends Generatore{
 	private int k;

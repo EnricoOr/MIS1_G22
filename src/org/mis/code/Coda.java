@@ -1,6 +1,8 @@
-package org.mis;
+package org.mis.code;
 
 import java.util.ArrayList;
+
+import org.mis.processi.Job;
 public abstract class Coda {
         protected ArrayList<Job> coda=new ArrayList<Job>();
         

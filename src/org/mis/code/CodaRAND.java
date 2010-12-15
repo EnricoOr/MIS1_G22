@@ -1,4 +1,7 @@
-package org.mis;
+package org.mis.code;
+
+import org.mis.gen.GeneratoreUniforme;
+import org.mis.processi.Job;
 
 
 public class CodaRAND extends Coda {

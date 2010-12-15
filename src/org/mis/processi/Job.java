@@ -1,4 +1,4 @@
-package org.mis;
+package org.mis.processi;
 
 public class Job {
 	private int rif;
