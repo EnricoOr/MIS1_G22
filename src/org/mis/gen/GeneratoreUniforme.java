@@ -56,7 +56,7 @@ public class GeneratoreUniforme extends Generatore {
         media2=somma2/numeroGenerazioni;
         varianza=media2-(media*media);
         System.out.println("Media: " + media);
-        System.out.println("Media dei uadrati: " + media2);
+        System.out.println("Media dei quadrati: " + media2);
         System.out.println("Varianza: " + varianza);
     }
     

@@ -1,5 +1,7 @@
 package org.mis;
 
+import org.mis.processi.Job;
+
 
 public class FineCPU extends Evento {
        

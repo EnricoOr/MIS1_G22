@@ -12,18 +12,22 @@ public class GeneratoreEsponenziale extends Generatore{
 		this.g=new GeneratoreUniforme(seme);
                 this.numeroGenerazioni=0;
 	}
+	
 	@Override
 	public double nextNumber()
 	{
                 this.numeroGenerazioni++;
 		return ((-this.ts)*Math.log(this.g.nextNumber()));
 	}    
+	
 	public long getNumeroGenerazioni(){
         return this.numeroGenerazioni;
     }  
+	
     public double getMedia(){
         return this.ts;
         }      
+    
     public void calcolaMediaVarianza(GeneratoreEsponenziale gen, int numeroGenerazioni){
         double media,media2,varianza,generato;
         double somma=0;

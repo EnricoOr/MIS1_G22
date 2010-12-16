@@ -2,6 +2,9 @@ package org.mis;
 //librerie per il log grafico
 import java.awt.Component;
 import javax.swing.JOptionPane;//*/
+
+import org.mis.gen.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -229,8 +232,7 @@ public class Sequenziatore {
     public boolean insiemePassivo=true;
     private File file;
     private FileOutputStream fos;
-    public CodaFIFO codaJobEsterni= new CodaFIFO();
-    private GeneratorePoissoniano sorgente;
+    private GeneratoreIperEsponenziale sorgente;
     private int numeroJobAttivi;
     private boolean[] tokenPool;
 	public double tempoDiCicloUltimoJob;

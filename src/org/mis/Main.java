@@ -3,7 +3,7 @@ package org.mis;
 import java.util.*;
 import java.io.*;
 
-import org.mis.gen.GeneratoreUniforme;
+import org.mis.gen.*;
 
 public class Main {
 	       
@@ -47,6 +47,7 @@ public class Main {
 		ps.println(k + "\t" + new Double(sm).toString().replace(".", ",") + "\t" + new Double(sv).toString().replace(".", ","));
 		medie.clear();	
 		}
+	
         public static void stimatoriMV2(int k, ArrayList<Double> tempiDiRisposta, PrintStream ps){
 		ArrayList<Double> medie=new ArrayList<Double>();
                 double m =0;
@@ -58,10 +59,11 @@ public class Main {
 			m=0;
 			medie.add(sm);
 		}
-		sv=calcolaVarianzaCampionaria(medie,sm);
+		export	sv=calcolaVarianzaCampionaria(medie,sm);
 		ps.println(k + "\t" + new Double(sm).toString().replace(".", ",") + "\t" + new Double(sv).toString().replace(".", ","));
 		medie.clear();	
 		}
+        
     /*private static int trovaMinimo(ArrayList<Integer> jobTerminati) {      
     	int temp =10000;  
         for(int i=0; i<jobTerminati.size(); i++){
@@ -74,21 +76,17 @@ public class Main {
 		
     
     public static void main(String[] args) {
-     /* Sezione per la verifica dei generatori
-      * System.out.println("Generatore Uniforme:");
+     /* Sezione per la verifica dei generatori*/ 
+    	System.out.println("Generatore Uniforme:");
         GeneratoreUniforme gen = new GeneratoreUniforme(12573);
         gen.calcolaMediaVarianza(gen, 10000);
-        System.out.println("Generatore Esponenziale:");
-        GeneratoreEsponenziale gen2 = new GeneratoreEsponenziale(0.5,3576);
-        gen2.calcolaMediaVarianza(gen2, 10000);
         System.out.println("Generatore IperEsponenziale:");
         GeneratoreIperEsponenziale gen3 = new GeneratoreIperEsponenziale(0.3,0.0394,67551569,196309533);
         gen3.calcolaMediaVarianza(gen3, 10000);
         System.out.println("Generatore KErlangiano:");
         GeneratoreKerlangiano gen4=new GeneratoreKerlangiano(3, 0.05, 897551);
         gen4.calcolaMediaVarianza(gen4, 10000);
-        System.out.println("Generatore Poissoniano");
-        */
+           
     	/*Creazione array per le varie osservazioni fatte
         ArrayList<Integer> jobTerminati = new ArrayList<Integer>();
     	ArrayList<Double> medieOsservazioneD1;
