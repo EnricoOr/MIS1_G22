@@ -1,17 +1,92 @@
-/**
- * 
- */
 package org.mis.processi;
 
+import java.util.Vector;
 
-public class Host extends Centro {
+import org.mis.code.Coda;
+import org.mis.gen.Generatore;
+import org.mis.gen.GeneratoreIperEsponenziale;
+import org.mis.gen.Random;
+import org.mis.gen.Seme;
+import org.mis.gen.Job;
+
+
+/**
+ * La classe stampante e' una classe derivata dalla classe astratta centro. La classe rappresenta 
+ * un centro senza coda poiche' di tipo IS, cioè ha infiniti posti in esecuzione.
+ * @author 
+ * @author 
+ * @author 
+ */
+
+public class Host extends Centro{
+
+	private Esponenziale esp;
+	private final double tx = 0.085;
+	private boolean occupato;
 
 	/**
-	 * 
+	 * E' il costruttore della classe il quale istanzia una stampante, il booleano occupato
+	 * è ovviamente impostato a false essendo il centro di tipo IS.
+	 * La legge di distribuzione nel tempo è esponenziale.
 	 */
-	public Host() {
+	
+	public Host(){
+		super("Host");
+		esp = new Esponenziale(this.tx, new Random(Seme.getSeme()));
+		occupato = false;
+	}
+
+	/**
+	 * Funzione la quale ritorna un tempo con distribuzione esponenziale. E' stato effettuato 
+	 * l'override del metodo della superclasse centro. 
+	 * @return Exp
+	 */
+	
+	@Override
+	public double getTempoCentro() {
+		return esp.nextExp();
+	}
+
+	/**
+	 * Funzione la quale ritorna true se il centro e' occupato e false se il centro è libero. 
+	 * E' un caso particolare perchè la stampante non sarà mai occupata perchè di tipo IS.
+	 * E' stato effettuato l'override del metodo della superclasse centro.
+	 * @return occupato(false)
+	 */
+	
+	@Override
+	public boolean getOccupato() {
+		return occupato;
+	}
+
+
+	@Override
+	public void setOccupato(boolean occ) {
+		this.occupato = occ;
+	}
+
+
+	@Override
+	public Job pop() {
+		return null;
+	}
+
+
+	@Override
+	public void push(Job job) {
 		
 	}
-	
+
+
+	@Override
+	public void salvaStato() {
+		
+	}
+
+
+	@Override
+	public void ripristinaStato() {
+		
+	}
 
 }
