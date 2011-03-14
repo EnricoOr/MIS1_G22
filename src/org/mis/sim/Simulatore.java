@@ -1,10 +1,17 @@
 package org.mis.sim;
 
+import java.util.Collections;
 import java.util.Vector;
+import java.util.List;
 
 import org.mis.processi.*;
 
 /**
+ * genero il tempo
+aggiungo il tempo al simtime add
+chiamo hold(getSimTime)
+aggiungo alla lista di hold
+
  * La classe si occupa di istanziare tutte le componenti del nostro impianto e di avviare la simulazione
  * @author 
  * @author 
@@ -13,19 +20,20 @@ import org.mis.processi.*;
 
 public class Simulatore {
 
-	private static int nClient = 120;
+	private static int nClient = 10;
 	private Cpu cpu;
 	private Disk disk;
 	private Host[] host;
 	private Printer[] stampanti;
 	private Terminale[] client;
 	private Osservazione osservazione;
+	private SimTime clock;
 	private final int run = 50;
 	private final int oss = 6000;
 	private static Log log;
 	
-	public Vector<Processo> Hold;
-	public Vector<Processo> Passivate;
+	public List<Processo> hold;
+	public List<Processo> passivate;
 	
 	private static boolean stab = false;
 	private boolean logging = false;
@@ -61,14 +69,18 @@ public class Simulatore {
 	
 	public void avvia()
 	{
+		passivate = new Vector<Processo>();
+		hold = new Vector<Processo>();
 		
 		log = new Log(1, logging);
 
 		creaCentri();
-		
+		clock = new SimTime();
 		if(stab) osservazione = new Osservazione(run, oss);
 		else osservazione = new Osservazione(run);
+
 		creaJob();
+		
 		
 		
 		System.out.println("***Inizio Simulazione " + nClient +" client ***");
@@ -89,9 +101,9 @@ public class Simulatore {
 		creaHost();
 		creaStampanti();
 		cpu = new Cpu();
-		this.Passivate.add(cpu);
+		this.passivate.add(cpu);
 		disk = new Disk();
-		this.Passivate.add(disk);
+		this.passivate.add(disk);
 	}
 	
 	/**
@@ -104,7 +116,7 @@ public class Simulatore {
 		for(int t=0; t<nClient; t++)
 		{
 			client[t] = new Terminale();
-			this.Passivate.add(client[t]);
+			this.passivate.add(client[t]);
 		}
 	}
 	
@@ -118,7 +130,7 @@ public class Simulatore {
 		for(int t=0; t<nClient; t++)
 		{
 			host[t] = new Host();
-			this.Passivate.add(host[t]);
+			this.passivate.add(host[t]);
 		}
 	}
 	
@@ -132,7 +144,7 @@ public class Simulatore {
 		for(int t=0; t<nClient; t++)
 		{
 			stampanti[t] = new Printer();
-			this.Passivate.add(stampanti[t]);
+			this.passivate.add(stampanti[t]);
 		}
 	}
 		
@@ -144,12 +156,14 @@ public class Simulatore {
 	{
 		for(int t=0; t<nClient; t++)
 		{
-			client[t].nextJob();
-			EventoArrivoUtente e = new EventoArrivoUtente("evento arrivo utente job: " + client[t].getJob().getId(), Calendario.getClock() + client[t].getTempoCentro(), client[t].getJob(), client[t]);
+			clock.add(client[t].getTempoCentro());
+			client[t].hold(clock.getSimTime());
+			passivate.add(client[t]);
+			//client[t].nextJob();
+			Collections.sort(passivate);
 			
-			if(Simulatore.logAcc("5")) log.scrivi(e);
-			
-			calendario.aggiungiEvento(e);
+			if(Simulatore.logAcc("5")) log.scrivi("Client "+t+" in hold");
+
 		}
 	}
 	

@@ -1,10 +1,10 @@
 package org.mis.processi;
 
 
-public abstract class Processo {
+public abstract class Processo implements Comparable<Processo>{
 	private String nome;
 	private Stato state;
-	private double hTime;
+	private Double hTime;
 	
 	
 		
@@ -38,7 +38,7 @@ public abstract class Processo {
 	}
 	
 	public void hold(double temp){
-		this.hTime=temp;
+		hTime=Double.valueOf(temp);
 		this.state=Stato.HOLD;
 	}
 	
@@ -50,9 +50,13 @@ public abstract class Processo {
 		this.state=Stato.PASSIVO;
 	}
 	
-	public double getTime(){
+	public Double getTime(){
 		
 		return hTime;
 	}
+	
+	public int compareTo(Processo other) {
+        return hTime.compareTo(other.hTime);
+    }
 	
 }

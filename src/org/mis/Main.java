@@ -5,6 +5,7 @@ import java.util.*;
 import java.io.*;
 
 import org.mis.gen.*;
+import org.mis.gen.Random;
 import org.mis.sim.*;
 
 
@@ -61,7 +62,7 @@ public class Main {
 		
 		private static void TestGenErlang() {
 			
-			Erlang erl = new Erlang(ix, tx, k);
+			GeneratoreKerlangiano erl = new GeneratoreKerlangiano(ix, tx, k);
 			double tot = 0;
 			double tot2 = 0;
 			double x;
@@ -84,7 +85,7 @@ public class Main {
 		 */
 		
 		private static void TestGenEsp() {
-			Esponenziale exp = new Esponenziale(tx, new Random(Seme.getSeme()));
+			GeneratoreEsponenziale exp = new GeneratoreEsponenziale(tx, new Random(Seme.getSeme()));
 			double tot = 0;
 			double tot2 = 0;
 			double x;
@@ -102,13 +103,13 @@ public class Main {
 		}
 
 		/**
-		 * Funzione che si occupa di eseguire il test del generatore iperesponenziale
+		 * Funzione che si occupa di eseguire il test del generatore iperesponenziale p=0.6
 		 * e di stamparne i risultati
 		 */
 		
 		private static void TestGenIperesp() {
 			Random rand = new Random(Seme.getSeme());
-			IperEsponenziale ipexp = new IperEsponenziale(tx, rand);
+			GeneratoreIperEsponenziale ipexp = new GeneratoreIperEsponenziale(tx, rand, 0.6);
 			double tot = 0;
 			double tot2 = 0;
 			double x;
@@ -120,6 +121,29 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.6)-1)+")\n");
+			ist = new Istogramma("Test generatore iperesponenziale");
+			stampaIst(ist);
+		}
+		
+		/**
+		 * Funzione che si occupa di eseguire il test del generatore iperesponenziale p=0.3
+		 * e di stamparne i risultati
+		 */
+		
+		private static void TestGenIperesp2() {
+			Random rand = new Random(Seme.getSeme());
+			GeneratoreIperEsponenziale ipexp = new GeneratoreIperEsponenziale(tx, rand, 0.3);
+			double tot = 0;
+			double tot2 = 0;
+			double x;
+			resetIst();
+			for (int i = 0; i< N; ++i) {
+				x = ipexp.nextIperExp();
+				istogramma[(int)(x*range)]++;
+				tot += x;
+				tot2 += Math.pow(x,2);
+			}
+			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.3)-1)+")\n");
 			ist = new Istogramma("Test generatore iperesponenziale");
 			stampaIst(ist);
 		}
@@ -163,6 +187,7 @@ public class Main {
 					TestGenErlang();
 					TestGenEsp();
 					TestGenIperesp();
+					TestGenIperesp2();
 					k = 3;
 					TestGenErlang();
 					k = 12;
