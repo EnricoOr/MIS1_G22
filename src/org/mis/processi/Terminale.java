@@ -7,12 +7,10 @@ package org.mis.processi;
 
 import java.util.Vector;
 
-import org.mis.code.Coda;
-import org.mis.gen.Generatore;
 import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
-import org.mis.gen.Job;
+import org.mis.sim.Simulatore;
 
 /**
  * La classe terminale è una classe derivata dalla classe astratta centro. La classe rappresenta 
@@ -23,14 +21,13 @@ import org.mis.gen.Job;
  * @author 
  */
 
-public class Terminale extends Centro{
+public class Terminale extends Processo{
 
 	private static int id = 0;
 	private static int identificatore=0; 
-	private Erlang gen2erl;
+	private Random rand = new Random(Seme.getSeme());
+	private GeneratoreIperEsponenziale genIper3;
 	private final double tx = 10;
-	private final int k =2;
-	private boolean occupato;
 	private Job job = null; 
 
 	/**
@@ -38,10 +35,10 @@ public class Terminale extends Centro{
 	 * La legge di distribuzione nel tempo è la 2-erlangiana.
 	 */
 	
-	public Terminali(){
+	public Terminale(){
 		super("Terminale " + (identificatore=(id++) % Simulatore.getNClient()));
-		gen2erl = new Erlang(Seme.getSeme(), this.tx, this.k);
-		occupato = false;
+		genIper3 = new GeneratoreIperEsponenziale(tx, rand, 0.3);
+
 	}
 
 	/**
@@ -56,13 +53,13 @@ public class Terminale extends Centro{
 	/**
 	 * Funzione la quale ritorna un tempo con distribuzione 2-erlagiana. E' stato effettuato 
 	 * l'override del metodo della superclasse centro. 
-	 * @return 2-Erl
+	 * @return genIper3
 	 */
 	
-	@Override
+
 	public double getTempoCentro() {
 		
-		return gen2erl.nextErlang();
+		return genIper3.nextIperExp();
 	}
 
 	/**
@@ -84,38 +81,6 @@ public class Terminale extends Centro{
 	public Job getJob()
 	{
 		return job;
-	}
-
-	/**
-	 * Funzione la quale ritorna true se il centro e' occupato e false se il centro è libero. 
-	 * E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return occupato
-	 */
-	
-	@Override
-	public boolean getOccupato() {
-		return occupato;
-	}
-
-	/**
-	 * Funzione la quale setta a true il booleano occupato. E' stato effettuato l'override del 
-	 * metodo della superclasse centro.
-	 * @param occ
-	 */
-	
-	@Override
-	public void setOccupato(boolean occ) {
-		this.occupato = occ;
-	}
-
-	@Override
-	public Job pop() {
-		return null;
-	}
-
-	@Override
-	public void push(Job job) {
-		
 	}
 
 }

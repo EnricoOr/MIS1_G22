@@ -2,24 +2,23 @@ package org.mis.processi;
 
 import java.util.Vector;
 
-import org.mis.code.Coda;
-import org.mis.gen.Generatore;
+import org.mis.code.CodaFIFO;
 import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
-import org.mis.gen.Job;
+
 
 
 /**
- * La classe cpu e' una classe derivata dalla classe astratta centro. La classe rappresenta 
- * un centro con coda di tipo random e tempo con distribuzione iperesponenziale con 
+ * La classe cpu e' una classe derivata dalla classe astratta processo. La classe rappresenta 
+ * un centro con coda di tipo FIFO e tempo con distribuzione iperesponenziale con 
  * probabilità 0,6. 
  * @author 
  * @author 
  * @author 
  */
 
-public class Cpu extends Centro {
+public class Cpu extends Processo {
 
 	private double genIpExp_p06;
 	private GeneratoreIperEsponenziale genIpExp_p06c1;
@@ -29,14 +28,13 @@ public class Cpu extends Centro {
 	private final double txc2 = 0.074;
 	private final double txc3 = 0.0285;
 	private Random rand = new Random(Seme.getSeme());
-	private CodaRand coda1 = new CodaRand("Coda1" + super.getNome(), rand);
-	private CodaRand coda2 = new CodaRand("Coda2" + super.getNome(), rand);
-	private CodaRand coda3 = new CodaRand("Coda3" + super.getNome(), rand);
+	private CodaFIFO coda1 = new CodaFIFO("Coda1" + super.getNome());
+	private CodaFIFO coda2 = new CodaFIFO("Coda2" + super.getNome());
+	private CodaFIFO coda3 = new CodaFIFO("Coda3" + super.getNome());
 	public Vector<Job> coda1s;
 	public Vector<Job> coda2s;
 	public Vector<Job> coda3s;
-	private boolean occupato;
-	private boolean occupatos;
+
 	
 	/**
 	 * E' il costruttore della classe il quale istanzia una cpu.
@@ -44,11 +42,11 @@ public class Cpu extends Centro {
 	 */
 	
 	public Cpu(){
-		super("Cpu");
-		genIpExp_p06c1 = new GeneratoreIperEsponenziale(txc1, rand);
-		genIpExp_p06c2 = new GeneratoreIperEsponenziale(txc2, rand);
-		genIpExp_p06c3 = new GeneratoreIperEsponenziale(txc3, rand);
-		occupato = false;
+		super("CPU");
+		genIpExp_p06c1 = new GeneratoreIperEsponenziale(txc1, rand, 0.6);
+		genIpExp_p06c2 = new GeneratoreIperEsponenziale(txc2, rand, 0.6);
+		genIpExp_p06c3 = new GeneratoreIperEsponenziale(txc3, rand, 0.6);
+
 	}
 	
 	/**
@@ -87,31 +85,11 @@ public class Cpu extends Centro {
 	 * @return IpExp_P06
 	 */
 	
-	@Override
+
 	public double getTempoCentro() {
 		return genIpExp_p06;
 	}
-	
-	/**
-	 * Funzione la quale ritorna true se il centro e' occupato e false se il centro è libero. 
-	 * E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return occupato
-	 */
-	
-	public boolean getOccupato() {
-		return occupato; 
-	}
 
-	/**
-	 * Funzione la quale setta a true il booleano occupato. E' stato effettuato l'override del 
-	 * metodo della superclasse centro.
-	 * @param occ
-	 */
-	
-	@Override
-	public void setOccupato(boolean occ) {
-		this.occupato = occ;
-	}
 
 	/**
 	 * Funzione la quale estrae dalla coda un job in base alla disciplina in gioco 
@@ -119,7 +97,7 @@ public class Cpu extends Centro {
 	 * @return job
 	 */
 	
-	@Override
+
 	public Job pop() {
 		while(true)
 		{
@@ -136,7 +114,7 @@ public class Cpu extends Centro {
 	 * @param job
 	 */
 	
-	@Override
+
 	public void push(Job job) {
 		if(job.getJobClass() == 2) {
 			coda2.push(job);

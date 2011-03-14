@@ -1,28 +1,20 @@
 package org.mis.processi;
 
-import java.util.Vector;
-
-import org.mis.code.Coda;
-import org.mis.gen.Generatore;
-import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
-import org.mis.gen.Job;
+
 
 /**
  * La classe Printer e' una classe derivata dalla classe astratta centro. La classe rappresenta 
- * un centro senza coda poiche' di tipo IS, cioè ha infiniti posti in esecuzione.
+ * un centro senza coda poichè di tipo IS, cioè ha infiniti posti in esecuzione.
  * @author 
  * @author 
  * @author 
  */
 
-public class Printer extends Centro{
+public class Printer extends Processo{
 
-	private Erlang gen12erl;
-	private final int tx = 40;
-	private final int k = 12;
-	private boolean occupato;
+	private Random genUn2_78;
 
 	/**
 	 * E' il costruttore della classe il quale istanzia una stampante, il booleano occupato
@@ -32,43 +24,18 @@ public class Printer extends Centro{
 	
 	public Printer(){
 		super("Stampante");
-		gen12erl = new Erlang(Seme.getSeme(), this.tx, this.k);
-		occupato = false;
+		genUn2_78 = new Random(Seme.getSeme());
 	}
 
 	/**
 	 * Funzione la quale ritorna un tempo con distribuzione 12-erlagiana. E' stato effettuato 
 	 * l'override del metodo della superclasse centro. 
-	 * @return 12-Erl
 	 */
 	
-	@Override
+
 	public double getTempoCentro() {
-		return gen12erl.nextErlang();
+		return genUn2_78.nextNumber2_78();
 	}
 
-	/**
-	 * Funzione la quale ritorna true se il centro e' occupato e false se il centro è libero. 
-	 * E' un caso particolare perchè la stampante non sarà mai occupata perchè di tipo IS.
-	 * E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return occupato(false)
-	 */
-	
-	@Override
-	public boolean getOccupato() {
-		return occupato;
-	}
-
-
-	@Override
-	public void setOccupato(boolean occ) {
-		this.occupato = occ;
-	}
-
-
-	@Override
-	public Job pop() {
-		return null;
-	}
 
 }

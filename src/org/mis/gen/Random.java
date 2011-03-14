@@ -1,11 +1,8 @@
-package generatori;
+package org.mis.gen;
 /**
  * Classe che serve a generare numeri pseudocasuali. Dato un seme "ix" in ingresso, 
  * in base ai parametri consigliati da Gordon a=5^31 (1220703125) e m=2^31 (2147483648), 
  * genera il successivo numero pseudocasuale della sequenza. 
- * @author Valerio Gentile
- * @author Andrea Giancarli
- * @author Alessandro Mastracci
  */
 public class Random {
 	private final long a=(long)Math.pow(5, 13);
@@ -32,5 +29,10 @@ public class Random {
 		ix = (a*ix)%m;
 		return (double) ix/(m-1);	
 	}
+	
+	public int nextNumber2_78(){
+		
+	    return (int)((76*(this.nextNumber()))+2);               
+	} 
 	 
 }

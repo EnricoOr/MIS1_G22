@@ -1,4 +1,4 @@
-package simulatore;
+package org.mis.sim;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,11 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import centri.Centro;
+import org.mis.processi.Processo;
 
-import eventi.Calendario;
-import eventi.Evento;
-import eventi.EventoArrivoUtente;
 
 /**
  * Si occupa della creazione del file di log sul disco e di registrare gli eventi che vengono eseguiti.
@@ -34,7 +31,7 @@ public class Log {
 	 * @param per abilitare il verbose mode.
 	 * @see #creaDir()
 	 */
-	public Log(int n, boolean verbose, Calendario calendario) {
+	public Log(int n, boolean verbose) {
 		this.verbose = verbose;
 		if (verbose) {
 			creaDir();

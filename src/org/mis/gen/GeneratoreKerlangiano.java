@@ -1,44 +1,38 @@
 package org.mis.gen;
 
-public class GeneratoreKerlangiano extends Generatore{
+public class GeneratoreKerlangiano extends Random {
+	private double tx;
 	private int k;
-	private Generatore g;
-    private long numeroGenerazioni;
+	/**
+	 * I tre parametri sono rispettivamente: il seme, la media del centro K-Erlangiano
+	 * e il numero degli stadi del centro K-Erlangiano
+	 * @param ix
+	 * @param tx
+	 * @param k
+	 */
+	public GeneratoreKerlangiano(int ix, double tx, int k ) {
+		super(ix);
+		this.tx = tx;
+		this.k = k;
+		
+	}
 	
-	public GeneratoreKerlangiano(int stadi,double ts,long seme)
-	{
-		this.g=new GeneratoreEsponenziale(ts/stadi,seme);
-		this.k=stadi;
-        this.numeroGenerazioni=0;
+	/**
+	 * Funzione che ritorna il prossimo numero della sequenza 
+	 * pseudocasuale della distribuzione uniforme k-Erlangiana 
+	 * compreso tra 0 e 1.
+	 * @return double nextErlang
+	 */
+	public double nextErlang() {
+		double p;
+		do  {
+			p=1;		
+			for (int i=1; i<=k; i++) {
+				p *= super.nextNumber();
+			}
+		}
+		while (p==0);	
+		return ((-tx/k)*Math.log(p));
 	}
-	@Override
-	public double nextNumber()
-	{
-        this.numeroGenerazioni++;
-		double x=0;
-		for(int i=0;i<k;i++)
-			x+=this.g.nextNumber();           
-		return x;
-	}
-    public long getNumeroGenerazioni(){
-        return this.numeroGenerazioni;
-    }    
-    public void calcolaMediaVarianza(GeneratoreKerlangiano gen, int numeroGenerazioni){
-        double media,media2,varianza,generato;
-        double somma=0;
-        double somma2=0;
-        for (int i=0;i<numeroGenerazioni;i++){
-        	generato=gen.nextNumber();
-            somma+=generato;
-            somma2 += (generato*generato);
-        }
-        media=somma/numeroGenerazioni;
-        media2=somma2/numeroGenerazioni;
-        varianza=media2-(media*media);
-        System.out.println("Media: " + media);
-        System.out.println("Media dei uadrati: " + media2);
-        System.out.println("Varianza: " + varianza);
-    }
-    
-}
 
+}

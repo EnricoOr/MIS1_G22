@@ -1,67 +1,99 @@
 package org.mis.processi;
 
-public class Job {
+public class Job extends Processo {
 	
-	private int rif;
-	private int numcicli;
-	private double tempoNascita;
-	private int cicliFatti;
-    private double tempoIngresso;
-    private double tempoInizioCiclo;
+	private int id;
+	private static int identificatore=0;
+	private int jobClass;
+	private Terminale generatoDa;
+	private double tempoIngrSist; //istante in cui il job è entrato nel sistema
+	private boolean trovato;
 	
-    public Job(int rif, int numcicli){
-		this.rif=rif;
-		this.numcicli=numcicli;
+	public Job(Terminale t){
+		super("job " + identificatore++);
+		id=identificatore;
+		jobClass = 1;
+		generatoDa = t;
+		trovato = false;
 	}
 	
-    public Job(int n , double tempoNascita){
-		this.tempoNascita=tempoNascita;
-		numcicli=n;
-		rif=-1;
+	
+	/**
+	 * Questa funzione restituisce l'id del job
+	 * @return id
+	 */
+	
+	public int getId(){
+		return id;
 	}
 	
-    public double getTempoNascita(){
-		return this.tempoNascita;
-	}     
-    
-    public void setTempoNascita(double t){
-        this.tempoNascita=t;
-    } 
-    
-    public double getTempoIngresso(){
-        return this.tempoIngresso;
-    }    
-    
-    public void setTempoIngresso(double tempo){
-        this.tempoIngresso=tempo;
-    }     
+	/**
+	 * Funzione che serve per impostare la classe del Job
+	 * @param int jc
+	 */
 	
-    public int getrif(){
-		return rif;
+	public void setJobClass(int jc) {
+		jobClass = jc;
 	}
 	
-    public int getnumcicli(){
-		return numcicli;
+	/**
+	 * Funzione che serve per prelevare la classe del Job
+	 * @return
+	 */
+	
+	public int getJobClass() {
+		return jobClass;
 	}
 	
-    public void setRif(int rif){
-		this.rif=rif;
+	/**
+	 * Questa funzione restituisce il terminale che l'ha generato
+	 * @return Terminale generatoDa
+	 */
+	
+	public Terminale getGeneratoDa()
+	{
+		return generatoDa;
 	}
 	
-    public void deccicli(){
-		numcicli--;
-		cicliFatti++;
+	/**
+	 * Questa funzione memorizza il tempo di ingresso del Job nel sistema
+	 * @param tempo
+	 */
+	
+	public void setIngresso(double tempo)
+	{
+		this.tempoIngrSist = tempo;
 	}
 	
-    public int getCicliFatti(){
-		return cicliFatti;
+	/**
+	 * Questa funzione preleva il tempo di ingresso del Job nel sistema
+	 * @return tempoIngrSist
+	 */
+	
+	public double getIngresso()
+	{
+		return this.tempoIngrSist;
+	}
+
+	/**
+	 * Questa funzione memorizza se il Job ha trovato i dati cercati in Disk
+	 * @param trov
+	 */
+	
+	public void setTrovato(boolean trov)
+	{
+		trovato = trov;
 	}
 	
-    public void setTempoInizioCiclo(double tempoInizioCiclo) {
-		this.tempoInizioCiclo = tempoInizioCiclo;
-	}
+	/**
+	 * Questa funzione restituisce true se il Job ha trovato i dati cercati in Disk
+	 * @return
+	 */
 	
-    public double getTempoInizioCiclo() {
-		return tempoInizioCiclo;
+	public boolean getTrovato()
+	{
+		return trovato;
 	}
+
+
 }

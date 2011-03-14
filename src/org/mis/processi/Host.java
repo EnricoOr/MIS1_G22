@@ -1,13 +1,9 @@
 package org.mis.processi;
 
-import java.util.Vector;
 
-import org.mis.code.Coda;
-import org.mis.gen.Generatore;
-import org.mis.gen.GeneratoreIperEsponenziale;
-import org.mis.gen.Random;
+import org.mis.gen.GeneratoreKerlangiano;
 import org.mis.gen.Seme;
-import org.mis.gen.Job;
+import org.mis.processi.Job;
 
 
 /**
@@ -18,11 +14,11 @@ import org.mis.gen.Job;
  * @author 
  */
 
-public class Host extends Centro{
+public class Host extends Processo{
 
-	private Esponenziale esp;
+	private GeneratoreKerlangiano kerl;
 	private final double tx = 0.085;
-	private boolean occupato;
+
 
 	/**
 	 * E' il costruttore della classe il quale istanzia una stampante, il booleano occupato
@@ -32,60 +28,27 @@ public class Host extends Centro{
 	
 	public Host(){
 		super("Host");
-		esp = new Esponenziale(this.tx, new Random(Seme.getSeme()));
-		occupato = false;
+		kerl = new GeneratoreKerlangiano(Seme.getSeme(),this.tx, 3);
 	}
 
 	/**
 	 * Funzione la quale ritorna un tempo con distribuzione esponenziale. E' stato effettuato 
 	 * l'override del metodo della superclasse centro. 
-	 * @return Exp
+	 * @return kerl
 	 */
 	
-	@Override
+
 	public double getTempoCentro() {
-		return esp.nextExp();
-	}
-
-	/**
-	 * Funzione la quale ritorna true se il centro e' occupato e false se il centro è libero. 
-	 * E' un caso particolare perchè la stampante non sarà mai occupata perchè di tipo IS.
-	 * E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return occupato(false)
-	 */
-	
-	@Override
-	public boolean getOccupato() {
-		return occupato;
+		return kerl.nextErlang();
 	}
 
 
-	@Override
-	public void setOccupato(boolean occ) {
-		this.occupato = occ;
-	}
-
-
-	@Override
 	public Job pop() {
 		return null;
 	}
 
 
-	@Override
 	public void push(Job job) {
-		
-	}
-
-
-	@Override
-	public void salvaStato() {
-		
-	}
-
-
-	@Override
-	public void ripristinaStato() {
 		
 	}
 

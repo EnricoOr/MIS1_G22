@@ -1,16 +1,14 @@
-package simulatore;
+package org.mis.sim;
 
-import centri.*;
-import eventi.Calendario;
-import eventi.Evento;
-import eventi.EventoArrivoUtente;
-import eventi.EventoCpu;
+import java.util.Vector;
+
+import org.mis.processi.*;
 
 /**
  * La classe si occupa di istanziare tutte le componenti del nostro impianto e di avviare la simulazione
- * @author Valerio Gentile
- * @author Andrea Giancarli
- * @author Alessandro Mastracci
+ * @author 
+ * @author 
+ * @author 
  */
 
 public class Simulatore {
@@ -19,13 +17,15 @@ public class Simulatore {
 	private Cpu cpu;
 	private Disk disk;
 	private Host[] host;
-	private Stampante[] stampanti;
-	private Terminali[] client;
-	private ReportOsservazione osservazione;
+	private Printer[] stampanti;
+	private Terminale[] client;
+	private Osservazione osservazione;
 	private final int run = 50;
 	private final int oss = 6000;
-	private Calendario calendario;
 	private static Log log;
+	
+	public Vector<Processo> Hold;
+	public Vector<Processo> Passivate;
 	
 	private static boolean stab = false;
 	private boolean logging = false;
@@ -49,7 +49,6 @@ public class Simulatore {
 	public Simulatore(int nClient, boolean stab, boolean log, String logAcc)
 	{
 		Simulatore.nClient = nClient;
-		EventoCpu.resetS();
 		Simulatore.stab = stab;
 		this.logging = log;
 		Simulatore.logAcc = logAcc;
@@ -62,23 +61,20 @@ public class Simulatore {
 	
 	public void avvia()
 	{
-		calendario = new Calendario(this);
 		
-		log = new Log(1, logging, calendario);
+		log = new Log(1, logging);
 
 		creaCentri();
 		
-		if(stab) osservazione = new ReportOsservazione(calendario, run, oss);
-		else osservazione = new ReportOsservazione(calendario, run);
+		if(stab) osservazione = new Osservazione(run, oss);
+		else osservazione = new Osservazione(run);
 		creaJob();
 		
 		
 		System.out.println("***Inizio Simulazione " + nClient +" client ***");
-		boolean continua = true;
-		while (continua) {
-			Evento ev = calendario.prossimoEvento();
-			continua = ev.esecuzioneEvento(calendario);
-		}
+
+		
+		
 		System.out.println("***Fine Simulazione " + nClient +" client ***\n");
 		if(logging) log.close();
 	}
@@ -93,7 +89,9 @@ public class Simulatore {
 		creaHost();
 		creaStampanti();
 		cpu = new Cpu();
+		this.Passivate.add(cpu);
 		disk = new Disk();
+		this.Passivate.add(disk);
 	}
 	
 	/**
@@ -102,10 +100,11 @@ public class Simulatore {
 	
 	public void creaTerminali()
 	{
-		client = new Terminali[nClient];
+		client = new Terminale[nClient];
 		for(int t=0; t<nClient; t++)
 		{
-			client[t] = new Terminali();
+			client[t] = new Terminale();
+			this.Passivate.add(client[t]);
 		}
 	}
 	
@@ -119,6 +118,7 @@ public class Simulatore {
 		for(int t=0; t<nClient; t++)
 		{
 			host[t] = new Host();
+			this.Passivate.add(host[t]);
 		}
 	}
 	
@@ -128,10 +128,11 @@ public class Simulatore {
 	
 	public void creaStampanti()
 	{
-		stampanti = new Stampante[nClient];
+		stampanti = new Printer[nClient];
 		for(int t=0; t<nClient; t++)
 		{
-			stampanti[t] = new Stampante();
+			stampanti[t] = new Printer();
+			this.Passivate.add(stampanti[t]);
 		}
 	}
 		
@@ -207,7 +208,7 @@ public class Simulatore {
 	 * @return stampanti
 	 */
 	
-	public Stampante[] getStampante()
+	public Printer[] getStampante()
 	{
 		return stampanti;
 	}
@@ -217,7 +218,7 @@ public class Simulatore {
 	 * @return osservazione
 	 */
 	
-	public ReportOsservazione getReportOsservazione()
+	public Osservazione getReportOsservazione()
 	{
 		return osservazione;
 	}

@@ -2,12 +2,11 @@ package org.mis.processi;
 
 import java.util.Vector;
 
-import org.mis.code.Coda;
-import org.mis.gen.Generatore;
-import org.mis.gen.GeneratoreIperEsponenziale;
+import org.mis.code.CodaLIFO;
+import org.mis.gen.GeneratoreKerlangiano;;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
-import org.mis.gen.Job;
+
 
 /**
  * La classe disk e' una classe derivata dalla classe astratta centro. La classe rappresenta 
@@ -17,15 +16,13 @@ import org.mis.gen.Job;
  * @author 
  */
 
-public class Disk extends Centro{
+public class Disk extends Processo{
 
-	private CodaLifo coda = new CodaLifo("Coda" + super.getNome());
+	private CodaLIFO coda = new CodaLIFO("Coda" + super.getNome());
 	public Vector<Job> codas;
-	private Erlang gen3erl;
-	private final int k = 3;
-	private final double tx = 0.0330;
-	private boolean occupato;
-	private boolean occupatos;
+	private GeneratoreKerlangiano gen2erl;
+	private final int k = 2;
+	private final double tx = 0.033;
 	private int jobEseguiti;
 	private double TotTempoRisp;
 	private double TotTempoCoda;
@@ -37,41 +34,18 @@ public class Disk extends Centro{
 	
 	public Disk(){
 		super("Disk");
-		gen3erl = new Erlang(Seme.getSeme(), this.tx, this.k);
-		occupato = false;
+		gen2erl = new GeneratoreKerlangiano(Seme.getSeme(), this.tx, this.k);
 	}
 
 	/**
-	 * Funzione la quale ritorna un tempo con distribuzione 3-erlagiana. E' stato effettuato 
+	 * Funzione la quale ritorna un tempo con distribuzione 2-erlagiana. E' stato effettuato 
 	 * l'override del metodo della superclasse centro. 
 	 * @return 3-Erl
 	 */
 	
-	@Override
+
 	public double getTempoCentro() {
-		return gen3erl.nextErlang();
-	}
-
-	/**
-	 * Funzione la quale ritorna true se il centro e' occupato e false se il centro è libero. 
-	 * E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return occupato
-	 */
-	
-	@Override
-	public boolean getOccupato() {
-		return occupato;
-	}
-
-	/**
-	 * Funzione la quale setta a true il booleano occupato. E' stato effettuato l'override del 
-	 * metodo della superclasse centro.
-	 * @param occ
-	 */
-	
-	@Override
-	public void setOccupato(boolean occ) {
-		this.occupato = occ;
+		return gen2erl.nextErlang();
 	}
 
 	/**
@@ -80,7 +54,7 @@ public class Disk extends Centro{
 	 * @return job
 	 */
 
-	@Override
+
 	public Job pop() {
 		return coda.pop();
 	}
@@ -91,7 +65,7 @@ public class Disk extends Centro{
 	 * @param job
 	 */
 	
-	@Override
+
 	public void push(Job job) {
 		coda.push(job);
 	}
