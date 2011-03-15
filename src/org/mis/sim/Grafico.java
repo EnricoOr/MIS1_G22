@@ -1,4 +1,4 @@
-package simulatore; 
+package org.mis.sim; 
 
 
 import java.awt.Color;
