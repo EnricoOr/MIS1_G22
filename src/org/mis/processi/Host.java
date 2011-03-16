@@ -18,6 +18,8 @@ public class Host extends Processo{
 
 	private GeneratoreKerlangiano kerl;
 	private final double tx = 0.085;
+	private Job current;
+
 
 
 	/**
@@ -41,15 +43,15 @@ public class Host extends Processo{
 	public double getTempoCentro() {
 		return kerl.nextErlang();
 	}
-
-
-	public Job pop() {
-		return null;
+	
+	public void setCurJob(Job c){
+		current=c;
 	}
 
 
-	public void push(Job job) {
+	public Job getJobCorrente(){
 		
+		return current;
 	}
 
 }

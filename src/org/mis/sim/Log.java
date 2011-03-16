@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.mis.processi.Job;
 import org.mis.processi.Processo;
 
 
@@ -120,9 +121,9 @@ public class Log {
 	 * @return clock
 	 */
 	
-	public double tempo()
+	public double tempo(SimTime t)
 	{
-		return tronca(Calendario.getClock());
+		return tronca(t.getSimTime());
 	}
 	
 	/**
@@ -130,9 +131,9 @@ public class Log {
 	 * @return clock
 	 */
 	
-	public double tempo2()
+	public double tempo2(SimTime t)
 	{
-		return Calendario.getClock();
+		return t.getSimTime();
 	}
 	
 	/**
@@ -164,8 +165,8 @@ public class Log {
 	/**
 	 * Questa funzione stampa l'evento fine simulazione
 	 */
-	public void scrivi() {
-			scrivi("{" + tempo() + "} La simulazione finisce.");
+	public void scrivi(SimTime t) {
+			scrivi("{" + tempo(t) + "} La simulazione finisce.");
 	}
 	
 	/**
@@ -173,27 +174,27 @@ public class Log {
 	 * @param job
 	 * @param classe
 	 */
-	public void scrivi(Job job, int classe) {
-		scrivi("{" + tempo() + "} Il " + job.getNome() + " diventa di classe " + classe + ".");
+	public void scrivi(Job job, int classe, SimTime t) {
+		scrivi("{" + tempo(t) + "} Il " + job.getNome() + " diventa di classe " + classe + ".");
 	}
 
 	/**
 	 * Questa funzione stampa che il centro è libero
 	 * @param centro
 	 */
-	public void scrivi(Centro centro)
+	public void scrivi(Processo centro, SimTime t)
 	{
-		scrivi("{" + tempo() + "} Il " + centro.getNome() + " è ora libero.");
+		scrivi("{" + tempo(t) + "} Il " + centro.getNome() + " è ora libero.");
 	}
 	
 	/**
 	 * Questa funzione stampa l'istante in cui prendiamo il tempo per il TMR
 	 * @param centro
 	 */
-	public void scriviTMR(Job job)
+	public void scriviTMR(Job job, SimTime t)
 	{
 		num++;
-		scrivi("{" + tempo() + "} -------------------------------------------------------- Il " + job.getNome() + " sta andando verso stampante. TMR " + (tempo2()-job.getIngresso()) + " num: " + num);
+		scrivi("{" + tempo(t) + "} -------------------------------------------------------- Il " + job.getNome() + " sta andando verso stampante. TMR " + (tempo2(t)-job.getIngresso()) + " num: " + num);
 	}
 	
 	/**
@@ -211,8 +212,8 @@ public class Log {
 	 * @param job attivo
 	 * @param centro d'uscita
 	 */
-	public void scrivi(Job jobEseguito, Centro centro) {
-		scrivi("{" + tempo() + "} Il " + jobEseguito.getNome() + " esce da <" +
+	public void scrivi(Job jobEseguito, Processo centro, SimTime t) {
+		scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome() + " esce da <" +
 				centro.getNome() + ">.");
 	}
 	
@@ -220,9 +221,9 @@ public class Log {
 	 * Questa funzione stampa gli eventi di servizio da un centro all'altro
 	 * @param Evento di servizio
 	 */
-	public void scrivi(Centro provenienza, Evento e) {
+	public void scrivi(Processo provenienza, Evento e, SimTime t) {
 		
-			scrivi("{" + tempo() + "} Il " + e.getJobEseguito().getNome() +
+			scrivi("{" + tempo(t) + "} Il " + e.getJobEseguito().getNome() +
 					" da <" + provenienza.getNome() + "> occupa <" + e.getCentro().getNome() +
 					"> fino a {" + tronca(e.getTempoServizio()) + "}.");
 	}
@@ -231,9 +232,9 @@ public class Log {
 	 * Questa funzione stampa gli eventi di servizio di job che un centro preleva dalla coda
 	 * @param Evento di servizio
 	 */
-	public void scrivi(Evento e) {
-		scrivi("{" + tempo()+"} <" + e.getCentro().getNome() +
-				"> preleva il " + e.getJobEseguito().getNome() + " dalla sua coda e lo serve" +
+	public void scrivi(Processo e, SimTime t) {
+		scrivi("{" + tempo(t)+"} <" + e.getNome() +
+				"> preleva il " + e.getNome() + " dalla sua coda e lo serve" +
 				" fino a {" + tronca(e.getTempoServizio()) + "}.");
 	}
 	
@@ -243,9 +244,9 @@ public class Log {
 	 * @param tempo
 	 * @param centro
 	 */
-	public void scrivi(Job jobEseguito, Centro prov, Centro centro) {
+	public void scrivi(Job jobEseguito, Processo prov, Processo centro, SimTime t) {
 		
-				scrivi("{" + tempo() + "} <" + centro.getNome() + "> occupato. Il "+
+				scrivi("{" + tempo(t) + "} <" + centro.getNome() + "> occupato. Il "+
 						jobEseguito.getNome() + " da <"+prov.getNome() + "> viene messo in coda <"
 						+ centro.getNome() + ">.");
 	}
@@ -255,10 +256,10 @@ public class Log {
 	 * @param jobEseguito
 	 * @param tempo
 	 */
-	public void scrivi(Job jobEseguito) {
-			scrivi("{" + tempo() + "} Il " + jobEseguito.getNome() + " esce dal sistema"
+	public void scrivi(Job jobEseguito, SimTime t) {
+			scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome() + " esce dal sistema"
 					+ " e torna da " + jobEseguito.getGeneratoDa().getNome() + ". Risposta = " +
-					tronca(tempo() - jobEseguito.getIngresso()));
+					tronca(tempo(t) - jobEseguito.getIngresso()));
 	}
 
 	/**

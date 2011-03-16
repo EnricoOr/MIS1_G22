@@ -5,15 +5,16 @@ import java.util.ArrayList;
 
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
+import org.mis.processi.Processo;
 
 /**
  * La classe si occupa di salvare tutti i dati durante la simulazione
- * @author Valerio Gentile
- * @author Andrea Giancarli
- * @author Alessandro Mastracci
+ * @author 
+ * @author
+ * @author 
  */
 
-public class Osservazione {
+public class Osservazione extends Processo{
 	
 	private int run;
 	private int jobT;
@@ -34,12 +35,12 @@ public class Osservazione {
 
 	/**
 	 * Questo costruttore viene utilizzato durante la stabilizzazione
-	 * @param calendario
 	 * @param run
 	 * @param jobT
 	 */
 	
 	public Osservazione(int run, int jobT) {
+		super("osservazione");
 		this.run = run;
 		this.jobT = jobT;
 		media = new double[jobT];
@@ -54,6 +55,7 @@ public class Osservazione {
 	 */
 	
 	public Osservazione(int run) {
+		super("osservazione");
 		this.run = run;
 		media = new double[run];
 		mediaTh = new double[run];
@@ -76,12 +78,11 @@ public class Osservazione {
 	}
 	
 	/**
-	 * Questa funzione si occupa di memorizzare i dati relativi al throughput della CPU
-	 * e di creare l'evento di fine simulazione nel caso tutti i dati necessari siano stati ottenuti
+	 * Questa funzione si occupa di memorizzare i dati relativi al throughput dell'Host.
 	 * @param dT
 	 */
 	
-	public void setThrCpu(double dT)
+	public void setThrHost(double dT)
 	{
 		throughput[(int)(jobCompletati/dT)]++;	
 		mediaTh[nRun] += jobCompletati/dT;
@@ -96,7 +97,6 @@ public class Osservazione {
 				nj[nRun] = jobT;
 				inThr = true;
 			}
-			else calendario.aggiungiEvento(new FineSimulazione("Fine simulazione", Calendario.getClock()));
 		}
 		else nTh++;
 		jobCompletati = 0;

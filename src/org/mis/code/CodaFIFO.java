@@ -16,7 +16,7 @@ public class CodaFIFO extends Coda {
 	
 	@Override
 	public Job pop() {
-		Job pop = coda..firstElement();
+		Job pop = coda.firstElement();
 		coda.remove(0);
 		return pop;
 	}

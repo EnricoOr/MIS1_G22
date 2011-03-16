@@ -34,6 +34,7 @@ public class Cpu extends Processo {
 	public Vector<Job> coda1s;
 	public Vector<Job> coda2s;
 	public Vector<Job> coda3s;
+	private Job current;
 
 	
 	/**
@@ -56,6 +57,8 @@ public class Cpu extends Processo {
 	 */
 	
 	public double getTempoCentro(Job jobCorrente) {
+		
+		current=jobCorrente;
 
 		if(jobCorrente.getJobClass() == 2) {
 			return genIpExp_p06 = genIpExp_p06c2.nextIperExp();
@@ -135,6 +138,11 @@ public class Cpu extends Processo {
 	public double nextRand()
 	{
 		return rand.nextNumber();
+	}
+	
+	public Job getJobCorrente(){
+		
+		return current;
 	}
 	
 }

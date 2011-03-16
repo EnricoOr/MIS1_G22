@@ -17,6 +17,7 @@ public abstract class Processo implements Comparable<Processo>{
 	public Processo(String nome) {
 		this.nome=nome;
 		this.state=Stato.PASSIVO;
+		
 	}
 	
 	

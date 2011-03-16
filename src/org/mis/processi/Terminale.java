@@ -5,12 +5,10 @@
 
 package org.mis.processi;
 
-import java.util.Vector;
-
 import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
-import org.mis.sim.Simulatore;
+
 
 /**
  * La classe terminale è una classe derivata dalla classe astratta centro. La classe rappresenta 
@@ -29,14 +27,16 @@ public class Terminale extends Processo{
 	private GeneratoreIperEsponenziale genIper3;
 	private final double tx = 10;
 	private Job job = null; 
+	private double dT;
 
 	/**
 	 * E' il costruttore della classe il quale istanzia un terminale con un id univoco incrementale.
-	 * La legge di distribuzione nel tempo è la 2-erlangiana.
+	 *
 	 */
 	
 	public Terminale(){
-		super("Terminale " + (identificatore=(id++) % Simulatore.getNClient()));
+		super("Terminale");
+		identificatore=id++;
 		genIper3 = new GeneratoreIperEsponenziale(tx, rand, 0.3);
 
 	}
@@ -59,8 +59,15 @@ public class Terminale extends Processo{
 
 	public double getTempoCentro() {
 		
-		return genIper3.nextIperExp();
+		dT=genIper3.nextIperExp();
+		return dT;
 	}
+	
+	public double getdT() {
+		
+		return dT;
+	}
+
 
 	/**
 	 * Crea un nuovo job con un id univoco incrementale generato da un terminale

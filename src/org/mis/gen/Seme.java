@@ -1,4 +1,4 @@
-package generatori;
+package org.mis.gen;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

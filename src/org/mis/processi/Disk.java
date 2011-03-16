@@ -3,8 +3,7 @@ package org.mis.processi;
 import java.util.Vector;
 
 import org.mis.code.CodaLIFO;
-import org.mis.gen.GeneratoreKerlangiano;;
-import org.mis.gen.Random;
+import org.mis.gen.GeneratoreKerlangiano;
 import org.mis.gen.Seme;
 
 
@@ -26,6 +25,8 @@ public class Disk extends Processo{
 	private int jobEseguiti;
 	private double TotTempoRisp;
 	private double TotTempoCoda;
+	private double dT;
+	private Job current;
 	
 	/**
 	 * E' il costruttore della classe il quale istanzia un disk.
@@ -45,7 +46,13 @@ public class Disk extends Processo{
 	
 
 	public double getTempoCentro() {
-		return gen2erl.nextErlang();
+		dT=gen2erl.nextErlang();
+		return dT;
+	}
+	
+	public double getdT() {
+		
+		return dT;
 	}
 
 	/**
@@ -56,7 +63,8 @@ public class Disk extends Processo{
 
 
 	public Job pop() {
-		return coda.pop();
+		current=coda.pop();
+		return current;
 	}
 
 	/**
@@ -131,6 +139,12 @@ public class Disk extends Processo{
 	{
 		return TotTempoRisp;
 	}
+	
+	public Job getJobCorrente(){
+		
+		return current;
+	}
+	
 
 
 }

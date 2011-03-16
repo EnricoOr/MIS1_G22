@@ -15,6 +15,7 @@ import org.mis.gen.Seme;
 public class Printer extends Processo{
 
 	private Random genUn2_78;
+	private Job current;
 
 	/**
 	 * E' il costruttore della classe il quale istanzia una stampante, il booleano occupato
@@ -35,6 +36,16 @@ public class Printer extends Processo{
 
 	public double getTempoCentro() {
 		return genUn2_78.nextNumber2_78();
+	}
+	
+	public void setCurJob(Job c){
+		current=c;
+	}
+
+
+	public Job getJobCorrente(){
+		
+		return current;
 	}
 
 
