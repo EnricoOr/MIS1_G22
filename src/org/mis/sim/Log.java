@@ -24,7 +24,6 @@ public class Log {
 	private boolean verbose = false;
 	private boolean stab = false;
 	private boolean logR = false;
-	private static int num = 0;
 	
 	/**
 	 * Crea la cartella log, se non esiste, e tutti i file per il log richiesti.
@@ -108,7 +107,7 @@ public class Log {
 	}
 	
 	/**
-	 * fa stampare nel log solo le prime cinque cifre decimali. Solo per migliorare la lettura
+	 * Imposta la precisione delle cifre decimali nel log alle sole prime cinque.
 	 * @param number
 	 * @return numero con massimo cinque tre decimali.
 	 */
@@ -131,9 +130,9 @@ public class Log {
 	 * @return clock
 	 */
 	
-	public double tempo2(SimTime t)
+	public double tempo2(SimTime time)
 	{
-		return t.getSimTime();
+		return time.getSimTime();
 	}
 	
 	/**
@@ -179,35 +178,6 @@ public class Log {
 	}
 
 	/**
-	 * Questa funzione stampa che il centro è libero
-	 * @param centro
-	 */
-	public void scrivi(Processo centro, SimTime t)
-	{
-		scrivi("{" + tempo(t) + "} Il " + centro.getNome() + " è ora libero.");
-	}
-	
-	/**
-	 * Questa funzione stampa l'istante in cui prendiamo il tempo per il TMR
-	 * @param centro
-	 */
-	public void scriviTMR(Job job, SimTime t)
-	{
-		num++;
-		scrivi("{" + tempo(t) + "} -------------------------------------------------------- Il " + job.getNome() + " sta andando verso stampante. TMR " + (tempo2(t)-job.getIngresso()) + " num: " + num);
-	}
-	
-	/**
-	 * Questa funzione stampa l'evento di generazione Job
-	 * @param Evento di arrivo
-	 */
-	public void scrivi(EventoArrivoUtente e) {
-		scrivi("{" + tempo() + "} Il <" + e.getJobEseguito().getGeneratoDa().getNome() +
-				"> sta generando il " + e.getJobEseguito().getNome() + " che arrivera' a {" +
-				tronca(e.getTempoServizio()) + "}.");
-	}
-
-	/**
 	 * Questa funzione stampa le uscite di un job da un centro
 	 * @param job attivo
 	 * @param centro d'uscita
@@ -215,17 +185,6 @@ public class Log {
 	public void scrivi(Job jobEseguito, Processo centro, SimTime t) {
 		scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome() + " esce da <" +
 				centro.getNome() + ">.");
-	}
-	
-	/**
-	 * Questa funzione stampa gli eventi di servizio da un centro all'altro
-	 * @param Evento di servizio
-	 */
-	public void scrivi(Processo provenienza, Evento e, SimTime t) {
-		
-			scrivi("{" + tempo(t) + "} Il " + e.getJobEseguito().getNome() +
-					" da <" + provenienza.getNome() + "> occupa <" + e.getCentro().getNome() +
-					"> fino a {" + tronca(e.getTempoServizio()) + "}.");
 	}
 
 	/**
@@ -235,7 +194,7 @@ public class Log {
 	public void scrivi(Processo e, SimTime t) {
 		scrivi("{" + tempo(t)+"} <" + e.getNome() +
 				"> preleva il " + e.getNome() + " dalla sua coda e lo serve" +
-				" fino a {" + tronca(e.getTempoServizio()) + "}.");
+				" fino a {" + tronca(e.getTime()) + "}.");
 	}
 	
 	/**
