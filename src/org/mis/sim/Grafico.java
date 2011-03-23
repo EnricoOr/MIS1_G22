@@ -70,7 +70,7 @@ public class Grafico extends ApplicationFrame {
         // create the chart...
     	
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "tempo medio di risposta in locale",	// titolo grafico
+            "tempo medio throughput host",	// titolo grafico
             "X",									// etichetta asse x
             "Y",									// etichetta asse y
             dataset,								// data

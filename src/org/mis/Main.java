@@ -1,8 +1,8 @@
 package org.mis;
 
 import org.jfree.ui.RefineryUtilities;
-import java.util.*;
-import java.io.*;
+//import java.util.*;
+//import java.io.*;
 
 import org.mis.gen.*;
 import org.mis.gen.Random;
@@ -30,7 +30,7 @@ public class Main {
 		private static boolean stab = false;
 		private static boolean logMode = false;
 		private static boolean testMode = false;
-		private static String logAcc = "0123456789";
+		private static Grafico graf;
 
 		
 		/**
@@ -175,7 +175,7 @@ public class Main {
 			
 			Seme.apri();
 			
-			ix= Seme.getSeme();
+			ix=Seme.getSeme();
 			
 			if (elaboraOpzioni(args))
 			{
@@ -196,21 +196,42 @@ public class Main {
 				else
 				{
 					int clien = 120; //se stabilizzazione la simulazione parte solo con 120 client altrimenti prova da 10 a 120
-					if (!stab) clien = 10;
-					for(; clien<=120; clien += 10)
-					{
-						Simulatore simulatore = new Simulatore(clien, stab, logMode, logAcc);
-						simulatore.avvia();
+					if(stab){
+						graf = new Grafico("Stabilizzazione");
+						double e=0;
+						double s=0;
+						
+						for (int n=1; n<10001;n++){
+							for (int k=0;k<50;k++){
+								
+								Simulatore simulatore = new Simulatore(clien, stab, logMode, n);
+								Osservazione ossN = simulatore.avvia();
+								e+=ossN.getMediaTh();
+								s+=ossN.getVarianza();
+							}
+							graf.addValue(e/50, n);
+							graf.addVariance(s/50, n);
+						}
+						
+					stampaGraf(graf);
+					}
+					else if (!stab){
+						clien = 10;
+					
+						for(; clien<=120; clien += 10)
+						{
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 30, 120);
+							simulatore.avvia();
+						}
 					}
 				}
 			}
 			else
 			{
 				System.out.println("\nLe opzioni valide sono le seguenti: ");
-				System.out.println("-l (per l'output dettagliato)");
-				System.out.println("-a (per l'accuratezza dell'output)");
-				System.out.println("-s (per la modalita' di stabilita')");
-				System.out.println("-t (per la modalita' di test dei generatori)");
+				System.out.println("-l (per il log su file dettagliato)");
+				System.out.println("-s (per la modalità di stabilizzazione)");
+				System.out.println("-t (per la modalità di test dei generatori)");
 				System.out.println("-h (per visualizzare l'aiuto)"); 
 				System.out.println("ATTENZIONE: si sconsiglia di abilitare il log mode" +
 						" (-l) per un lungo periodo di simulazione perche' occupa molto spazio" +
@@ -248,13 +269,25 @@ public class Main {
 		}
 		
 		/**
+		 * metodo che apre e stampa a video il grafico del run di stabilizzazione
+		 * @param Grafico ist
+		 */
+		
+		public static void stampaGraf(Grafico graf)
+		{
+			
+			graf.pack();
+			RefineryUtilities.centerFrameOnScreen(graf);
+			graf.setVisible(true);
+		}
+		
+		/**
 		 * Questa funzione controlla che i parametri passati in ingresso al programma siano corretti
 		 * @param argomenti passati al programma
 		 * @return ritorna true se il parsing degli argomenti ha avuto successo
 		 */
 		
 		public static boolean elaboraOpzioni(String args[]) {
-			boolean aInserted = false;
 			boolean lInserted = false;
 			boolean sInserted = false;
 			boolean tInserted = false;
@@ -284,24 +317,6 @@ public class Main {
 							System.out.println("Parametro '" + args[i] + "' inserito 2 volte. ");
 							return false;
 						}
-					} else if (args[i].charAt(1) == 'a') {
-							if (!aInserted) {
-								try {									
-									logAcc = (args[i+1]);
-									aInserted = true;
-								} catch (NumberFormatException e) {
-									System.out.println("Valore '" + args[i+1] + "' non valido come" +
-											" accuratezza del log. ");
-									return false;
-								} catch (ArrayIndexOutOfBoundsException e) {
-									System.out.println("Non e' stato inserito un valore consentito. ");
-									return false;
-								}
-								i++;
-							} else {
-								System.out.println("Parametro '" + args[i] + "' inserito 2 volte. ");
-								return false;
-							}
 					} else if (args[i].charAt(1) == 'h') {
 						return false;
 					} else {

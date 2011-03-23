@@ -165,7 +165,7 @@ public class Log {
 	 * Questa funzione stampa l'evento fine simulazione
 	 */
 	public void scrivi(SimTime t) {
-			scrivi("{" + tempo(t) + "} La simulazione finisce.");
+			scrivi("{" + tempo(t) + "} La simulazione finisce.\n-->Tempo impiegato dalla simulazione: " + t.getSimDuration()/60000 + " minuti.");
 	}
 	
 	/**

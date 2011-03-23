@@ -20,6 +20,7 @@ public class Osservazione extends Processo{
 	private int jobT;
 	private int nRun = 0, nOss = 0, n = 0, nTh = 0;
 	private int jobCompletati = 0;
+	private int jobToHost=0;
 	private double totTempoRisp = 0;
 	private double[] media;
 	private double[] mediaTh;
@@ -30,8 +31,7 @@ public class Osservazione extends Processo{
 	private double tempSommaOss = 0;
 	private double tempSommaRun = 0;
 	private Random rand = null;
-	private boolean inThr = true;
-	private static double RN = 0;
+
 
 	/**
 	 * Questo costruttore viene utilizzato durante la stabilizzazione
@@ -50,7 +50,6 @@ public class Osservazione extends Processo{
 	
 	/**
 	 * Questo costruttore viene utilizzato durante la generazione dei risultati
-	 * @param calendario
 	 * @param run
 	 */
 	
@@ -65,27 +64,33 @@ public class Osservazione extends Processo{
 		nj[0] = jobT;
 		throughput = new int[50];
 		for(int n=0; n<throughput.length; n++) throughput[n] = 0;
-		RN = 0;
 	}
 	
 	/**
-	 * Questa funzione incrementa il contatore che tiene conto del numero dei Job completati
+	 * Questo metodo incrementa il contatore che tiene conto del numero dei Job completati
 	 */
-	
 	public void jobCompletato()
 	{
 		jobCompletati++;
 	}
 	
 	/**
-	 * Questa funzione si occupa di memorizzare i dati relativi al throughput dell'Host.
+	 * Questo metodo incrementa il contatore che tiene conto del numero che vanno all'host
+	 */
+	public void jobtoHost()
+	{
+		jobToHost++;
+	}
+	
+	/**
+	 * Questa funzione si occupa di memorizzare i dati relativi al throughput in entrata all'Host.
 	 * @param dT
 	 */
 	
 	public void setThrHost(double dT)
 	{
-		throughput[(int)(jobCompletati/dT)]++;	
-		mediaTh[nRun] += jobCompletati/dT;
+		throughput[(int)(jobToHost/dT)]++;	
+		mediaTh[nRun] += jobToHost/dT;
 		if(nTh == jobT-1)
 		{
 
@@ -93,9 +98,8 @@ public class Osservazione extends Processo{
 			{
 				nRun++;
 				nTh = 0;
-				jobT = 50 + (int)(rand.nextNumber()*50);
 				nj[nRun] = jobT;
-				inThr = true;
+
 			}
 		}
 		else nTh++;
@@ -107,7 +111,7 @@ public class Osservazione extends Processo{
 	 * @return throughput
 	 */
 	
-	public int[] getThrCpu()
+	public int[] getThrHst()
 	{
 		return throughput;
 	}
@@ -124,7 +128,7 @@ public class Osservazione extends Processo{
 	 * @return nj
 	 */
 	
-	public int[] getNj()
+	public int getNj()
 	{
 		return nj;
 	}
@@ -134,7 +138,7 @@ public class Osservazione extends Processo{
 	 * @return media
 	 */
 	
-	public double[] getMedia()
+	public double getMedia()
 	{
 		return media;
 	}
@@ -144,7 +148,7 @@ public class Osservazione extends Processo{
 	 * @return
 	 */
 	
-	public double[] getMediaTh()
+	public double getMediaTh()
 	{
 		return mediaTh;
 	}
@@ -154,19 +158,14 @@ public class Osservazione extends Processo{
 	 * @return
 	 */
 	
-	public double[] getVarianza()
+	public double getVarianza()
 	{
 		return varianza;
 	}
 	
-	public double getRN()
-	{
-		return RN/50;
-	}
 	
 	/**
 	 * Questa funzione si occupa di memorizzare i dati relativi alle osservazioni durante la stabilizzazione
-	 * e di creare l'evento di fine simulazione nel caso tutti i dati necessari siano stati ottenuti
 	 * @param oss
 	 */
 	
@@ -175,8 +174,8 @@ public class Osservazione extends Processo{
 		tempSommaOss += oss;
 		if(n == nOss)
 		{
-			if(nRun == run-1) calendario.resetSeme();
-			else calendario.resetSistema();
+		
+
 			if(nRun < run-1) 
 			{
 				tempSommaRun += tempSommaOss / (n+1);
@@ -200,10 +199,8 @@ public class Osservazione extends Processo{
 				singOss.clear();
 				tempSommaRun = 0;
 				nOss++;
-				//if(nOss==4)System.out.println("prova");
 				nRun = 0;
 				n = 0;
-				if(nOss == jobT) calendario.aggiungiEvento(new FineSimulazione("Fine simulazione", Calendario.getClock()));
 			}
 		}
 		else n++;
@@ -217,13 +214,12 @@ public class Osservazione extends Processo{
 	
 	public void aggOss(double oss)
 	{
-		if(!EventoOsservatore.inOsservazione() || inThr)
-		{
+
 			media[nRun] += oss;
-			if(n==Simulatore.getNClient()-1) RN += media[nRun];
+			if(n==Simulatore.getNClient()-1)
 			if(n == jobT)
 			{
-				if(!EventoOsservatore.inOsservazione()) calendario.ripristinaStato();
+		
 				if(nRun < run-1) 
 				{
 					n = 0;
@@ -235,10 +231,9 @@ public class Osservazione extends Processo{
 					}
 					else inThr = false;
 				}
-				else if(!EventoOsservatore.inOsservazione()) calendario.aggiungiEvento(new FineSimulazione("Fine simulazione", Calendario.getClock()));
-						else inThr = false;
 			}
-			else n++;
+			
+			n++;
 		}
-	}
+
 }

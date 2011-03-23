@@ -7,7 +7,7 @@ public class Job extends Processo {
 	private int jobClass;
 	private Terminale generatoDa;
 	private double tempoIngrSist; //istante in cui il job è entrato nel sistema
-	private boolean trovato;
+	private double tempoIngrCoda; //istante in cui il job si accoda ad un centro
 	
 	public Job(Terminale t){
 		super("job " + identificatore++);
@@ -75,14 +75,15 @@ public class Job extends Processo {
 		return this.tempoIngrSist;
 	}
 
+	
 	/**
-	 * Questa funzione memorizza se il Job ha trovato i dati cercati in Disk
+	 * Questo metodo memorizza l'istante di tempo in cui il job si accoda ad un centro
 	 * @param trov
 	 */
 	
-	public void setTrovato(boolean trov)
+	public void setIngCoda(double t)
 	{
-		trovato = trov;
+		this.tempoIngrCoda = t;
 	}
 	
 	/**
@@ -90,10 +91,9 @@ public class Job extends Processo {
 	 * @return
 	 */
 	
-	public boolean getTrovato()
+	public double getIngCoda()
 	{
-		return trovato;
+		return this.tempoIngrCoda;
 	}
-
 
 }
