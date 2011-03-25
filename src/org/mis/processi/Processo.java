@@ -4,7 +4,7 @@ package org.mis.processi;
 public abstract class Processo implements Comparable<Processo>{
 	private String nome;
 	private Stato state;
-	private Double hTime;
+	protected Double hTime;
 	
 	
 		

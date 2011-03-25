@@ -206,7 +206,7 @@ public class Main {
 								
 								Simulatore simulatore = new Simulatore(clien, stab, logMode, n);
 								Osservazione ossN = simulatore.avvia();
-								e+=ossN.getMediaTh();
+								e+=ossN.getMedia();
 								s+=ossN.getVarianza();
 							}
 							graf.addValue(e/50, n);
@@ -218,11 +218,11 @@ public class Main {
 					else if (!stab){
 						clien = 10;
 					
-						for(; clien<=120; clien += 10)
-						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 30, 120);
+						//for(; clien<=120; clien += 10)
+						//{
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 2, 10);
 							simulatore.avvia();
-						}
+						//}
 					}
 				}
 			}

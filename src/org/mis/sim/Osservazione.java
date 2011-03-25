@@ -1,10 +1,5 @@
 package org.mis.sim;
 
-import java.util.ArrayList;
-
-
-import org.mis.gen.Random;
-import org.mis.gen.Seme;
 import org.mis.processi.Processo;
 
 /**
@@ -16,21 +11,15 @@ import org.mis.processi.Processo;
 
 public class Osservazione extends Processo{
 	
-	private int run;
-	private int jobT;
-	private int nRun = 0, nOss = 0, n = 0, nTh = 0;
+	private int ncli;
+	private int nOss = 0, n=0;
 	private int jobCompletati = 0;
 	private int jobToHost=0;
 	private double totTempoRisp = 0;
 	private double[] media;
-	private double[] mediaTh;
-	private double[] varianza;
-	private int[] nj;
-	private int[] throughput;
-	private ArrayList<Double> singOss;
-	private double tempSommaOss = 0;
-	private double tempSommaRun = 0;
-	private Random rand = null;
+	private double[] mediaTr;
+	private double varianza;
+	private double throughput=0;
 
 
 	/**
@@ -39,13 +28,13 @@ public class Osservazione extends Processo{
 	 * @param jobT
 	 */
 	
-	public Osservazione(int run, int jobT) {
+	public Osservazione(int nOss) {
+		
 		super("osservazione");
-		this.run = run;
-		this.jobT = jobT;
-		media = new double[jobT];
-		varianza = new double[jobT];
-		singOss = new ArrayList<Double>();
+		this.nOss=nOss;
+		media = new double[nOss];
+
+
 	}
 	
 	/**
@@ -53,17 +42,13 @@ public class Osservazione extends Processo{
 	 * @param run
 	 */
 	
-	public Osservazione(int run) {
+	public Osservazione(int nOss, int ncli) {
+		
 		super("osservazione");
-		this.run = run;
-		media = new double[run];
-		mediaTh = new double[run];
-		nj = new int[run];
-		rand = new Random(Seme.getSeme());
-		jobT = 50 + (int)(rand.nextNumber()*50);
-		nj[0] = jobT;
-		throughput = new int[50];
-		for(int n=0; n<throughput.length; n++) throughput[n] = 0;
+		this.ncli = ncli;
+		this.nOss=nOss;
+		media = new double[nOss];
+		mediaTr = new double[nOss];
 	}
 	
 	/**
@@ -87,31 +72,20 @@ public class Osservazione extends Processo{
 	 * @param dT
 	 */
 	
-	public void setThrHost(double dT)
+	public void setThrHost()
 	{
-		throughput[(int)(jobToHost/dT)]++;	
-		mediaTh[nRun] += jobToHost/dT;
-		if(nTh == jobT-1)
-		{
+		
+		throughput = jobToHost/hTime.doubleValue();
+		media[n] = jobToHost/hTime.doubleValue();
 
-			if(nRun < run-1) 
-			{
-				nRun++;
-				nTh = 0;
-				nj[nRun] = jobT;
-
-			}
-		}
-		else nTh++;
-		jobCompletati = 0;
 	}
 	
 	/**
-	 * Questa funzione serve per prelevare il throughput della finestra di osservazione corrente
+	 * Questa funzione serve per prelevare il throughput corrente
 	 * @return throughput
 	 */
 	
-	public int[] getThrHst()
+	public double getThrHst()
 	{
 		return throughput;
 	}
@@ -122,35 +96,33 @@ public class Osservazione extends Processo{
 	{
 		totTempoRisp += tempo;
 	}
-
-	/**
-	 * Funzione che serve per prelevare i valori di Nj
-	 * @return nj
-	 */
-	
-	public int getNj()
-	{
-		return nj;
-	}
 	
 	/**
-	 * Funzione che serve per prelevare la media dei tempi di osservazione
+	 * Funzione che serve per prelevare la media del throughtput host
 	 * @return media
 	 */
 	
 	public double getMedia()
 	{
-		return media;
+		double med=0;
+		for (int i=0;i<nOss;i++){
+			med+=media[i];
+		}
+		return (med/nOss);
 	}
 	
 	/**
-	 * Funzione che serve per prelevare la media del throughput
+	 * Funzione che serve per prelevare la media del tempo di risposta disk
 	 * @return
 	 */
 	
-	public double getMediaTh()
+	public double getMediaTr()
 	{
-		return mediaTh;
+		double med=0;
+		for (int i=0;i<nOss;i++){
+			med+=mediaTr[i];
+		}
+		return (med/nOss);
 	}
 	
 	/**
@@ -160,6 +132,15 @@ public class Osservazione extends Processo{
 	
 	public double getVarianza()
 	{
+		double campQua=0;
+		double medQua=0;
+		for (int i=0;i<nOss;i++){
+			campQua += Math.pow(media[i], 2);
+			medQua+=media[i];
+		}
+		
+		varianza = (campQua/nOss)-Math.pow((medQua/nOss), 2);
+		
 		return varianza;
 	}
 	
@@ -169,41 +150,13 @@ public class Osservazione extends Processo{
 	 * @param oss
 	 */
 	
-	public void aggOssStab(double oss)
+	public void aggOssStab()
 	{
-		tempSommaOss += oss;
-		if(n == nOss)
-		{
-		
-
-			if(nRun < run-1) 
-			{
-				tempSommaRun += tempSommaOss / (n+1);
-				singOss.add(tempSommaOss / (n+1));
-				tempSommaOss = 0;
-				nRun++;
-				n = 0;
-			}
-			else
-			{
-				tempSommaRun += tempSommaOss / (n+1);
-				singOss.add(tempSommaOss / (n+1));
-				tempSommaOss = 0;
-				if(nOss%10==0)System.out.println("nOss " + nOss);
-				media[nOss] = tempSommaRun / run;
-				for(int c=0; c<singOss.size(); c++)
-				{
-					varianza[nOss] += Math.pow(singOss.get(c) - media[nOss], 2);
-				}
-				varianza[nOss] /= (singOss.size()-1);
-				singOss.clear();
-				tempSommaRun = 0;
-				nOss++;
-				nRun = 0;
-				n = 0;
-			}
-		}
-		else n++;
+	
+		this.setThrHost();
+		if(n<nOss) n++;
+			
+	
 	}
 
 	/**
@@ -212,28 +165,17 @@ public class Osservazione extends Processo{
 	 * @param oss
 	 */
 	
-	public void aggOss(double oss)
+	public void aggOss()
 	{
 
-			media[nRun] += oss;
-			if(n==Simulatore.getNClient()-1)
-			if(n == jobT)
-			{
-		
-				if(nRun < run-1) 
-				{
-					n = 0;
-					if(!EventoOsservatore.inOsservazione())
-					{
-						nRun++;
-						jobT = 50 + (int)(rand.nextNumber()*50);
-						nj[nRun] = jobT;
-					}
-					else inThr = false;
-				}
-			}
+		if (ncli==20){
 			
-			n++;
+			
 		}
+		this.setThrHost();
+		if(n<nOss) n++;
+		
+	}
+			
 
 }

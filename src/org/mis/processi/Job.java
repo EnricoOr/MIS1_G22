@@ -14,7 +14,7 @@ public class Job extends Processo {
 		id=identificatore;
 		jobClass = 1;
 		generatoDa = t;
-		trovato = false;
+
 	}
 	
 	

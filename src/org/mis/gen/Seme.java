@@ -11,9 +11,9 @@ import java.io.InputStreamReader;
 /**
  * Questa classe provvede a leggere un seme da un file di testo chiamato seme.txt
  * Il seme verrà passato a tutti i metodi delle classi che ne faranno richiesta.
- * @author Valerio Gentile
- * @author Andrea Giancarli
- * @author Alessandro Mastracci
+ * @author 
+ * @author 
+ * @author 
  */
 
 public class Seme {
