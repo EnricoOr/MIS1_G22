@@ -58,7 +58,7 @@ public class Cpu extends Processo {
 	
 	public double getTempoCentro(Job jobCorrente) {
 		
-		current=jobCorrente;
+		this.current=jobCorrente;
 
 		if(jobCorrente.getJobClass() == 2) {
 			return genIpExp_p06 = genIpExp_p06c2.nextIperExp();

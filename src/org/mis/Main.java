@@ -55,6 +55,23 @@ public class Main {
 			stampaIst(ist);
 		}
 		
+		private static void TestGenIni2_78() {
+			Random gen = new Random(ix);
+			double tot = 0;
+			double tot2 = 0;	
+			double x;
+			resetIst();
+			for (int i = 0; i< N; ++i) {
+				x = gen.nextNumber2_78();
+				istogramma[(int)x]++;
+				tot += x;
+				tot2 += Math.pow(x,2);
+			}
+			System.out.println("Test generatore random(2,78)\nmedia:    "+tot/N+" (0.5)\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" (0.0)\n");
+			ist = new Istogramma("Test generatore random");
+			stampaIst(ist);
+		}
+		
 		
 		/**
 		 * Funzione che si occupa di eseguire il test del generatore erlangiano
@@ -184,6 +201,7 @@ public class Main {
 				{
 					System.out.println("Avviata modalita' test");
 					TestGenRandom();
+					TestGenIni2_78();
 					k = 2;
 					TestGenErlang();
 					TestGenEsp();
@@ -217,11 +235,11 @@ public class Main {
 					else if (!stab){
 						clien = 10;
 					
-						//for(; clien<=120; clien += 10)
-						//{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 2, 5);
+						for(; clien<=120; clien += 10)
+						{
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 10, 8);
 							simulatore.avvia();
-						//}
+						}
 					}
 				}
 			}
@@ -240,7 +258,7 @@ public class Main {
 			Tempo2=System.currentTimeMillis();
 
 			Tempo=Tempo2-Tempo1;
-			System.out.println("Tempo impiegato dalla simulazione: " + Tempo/60000 + " minuti.");
+			System.out.println("Tempo impiegato dalla simulazione: " + (double)Tempo/10000 + " secondi.");
 		}
 		
 		/**
