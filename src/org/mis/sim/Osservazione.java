@@ -12,7 +12,8 @@ import org.mis.processi.Processo;
 public class Osservazione extends Processo{
 	
 	private int ncli;
-	private int nOss = 0, n=0;
+	private int nOss; 
+	private int n;
 	private int jobCompletati = 0;
 	private int jobToHost=0;
 	private double totTempoRisp = 0;
@@ -47,6 +48,7 @@ public class Osservazione extends Processo{
 		super("osservazione");
 		this.ncli = ncli;
 		this.nOss=nOss;
+		this.n=0;
 		media = new double[nOss];
 		mediaTr = new double[nOss];
 	}
@@ -75,8 +77,8 @@ public class Osservazione extends Processo{
 	public void setThrHost()
 	{
 		
-		throughput = jobToHost/hTime.doubleValue();
-		media[n] = jobToHost/hTime.doubleValue();
+		throughput = (double)jobToHost/hTime.doubleValue();
+		media[n] = throughput;
 
 	}
 	
@@ -104,11 +106,11 @@ public class Osservazione extends Processo{
 	
 	public double getMedia()
 	{
-		double med=0;
+		double med=0.00000;
 		for (int i=0;i<nOss;i++){
 			med+=media[i];
 		}
-		return (med/nOss);
+		return (double)(med/nOss);
 	}
 	
 	/**
@@ -118,11 +120,11 @@ public class Osservazione extends Processo{
 	
 	public double getMediaTr()
 	{
-		double med=0;
+		double med=0.000;
 		for (int i=0;i<nOss;i++){
 			med+=mediaTr[i];
 		}
-		return (med/nOss);
+		return (double)(med/nOss);
 	}
 	
 	/**
@@ -132,14 +134,14 @@ public class Osservazione extends Processo{
 	
 	public double getVarianza()
 	{
-		double campQua=0;
-		double medQua=0;
+		double campQua=0.000;
+		double medQua=0.000;
 		for (int i=0;i<nOss;i++){
-			campQua += Math.pow(media[i], 2);
+			campQua += (double)Math.pow(media[i], 2);
 			medQua+=media[i];
 		}
 		
-		varianza = (campQua/nOss)-Math.pow((medQua/nOss), 2);
+		varianza = (double)(campQua/nOss)-Math.pow((double)(medQua/nOss), 2);
 		
 		return varianza;
 	}
@@ -168,10 +170,10 @@ public class Osservazione extends Processo{
 	public void aggOss()
 	{
 
-		if (ncli==20){
+		//if (ncli==20){
 			
 			
-		}
+	//	}
 		this.setThrHost();
 		if(n<nOss) n++;
 		

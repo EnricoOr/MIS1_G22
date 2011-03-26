@@ -8,6 +8,7 @@ package org.mis.processi;
 import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
+import org.mis.sim.Simulatore;
 
 
 /**
@@ -22,7 +23,7 @@ import org.mis.gen.Seme;
 public class Terminale extends Processo{
 
 	private static int id = 0;
-	private static int identificatore=0; 
+	private static int identificatore; 
 	private Random rand = new Random(Seme.getSeme());
 	private GeneratoreIperEsponenziale genIper3;
 	private final double tx = 10;
@@ -36,7 +37,7 @@ public class Terminale extends Processo{
 	
 	public Terminale(){
 		super("Terminale");
-		identificatore=id++;
+		identificatore=(id++) % Simulatore.getNClient();
 		genIper3 = new GeneratoreIperEsponenziale(tx, rand, 0.3);
 
 	}
