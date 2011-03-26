@@ -75,7 +75,7 @@ public class Simulatore {
 		hold = new Vector<Processo>();
 		jobSis = new Vector<Job>();
 
-		log = new Log(1, logging);
+		log = new Log((int)System.currentTimeMillis(), logging);
 
 		creaCentri();
 		clock = new SimTime();
@@ -86,39 +86,43 @@ public class Simulatore {
 		
 		System.out.println("***Inizio Simulazione " + nClient +" client ***");
 		//aggiungo il processo fine simulazione alla lista degli oggetti hold
-		osservazione.hold(tau);
-		end.hold(nOsser*tau);
-		hold.add(osservazione);
-		hold.add(end);
+		this.osservazione.hold(tau);
+		this.end.hold(nOsser*tau);
+		this.hold.add(osservazione);
+		this.hold.add(end);
 		Collections.sort(hold);
+		log.print_h(hold);
 		
 		//inizio ciclo di simulazione
 		while (!stop){
 			//estraggo sempre l'oggetto in testa alla lista ordinata di hold
-			Processo curr = hold.firstElement();
+			Processo curr = this.hold.remove(0);
 			
 			//inizio processo centro terminale
 			if(curr.getNome().equals("Terminale")){
 				log.scrivi("TERMINALE TERMINA HOLD");
 				Terminale term = (Terminale) curr;
 				clock.add(term.getdT());
-				hold.remove(term);
+				
 
 				Job j = term.nextJob();
 				jobSis.add(j);
 				log.scrivi("Job generato dal terminale: "+term.getId());
 				term.passivate();
-				passivate.add(term);
+				this.passivate.add(term);
+				log.print_p(passivate);
 				
 				//se la cpu è passiva il job l'attiva altrimenti si mette in coda
 				if (cpu.getStato()==Stato.PASSIVO){
-					passivate.remove(cpu);
+					this.passivate.remove(cpu);
 					cpu.activate();
 					log.scrivi("CPU ATTIVATA E RIMOSSA DA CODA PASSIVA");
 					double time = clock.getSimTime()+cpu.getTempoCentro(jobSis.lastElement());
 					cpu.hold(time);
+					log.scrivi("hold della cpu per t="+time);
 					this.hold.add(cpu);
 					Collections.sort(hold);
+					log.print_h(hold);
 				}
 				else {
 					cpu.push(j);
@@ -167,7 +171,7 @@ public class Simulatore {
 							break;
 						}
 					}
-					passivate.remove(currH);
+					this.passivate.remove(currH);
 					currH.activate();
 					log.scrivi("HOST ATTIVATO E RIMOSSA DA CODA PASSIVA");
 					currH.setCurJob(j);
@@ -176,7 +180,7 @@ public class Simulatore {
 					currH.hold(time);
 					this.hold.add(currH);
 					Collections.sort(hold);
-					
+					log.print_h(hold);
 				}
 				else if (j.getJobClass()==3){
 					log.scrivi(j, cpu, clock);					//stampa l'uscita dal centro di cpu
@@ -186,7 +190,7 @@ public class Simulatore {
 					
 					//se il disk è passivo il job l'attiva altrimenti si mette in coda
 					if (disk.getStato()==Stato.PASSIVO){
-						passivate.remove(disk);
+						this.passivate.remove(disk);
 						disk.activate();
 						log.scrivi("DISK ATTIVATO E RIMOSSO DA CODA PASSIVA");
 						
@@ -211,7 +215,7 @@ public class Simulatore {
 								break;
 							}
 						}
-						passivate.remove(currP);
+						this.passivate.remove(currP);
 						currP.activate();
 						log.scrivi("STAMPANTE ATTIVATA E RIMOSSA DA CODA PASSIVA");
 						currP.setCurJob(j);
@@ -227,7 +231,7 @@ public class Simulatore {
 				if (cpu.codeVuote()) {
 					
 					cpu.passivate();
-					passivate.add(cpu);
+					this.passivate.add(cpu);
 				}
 				else{
 					Job next = cpu.pop();
@@ -250,7 +254,7 @@ public class Simulatore {
 				
 				//se la cpu è passiva il job l'attiva altrimenti si mette in coda
 				if (cpu.getStato()==Stato.PASSIVO){
-					passivate.remove(cpu);
+					this.passivate.remove(cpu);
 					cpu.activate();
 					log.scrivi("CPU ATTIVATA E RIMOSSA DA CODA PASSIVA");
 					double time = clock.getSimTime()+cpu.getTempoCentro(j);
@@ -316,7 +320,7 @@ public class Simulatore {
 				
 				j.setJobClass(1);
 				pt.passivate();
-				passivate.add(pt);
+				this.passivate.add(pt);
 				jobSis.remove(j); //job termina il suo ciclo
 				osservazione.jobCompletato();
 				
@@ -344,7 +348,7 @@ public class Simulatore {
 			if (curr.getNome().equals("osservazione")){
 				
 				clock.setSimTime(osservazione.getTime().doubleValue());
-				log.scrivi("OSSERVAZIONE TERMINA HOLD");
+				log.scrivi("**OSSERVAZIONE....");
 			
 				if (stab) osservazione.aggOssStab();
 				else osservazione.aggOss();
@@ -352,8 +356,9 @@ public class Simulatore {
 				nOsser--;
 				if(nOsser!=0){
 					osservazione.hold(clock.getSimTime()+tau);
-					hold.add(osservazione);
+					this.hold.add(osservazione);
 					Collections.sort(hold);
+					log.print_h(hold);
 				}
 				
 				

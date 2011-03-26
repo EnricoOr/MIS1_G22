@@ -55,6 +55,7 @@ public class Main {
 			stampaIst(ist);
 		}
 		
+		
 		/**
 		 * Funzione che si occupa di eseguire il test del generatore erlangiano
 		 * e di stamparne i risultati
@@ -190,8 +191,6 @@ public class Main {
 					TestGenIperesp2();
 					k = 3;
 					TestGenErlang();
-					k = 12;
-					TestGenErlang();
 				}
 				else
 				{
@@ -220,7 +219,7 @@ public class Main {
 					
 						//for(; clien<=120; clien += 10)
 						//{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 2, 10);
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 2, 5);
 							simulatore.avvia();
 						//}
 					}

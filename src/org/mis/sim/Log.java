@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Vector;
 
 import org.mis.processi.Job;
 import org.mis.processi.Processo;
@@ -166,6 +167,26 @@ public class Log {
 	 */
 	public void scrivi(SimTime t) {
 			scrivi("{" + tempo(t) + "} La simulazione finisce.\n-->Tempo impiegato dalla simulazione: " + t.getSimDuration()/60000 + " minuti.");
+	}
+	
+	public void print_h(Vector <Processo> hold){
+		
+		scrivi("----lista oggetti in hold----");
+		for (int i=0; i<hold.size();i++){
+			scrivi("-->"+hold.get(i).getNome()+" htime:"+hold.get(i).getTime());
+		}
+		scrivi("----Fine lista oggetti in hold----");
+		
+	}
+	
+	public void print_p(Vector <Processo> passivate){
+		
+		scrivi("----lista oggetti passivi----");
+		for (int i=0; i<passivate.size();i++){
+			scrivi("-->"+passivate.get(i).getNome());
+		}
+		scrivi("----Fine lista oggetti passivi----");
+		
 	}
 	
 	/**
