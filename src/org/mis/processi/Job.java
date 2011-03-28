@@ -78,7 +78,7 @@ public class Job extends Processo {
 	
 	/**
 	 * Questo metodo memorizza l'istante di tempo in cui il job si accoda ad un centro
-	 * @param trov
+	 * @param t
 	 */
 	
 	public void setIngCoda(double t)
@@ -87,8 +87,8 @@ public class Job extends Processo {
 	}
 	
 	/**
-	 * Questa funzione restituisce true se il Job ha trovato i dati cercati in Disk
-	 * @return
+	 * Il metodo restituisce l'istante di clock in cui il job si è accodato in un centro.
+	 * @return tempoIngrCoda
 	 */
 	
 	public double getIngCoda()

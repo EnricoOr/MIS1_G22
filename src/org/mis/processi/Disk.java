@@ -23,7 +23,6 @@ public class Disk extends Processo{
 	private final int k = 2;
 	private final double tx = 0.033;
 	private double TotTempoRisp;
-	private double TotTempoCoda;
 	private double dT;
 	private Job current;
 	
@@ -86,32 +85,20 @@ public class Disk extends Processo{
 	{
 		return coda.getDimensione();
 	}
-
-
+	
 	/**
-	 * Funzione la quale somma al tempo totale di attesa in coda il tempo di attesa del job appena 
-	 * entrato in disk. 
-	 * @param tempo
+	 * Metodo che incrementa tempo totale di risposta per il centro disk.
+	 * @parm tempo
 	 */
 	
-	public void setTempoCoda(double tempo)
+	public void setTempoRisposta(double tempo)
 	{
-		TotTempoCoda += tempo;
-	}
-
-	/**
-	 * Funzione la quale ritorna il tempo totale di attesa dei job in coda al centro disk.
-	 * @return tempo totale coda centro disk
-	 */
-	
-	public double getTempoCoda()
-	{
-		return TotTempoCoda;
+		TotTempoRisp+=tempo;
 	}
 
 	/**
 	 * Funzione la quale ritorna il tempo totale di risposta per il centro disk.
-	 * @return tempo totale risposta centro disk
+	 * @return tempo totale risposta disk
 	 */
 	
 	public double getTempoRisposta()
@@ -133,6 +120,15 @@ public class Disk extends Processo{
 		
 	}
 	
+	/**
+	 * Questa funzione resetta lo stato del centro
+	 */
+	
+	public void reset()
+	{
+		coda.resetCoda();
+		this.passivate();
+	}
 
 
 }

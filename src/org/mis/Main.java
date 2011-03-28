@@ -30,7 +30,8 @@ public class Main {
 		private static boolean stab = false;
 		private static boolean logMode = false;
 		private static boolean testMode = false;
-		private static Grafico graf;
+		private static Grafico grafMe;
+		private static Grafico grafVa;
 
 		
 		/**
@@ -51,23 +52,6 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore random\nmedia:    "+tot/N+" (0.5)\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" (0.0)\n");
-			ist = new Istogramma("Test generatore random");
-			stampaIst(ist);
-		}
-		
-		private static void TestGenIni2_78() {
-			Random gen = new Random(ix);
-			double tot = 0;
-			double tot2 = 0;	
-			double x;
-			resetIst();
-			for (int i = 0; i< N; ++i) {
-				x = gen.nextNumber2_78();
-				istogramma[(int)x]++;
-				tot += x;
-				tot2 += Math.pow(x,2);
-			}
-			System.out.println("Test generatore random(2,78)\nmedia:    "+tot/N+" (0.5)\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" (0.0)\n");
 			ist = new Istogramma("Test generatore random");
 			stampaIst(ist);
 		}
@@ -94,29 +78,6 @@ public class Main {
 			}
 			System.out.println("Test generatore " + k + "-erlangiano\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)/k+")\n");
 			ist = new Istogramma("Test generatore " + k + "-erlangiano");
-			stampaIst(ist);
-		}
-
-		/**
-		 * Funzione che si occupa di eseguire il test del generatore esponenziale
-		 * e di stamparne i risultati
-		 */
-		
-		private static void TestGenEsp() {
-			GeneratoreEsponenziale exp = new GeneratoreEsponenziale(tx, new Random(Seme.getSeme()));
-			double tot = 0;
-			double tot2 = 0;
-			double x;
-			resetIst();
-			for (int i = 0; i< N; ++i) {
-				x = exp.nextExp();
-				istogramma[(int)(x*range)]++;
-				tot += x;
-				tot2 += Math.pow(x,2);
-			}
-
-			System.out.println("Test generatore esponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)+")\n");
-			ist = new Istogramma("Test generatore esponenziale");
 			stampaIst(ist);
 		}
 
@@ -201,10 +162,8 @@ public class Main {
 				{
 					System.out.println("Avviata modalita' test");
 					TestGenRandom();
-					TestGenIni2_78();
 					k = 2;
 					TestGenErlang();
-					TestGenEsp();
 					TestGenIperesp();
 					TestGenIperesp2();
 					k = 3;
@@ -214,32 +173,65 @@ public class Main {
 				{
 					int clien = 120; //se stabilizzazione la simulazione parte solo con 120 client altrimenti prova da 10 a 120
 					if(stab){
-						graf = new Grafico("Stabilizzazione");
-						double e=0;
-						double s=0;
+						System.out.println("Avviata modalità stabilizzazione");
+						grafMe = new Grafico("Stabilizzazione Gordon - Media", "Media");
+						grafVa = new Grafico("Stabilizzazione Gordon - Varianza", "Varianza");
 						
-						for (int n=1; n<100;n++){
+						//double s=0.00;
+						
+						for (int n=1; n<3000;n++){
+							//System.out.println("********INIZIO BLOCCO p RUN********");
+							
+							double[] xn=new double[50]; //medie campionarie di ogni run
+							double xjn=0.00; //variabile appoggio per stima media gordon
+							double var=0.00; //variabile appoggio per stima varianza gordon
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, n);
+							simulatore.simInit();
+							
 							for (int k=0;k<50;k++){
 								
-								Simulatore simulatore = new Simulatore(clien, stab, logMode, n);
 								simulatore.avvia();
 								Osservazione ossN=simulatore.getOsservazioni();
-								e+=ossN.getMedia();
-								s+=ossN.getVarianza();
+
+								xn[k]=ossN.getMedia();
+								simulatore.resetSim();
+							
 							}
-							graf.addValue(n,e/50);
-							graf.addVariance(n,s/50);
+							
+							for (int j=0;j<50;j++){
+								xjn+=xn[j];
+							}
+							
+							double en = (xjn/50);
+							
+							for (int j=0;j<50;j++){
+								var+=Math.pow((xn[j]-en),2);
+							}
+							
+							double s2xn = (var/49);
+							
+							grafMe.addValue(n, en);
+							grafVa.addValue(n,s2xn);
+							//System.out.println("x(n)="+xjn+"\ne(n)="+en+"\ns^2(x(n))="+s2xn);
+							//System.out.println("********FINE BLOCCO p RUN********");
+							progress(3000,n);
+							Seme.chiudi();
+							Seme.apri();
 						}
 						
-					stampaGraf(graf);
+					stampaGraf(grafMe);
+					stampaGraf(grafVa);
 					}
 					else if (!stab){
 						clien = 10;
 					
 						for(; clien<=120; clien += 10)
 						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 10, 8);
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 10, 5);
+							simulatore.simInit();
 							simulatore.avvia();
+							Seme.chiudi();
+							Seme.apri();
 						}
 					}
 				}
@@ -259,7 +251,7 @@ public class Main {
 			Tempo2=System.currentTimeMillis();
 
 			Tempo=Tempo2-Tempo1;
-			System.out.println("Tempo impiegato dalla simulazione: " + (double)Tempo/10000 + " secondi.");
+			System.out.println("Tempo impiegato dalla simulazione: " + (double)Tempo/1000 + " secondi.");
 		}
 		
 		/**
@@ -300,6 +292,65 @@ public class Main {
 		}
 		
 		/**
+		 * metodo per la stampa della percentuale di lavoro completeato della stabilizzazione
+		 * @param Percentuale
+		 */
+		public static void printProg(int percent){
+		        StringBuilder bar = new StringBuilder("[");
+
+		        for(int i = 0; i < 50; i++){
+		            if( i < (percent/2)){
+		                bar.append("=");
+		            }else if( i == (percent/2)){
+		                bar.append(">");
+		            }else{
+		                bar.append(" ");
+		            }
+		        }
+
+		        bar.append("]   " + percent + "%     ");
+		        System.out.print("\r"+bar.toString());
+		 }
+		
+		public static void progress(int n, int perc){
+			
+			if (perc==((n/100)*5)){
+				printProg(5);
+				
+			}
+			else if (perc==((n/100)*15)){
+				printProg(15);
+				
+			}
+			else if (perc==((n/100)*25)){
+				printProg(25);
+				
+			}
+			else if (perc==((n/100)*35)){
+				printProg(35);
+				
+			}
+			else if (perc==((n/100)*50)){
+				printProg(50);
+			}
+			else if (perc==((n/100)*60)){
+				printProg(60);
+			}
+			else if (perc==((n/100)*75)){
+				printProg(75);
+			}
+			else if (perc==((n/100)*85)){
+				printProg(85);
+			}
+			else if (perc==((n/100)*98)){
+				printProg(99);
+			}
+			else if (perc==n-1){
+				printProg(100);
+			}
+		}
+		
+		/**
 		 * Questa funzione controlla che i parametri passati in ingresso al programma siano corretti
 		 * @param argomenti passati al programma
 		 * @return ritorna true se il parsing degli argomenti ha avuto successo
@@ -322,6 +373,7 @@ public class Main {
 					} else if (args[i].charAt(1) == 's') {
 						if (!sInserted) {
 							stab = true;
+							
 							sInserted = true;
 						} else {
 							System.out.println("Parametro '" + args[i] + "' inserito 2 volte. ");

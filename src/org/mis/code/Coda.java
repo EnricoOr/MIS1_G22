@@ -52,6 +52,15 @@ public abstract class Coda {
 	}
 	
 	/**
+	 * Funzione la quale rimuove tutti gli elementi dalla coda di un centro, sarà utile per
+	 * resettare le code del sistema.
+	 */
+	
+	public void resetCoda() {
+		coda.removeAllElements();
+	}
+	
+	/**
 	 * Funzione astratta la quale estrae un job dalla coda in base alla disciplia in gioco, 
 	 * sarà necessario fae un override.
 	 */

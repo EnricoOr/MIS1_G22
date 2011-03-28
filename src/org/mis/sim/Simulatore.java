@@ -1,6 +1,6 @@
 package org.mis.sim;
 
-import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.Vector;
 
 import org.mis.gen.Random;
@@ -36,7 +36,7 @@ public class Simulatore {
 	private double tau;
 	private int nOsser;
 	
-	public Vector<Processo> hold;
+	public PriorityQueue<Processo> hold;
 	public Vector<Processo> passivate;
 	public Vector<Job> jobSis;
 	
@@ -49,7 +49,7 @@ public class Simulatore {
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = log;
-		this.tau=6;
+		this.tau=5;
 		this.nOsser=n;
 		
 	}
@@ -65,6 +65,19 @@ public class Simulatore {
 	}
 	
 	/**
+	 * Questo metodo inizializza i vari processi e variabii della simulazione
+	 */
+	public void simInit(){
+		
+		passivate = new Vector<Processo>();
+		hold = new PriorityQueue<Processo>();
+		jobSis = new Vector<Job>();
+		creaCentri();
+		log = new Log((int)System.currentTimeMillis(), logging);
+		
+	}
+	
+	/**
 	 * Questa funzione avvia la simulazione sia per la stabilizzazione
 	 * che per l'analisi dei risultati
 	 */
@@ -72,33 +85,26 @@ public class Simulatore {
 	public void avvia()
 	{
 		boolean stop=false;
-		passivate = new Vector<Processo>();
-		hold = new Vector<Processo>();
-		jobSis = new Vector<Job>();
-
-		log = new Log((int)System.currentTimeMillis(), logging);
 		
-
-		creaCentri();
 		clock = new SimTime();
 		end = new FineSim();
 		if(stab) osservazione = new Osservazione(nOsser);
 		else osservazione = new Osservazione(nOsser, nClient);
 		creaJob();
 		
-		System.out.println("***Inizio Simulazione " + nClient +" client ***");
+		if(!stab) System.out.println("***Inizio Simulazione " + nClient +" client ***");
 		//aggiungo il processo fine simulazione alla lista degli oggetti hold
 		this.osservazione.hold(tau);
 		this.end.hold(nOsser*tau+0.001);
 		this.hold.add(osservazione);
 		this.hold.add(end);
-		Collections.sort(hold);
+//		Collections.sort(hold);
 		log.print_h(hold);
 		
 		//inizio ciclo di simulazione
 		while (!stop){
 			//estraggo sempre l'oggetto in testa alla lista ordinata di hold
-			Processo curr = this.hold.remove(0);
+			Processo curr = this.hold.poll();
 			
 			//inizio processo centro terminale
 			if(curr.getNome().equals("Terminale")){
@@ -123,8 +129,8 @@ public class Simulatore {
 					cpu.hold(time);
 					log.scrivi("hold della cpu per t="+time);
 					this.hold.add(cpu);
-					Collections.sort(hold);
-					log.print_h(hold);
+//					Collections.sort(hold);
+					//log.print_h(hold);
 				}
 				else {
 					cpu.push(j);
@@ -181,8 +187,8 @@ public class Simulatore {
 					double time = clock.getSimTime()+currH.getTempoCentro();
 					currH.hold(time);
 					this.hold.add(currH);
-					Collections.sort(hold);
-					log.print_h(hold);
+//					Collections.sort(hold);
+					//log.print_h(hold);
 				}
 				else if (j.getJobClass()==3){
 					log.scrivi(j, cpu, clock);					//stampa l'uscita dal centro di cpu
@@ -193,16 +199,18 @@ public class Simulatore {
 					//se il disk è passivo il job l'attiva altrimenti si mette in coda
 					if (disk.getStato()==Stato.PASSIVO){
 						this.passivate.remove(disk);
+						if (nClient==20) j.setIngresso(clock.getSimTime());
 						disk.activate(j);
 						log.scrivi("DISK ATTIVATO E RIMOSSO DA CODA PASSIVA");
 						
 						double time = clock.getSimTime()+disk.getTempoCentro();
 						disk.hold(time);
 						this.hold.add(disk);
-						Collections.sort(hold);
+//						Collections.sort(hold);
 						
 					}
 					else{
+						if (nClient==20) j.setIngresso(clock.getSimTime());
 						disk.push(j);
 						log.scrivi(j, cpu, disk, clock);		//stampa l'accdamento nella coda del disk
 					}
@@ -225,7 +233,7 @@ public class Simulatore {
 						double time = clock.getSimTime()+currP.getTempoCentro();
 						currP.hold(time);
 						this.hold.add(currP);
-						Collections.sort(hold);
+//						Collections.sort(hold);
 					}
 				}
 				
@@ -241,7 +249,7 @@ public class Simulatore {
 					double time = clock.getSimTime()+cpu.getTempoCentro(next);
 					cpu.hold(time);
 					this.hold.add(cpu);
-					Collections.sort(hold);
+//					Collections.sort(hold);
 				}
 				
 			}//fine processo centro cpu
@@ -262,7 +270,7 @@ public class Simulatore {
 					double time = clock.getSimTime()+cpu.getTempoCentro(workingJob);
 					cpu.hold(time);
 					this.hold.add(cpu);
-					Collections.sort(hold);
+//					Collections.sort(hold);
 				}
 				else {
 					cpu.push(workingJob);
@@ -280,7 +288,7 @@ public class Simulatore {
 					double time = clock.getSimTime()+disk.getTempoCentro();
 					disk.hold(time);
 					this.hold.add(disk);
-					Collections.sort(hold);
+//					Collections.sort(hold);
 				}
 				log.scrivi(workingJob, disk, clock);			//salva l'uscita del job dal centro disk
 			}//fine processo centro disk
@@ -309,7 +317,7 @@ public class Simulatore {
 				double time = clock.getSimTime()+currP.getTempoCentro();
 				currP.hold(time);
 				this.hold.add(currP);
-				Collections.sort(hold);
+//				Collections.sort(hold);
 				log.scrivi(hostJob, ht, clock);			//stampa l'uscita del job dal centro host
 				
 			}//fine processo centro host
@@ -338,7 +346,7 @@ public class Simulatore {
 						double time = clock.getSimTime()+client[t].getTempoCentro();
 						client[t].hold(time);
 						this.hold.add(client[t]);
-						Collections.sort(hold);
+//						Collections.sort(hold);
 						break;
 					}
 				}
@@ -356,12 +364,12 @@ public class Simulatore {
 			
 				if (stab) osservazione.aggOssStab();
 				else osservazione.aggOss();
-				//log.scrivi("****Thruoghput Host corr = "+ osservazione.getThrHst());
+				log.scrivi("****Thruoghput Host corr = "+ osservazione.getThrHst());
 				nOsser--;
 				if(nOsser!=0){
 					osservazione.hold(clock.getSimTime()+tau);
 					this.hold.add(osservazione);
-					Collections.sort(hold);
+//					Collections.sort(hold);
 					log.print_h(hold);
 				}
 				
@@ -374,12 +382,13 @@ public class Simulatore {
 				clock.setSimTime(end.getTime().doubleValue());
 				clock.stopSimTime();
 				
+				if(!stab){
 				System.out.println("***Fine Simulazione " + nClient +" client ***\n");
 				System.out.println("****Media: "+osservazione.getMedia()+"\n");
 				System.out.println("****Varianza: "+osservazione.getVarianza()+"\n");
 				log.scrivi(clock);				//stampa la fine della simulazione
 				log.scrivi("***Media: "+osservazione.getMedia()+"***\n"+"***Varianza: "+osservazione.getVarianza()+"***\n");
-
+				}
 				if(logging) log.close();
 				stop=true;
 				
@@ -458,7 +467,7 @@ public class Simulatore {
 			double time = clock.getSimTime()+client[t].getTempoCentro();
 			client[t].hold(time);
 			this.hold.add(client[t]);
-			Collections.sort(hold);
+//			Collections.sort(hold);
 			
 			
 			log.scrivi("Client "+t+" in hold");
@@ -475,47 +484,7 @@ public class Simulatore {
 	{
 		return stab;
 	}
-	
-	/**
-	 * Questa funzione restituisce la CPU del sistema
-	 * @return cpu
-	 */
-	
-	public Cpu getCpu()
-	{
-		return cpu;
-	}
-	
-	/**
-	 * Questa funzione restituisce il Disk del sistema
-	 * @return disk
-	 */
-	
-	public Disk getDisk()
-	{
-		return disk;
-	}
-	
-	/**
-	 * Questa funzione restituisce il vettore con gli Host del sistema
-	 * @return host
-	 */
-	
-	public Host[] getHost()
-	{
-		return host;
-	}
-	
-	/**
-	 * Questa funzione restituisce il vettore con le stampanti del sistema
-	 * @return stampanti
-	 */
-	
-	public Printer[] getStampante()
-	{
-		return stampanti;
-	}
-	
+		
 	/**
 	 * Questa funzione restituisce il report delle osservazioni della simulazione
 	 * @return osservazione
@@ -527,13 +496,31 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questa funzione restituisce il vettore con gli Host del sistema
-	 * @return log
+	 * Questo metodo serve per resettare lo stato del sistema ad ogni fine run
+	 * durante la stabilizzazione
 	 */
 	
-	public Log getLog()
+	public void resetSim()
 	{
-		return log;
+
+		this.hold.clear();
+		this.passivate.removeAllElements();
+		this.jobSis.removeAllElements();
+		this.cpu.reset();
+		this.passivate.add(cpu);
+		this.disk.reset();
+		this.passivate.add(disk);
+		for(int t=0; t<nClient; t++)
+		{
+			client[t].passivate();
+			this.passivate.add(client[t]);
+			host[t].passivate();
+			this.passivate.add(host[t]);
+			stampanti[t].passivate();
+			this.passivate.add(stampanti[t]);
+		}
+		this.nOsser=this.osservazione.nOss;
+
 	}
 	
 	/**

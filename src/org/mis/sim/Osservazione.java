@@ -12,10 +12,11 @@ import org.mis.processi.Processo;
 public class Osservazione extends Processo{
 	
 	private int ncli;
-	private int nOss; 
+	public int nOss; 
 	private int n;
 	private int jobCompletati = 0;
 	private int jobToHost=0;
+	private int jobToDisk=0;
 	private double totTempoRisp = 0;
 	private double[] media;
 	private double[] mediaTr;
@@ -34,7 +35,6 @@ public class Osservazione extends Processo{
 		super("osservazione");
 		this.nOss=nOss;
 		media = new double[nOss];
-
 
 	}
 	
@@ -67,6 +67,25 @@ public class Osservazione extends Processo{
 	public void jobtoHost()
 	{
 		jobToHost++;
+	}
+	
+	/**
+	 * Questo metodo incrementa il contatore che tiene conto del numero che vanno al Disk
+	 */
+	public void jobtoDisk()
+	{
+		jobToDisk++;
+	}
+	
+	/**
+	 * Questo metodo resetta le varie variabili d'osservazione.
+	 */
+	public void resetOss()
+	{
+		jobToDisk=0;
+		totTempoRisp=0;
+		jobToHost=0;
+		
 	}
 	
 	/**
@@ -106,7 +125,7 @@ public class Osservazione extends Processo{
 	
 	public double getMedia()
 	{
-		double med=0.00000;
+		double med=0.000;
 		for (int i=0;i<nOss;i++){
 			med+=media[i];
 		}
@@ -170,10 +189,10 @@ public class Osservazione extends Processo{
 	public void aggOss()
 	{
 
-		//if (ncli==20){
+		if (ncli==20){
 			
 			
-	//	}
+		}
 		this.setThrHost();
 		if(n<nOss) n++;
 		

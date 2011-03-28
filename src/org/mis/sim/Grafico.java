@@ -22,7 +22,7 @@ import org.jfree.ui.ApplicationFrame;
  */
 public class Grafico extends ApplicationFrame {
 	final XYSeries serie1;
-	final XYSeries serie2;
+	//final XYSeries serie2;
     
 	private static final long serialVersionUID = 1L;
 
@@ -30,12 +30,12 @@ public class Grafico extends ApplicationFrame {
      * Creates a new demo
      * @param title  the frame title.
      */
-    public Grafico(final String title) {
+    public Grafico(final String title, final String valName) {
 
         super(title);
 
-        serie1 = new XYSeries("Media");
-        serie2 = new XYSeries("Varianza");
+        serie1 = new XYSeries(valName);
+        //serie2 = new XYSeries("Varianza");
         final XYDataset dataset = createDataset();
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
@@ -53,7 +53,7 @@ public class Grafico extends ApplicationFrame {
         final XYSeriesCollection dataset = new XYSeriesCollection();
        
         dataset.addSeries(serie1);
-        dataset.addSeries(serie2);
+        //dataset.addSeries(serie2);
 
         return dataset;
     }
@@ -70,9 +70,9 @@ public class Grafico extends ApplicationFrame {
         // create the chart...
     	
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "tempo medio throughput host",	// titolo grafico
-            "X",									// etichetta asse x
-            "Y",									// etichetta asse y
+            "Throughput acceso Host",	// titolo grafico
+            "nOsservazioni",									// etichetta asse x
+            "job/sec",									// etichetta asse y
             dataset,								// data
             PlotOrientation.VERTICAL,
             true,                     // include legend
@@ -100,7 +100,7 @@ public class Grafico extends ApplicationFrame {
 
         // change the auto tick unit selection to integer units only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        rangeAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
         // OPTIONAL CUSTOMISATION COMPLETED.
                 
         return chart;
@@ -111,8 +111,8 @@ public class Grafico extends ApplicationFrame {
 	{
 		this.serie1.add(a, b);
 	}
-	public void addVariance(double a, double b)
+	/*public void addVariance(double a, double b)
 	{
 		this.serie2.add(a, b);	
-	}
+	}*/
 }

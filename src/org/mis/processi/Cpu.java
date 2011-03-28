@@ -145,4 +145,15 @@ public class Cpu extends Processo {
 		return current;
 	}
 	
+	/**
+	 * Questa funzione resetta lo stato del centro
+	 */
+	
+	public void reset()
+	{
+		coda1.resetCoda();
+		coda2.resetCoda();
+		coda3.resetCoda();
+		this.passivate();
+	}
 }

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.Vector;
 
 import org.mis.processi.Job;
@@ -169,14 +171,14 @@ public class Log {
 			scrivi("{" + tempo(t) + "} La simulazione finisce.\n-->Tempo impiegato dalla simulazione: " + t.getSimDuration()/60000 + " minuti.");
 	}
 	
-	public void print_h(Vector <Processo> hold){
-		
+	public void print_h(PriorityQueue<Processo> hold){
+		Vector<Processo> holdtmp = new Vector<Processo>(hold);
+		Collections.sort(holdtmp);
 		scrivi("----lista oggetti in hold----");
-		for (int i=0; i<hold.size();i++){
-			scrivi("-->"+hold.get(i).getNome()+" htime:"+hold.get(i).getTime());
+		for (int i=0; i<holdtmp.size();i++){
+			scrivi("-->"+holdtmp.get(i).getNome()+" htime:"+holdtmp.get(i).getTime());
 		}
 		scrivi("----Fine lista oggetti in hold----");
-		
 	}
 	
 	public void print_p(Vector <Processo> passivate){
