@@ -27,6 +27,7 @@ public class Main {
 		private static int[] istogramma=new int[range+1];
 		private static double tx = 0.0333;
 		private static Istogramma ist;
+		private static int numOss;
 		private static boolean stab = false;
 		private static boolean logMode = false;
 		private static boolean testMode = false;
@@ -179,7 +180,7 @@ public class Main {
 						
 						//double s=0.00;
 						
-						for (int n=1; n<3000;n++){
+						for (int n=1; n<numOss;n++){
 							//System.out.println("********INIZIO BLOCCO p RUN********");
 							
 							double[] xn=new double[50]; //medie campionarie di ogni run
@@ -214,7 +215,7 @@ public class Main {
 							grafVa.addValue(n,s2xn);
 							//System.out.println("x(n)="+xjn+"\ne(n)="+en+"\ns^2(x(n))="+s2xn);
 							//System.out.println("********FINE BLOCCO p RUN********");
-							progress(3000,n);
+							progress(numOss,n);
 							Seme.chiudi();
 							Seme.apri();
 						}
@@ -240,7 +241,7 @@ public class Main {
 			{
 				System.out.println("\nLe opzioni valide sono le seguenti: ");
 				System.out.println("-l (per il log su file dettagliato)");
-				System.out.println("-s (per la modalità di stabilizzazione)");
+				System.out.println("-s numosservazioni (per la modalità di stabilizzazione)");
 				System.out.println("-t (per la modalità di test dei generatori)");
 				System.out.println("-h (per visualizzare l'aiuto)"); 
 				System.out.println("ATTENZIONE: si sconsiglia di abilitare il log mode" +
@@ -361,7 +362,7 @@ public class Main {
 			boolean sInserted = false;
 			boolean tInserted = false;
 			for (int i = 0; i < args.length; i++) {
-				if ((args[i].charAt(0) == '-') && (args[i].length() == 2)) {
+				if ((args[i].charAt(0) == '-') && (args[i].length() >= 2)) {
 					if (args[i].charAt(1) == 'l') {
 						if (!lInserted) {
 							logMode = true;
@@ -372,9 +373,17 @@ public class Main {
 						}
 					} else if (args[i].charAt(1) == 's') {
 						if (!sInserted) {
-							stab = true;
-							
+							StringBuilder num = new StringBuilder();
+							for (int l=2;l<args[i].length();l++){
+								num.append(args[i].charAt(l));
+								}
+							numOss=Integer.parseInt(num.toString());
+							stab = true;			
 							sInserted = true;
+							if (numOss<1){
+								System.out.println("Inserire un numero di osservazioni per la stabilizzazione maggiore di 1.\nEs. ./g22.jar -s1000'");
+								return false;
+							}
 						} else {
 							System.out.println("Parametro '" + args[i] + "' inserito 2 volte. ");
 							return false;
