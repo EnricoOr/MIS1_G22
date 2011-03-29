@@ -2,7 +2,7 @@ package org.mis.sim;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Vector;
+
 
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
@@ -36,32 +36,35 @@ public class Simulatore {
 	private static Log log;
 	private static double tau;
 	private int nOsser;
+	private Job[] jobSis;
 	
 	public PriorityQueue<Processo> hold;
 	public ArrayList<Processo> passivate;
-	public Vector<Job> jobSis;
+	//public Vector<Job> jobSis;
 	
 	private static boolean stab = false;
 	private boolean logging = false;
 	
 	
-	public Simulatore(int nClient, boolean stab, boolean log, int n)
+	public Simulatore(int nClient, boolean stab, boolean logi, int n)
 	{
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
-		this.logging = log;
+		this.logging = logi;
 		tau=5;
 		this.nOsser=n;
+		log = new Log((int)System.currentTimeMillis(), logging);
 		
 	}
 	
-	public Simulatore(int nClient, boolean stab, boolean log, int n, double t)
+	public Simulatore(int nClient, boolean stab, boolean logi, int n, double t)
 	{
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
-		this.logging = log;
+		this.logging = logi;
 		tau=t;
 		this.nOsser=n;
+		log = new Log((int)System.currentTimeMillis(), logging);
 		
 	}
 	
@@ -72,9 +75,8 @@ public class Simulatore {
 		
 		passivate = new ArrayList<Processo>();
 		hold = new PriorityQueue<Processo>();
-		jobSis = new Vector<Job>();
+		jobSis = new Job[nClient];
 		creaCentri();
-		log = new Log((int)System.currentTimeMillis(), logging);
 		
 	}
 	
@@ -114,7 +116,7 @@ public class Simulatore {
 				
 
 				Job j = term.nextJob();
-				jobSis.add(j);
+				jobSis[term.getId()]=j;
 				log.scrivi("Job generato dal terminale: "+term.getId());
 				term.passivate();
 				this.passivate.add(term);
@@ -125,7 +127,7 @@ public class Simulatore {
 					this.passivate.remove(cpu);
 					cpu.activate();
 					log.scrivi("CPU ATTIVATA E RIMOSSA DA CODA PASSIVA");
-					double time = clock.getSimTime()+cpu.getTempoCentro(jobSis.lastElement());
+					double time = clock.getSimTime()+cpu.getTempoCentro(jobSis[term.getId()]);
 					cpu.hold(time);
 					log.scrivi("hold della cpu per t="+time);
 					this.hold.add(cpu);
@@ -325,7 +327,7 @@ public class Simulatore {
 				printJob.setJobClass(1);
 				pt.passivate();
 				this.passivate.add(pt);
-				jobSis.remove(printJob); //job termina il suo ciclo
+				jobSis[printJob.getGeneratoDa().getId()]=null; //job termina il suo ciclo
 				
 				log.scrivi(printJob, pt, clock);			//stampa l'uscita del job dalla stampante
 				
@@ -462,16 +464,6 @@ public class Simulatore {
 
 		}
 	}
-	
-	/**
-	 * Questa funzione restituisce true se è attiva la modalita di stabilizzazione
-	 * @return stab
-	 */
-	
-	public static boolean stab()
-	{
-		return stab;
-	}
 		
 	/**
 	 * Questa funzione restituisce il report delle osservazioni della simulazione
@@ -493,13 +485,13 @@ public class Simulatore {
 
 		this.hold.clear();
 		this.passivate.clear();
-		this.jobSis.removeAllElements();
 		this.cpu.reset();
 		this.passivate.add(cpu);
 		this.disk.reset();
 		this.passivate.add(disk);
 		for(int t=0; t<nClient; t++)
 		{
+			jobSis[t]=null;
 			client[t].passivate();
 			this.passivate.add(client[t]);
 			host[t].passivate();
@@ -509,6 +501,16 @@ public class Simulatore {
 		}
 		this.nOsser=this.osservazione.nOss;
 
+	}
+	
+	/**
+	 * Questa funzione restituisce true se è attiva la modalita di stabilizzazione
+	 * @return stab
+	 */
+
+	public static boolean stab()
+	{
+		return stab;
 	}
 	
 	/**

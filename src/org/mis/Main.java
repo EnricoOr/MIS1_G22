@@ -215,7 +215,7 @@ public class Main {
 							grafVa.addValue(n,s2xn);
 							//System.out.println("x(n)="+xjn+"\ne(n)="+en+"\ns^2(x(n))="+s2xn);
 							//System.out.println("********FINE BLOCCO p RUN********");
-							progress(numOss,n);
+							progress(n);
 							Seme.chiudi();
 							Seme.apri();
 						}
@@ -228,7 +228,7 @@ public class Main {
 					
 						for(; clien<=120; clien += 10)
 						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 10, 5);
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 2000, 5);
 							simulatore.simInit();
 							simulatore.avvia();
 							Seme.chiudi();
@@ -313,40 +313,46 @@ public class Main {
 		        System.out.print("\r"+bar.toString());
 		 }
 		
-		public static void progress(int n, int perc){
-			
-			if (perc==((n/100)*5)){
+		public static void progress(int perc){
+			int n=numOss/100;
+			/*switch (perc){
+			case (n*5):
 				printProg(5);
+			
+			
+			}*/
+			if (perc==(n*5)){
+				
 				
 			}
-			else if (perc==((n/100)*15)){
+			else if (perc==(n*15)){
 				printProg(15);
 				
 			}
-			else if (perc==((n/100)*25)){
+			else if (perc==(n*25)){
 				printProg(25);
 				
 			}
-			else if (perc==((n/100)*35)){
+			else if (perc==(n*35)){
 				printProg(35);
 				
 			}
-			else if (perc==((n/100)*50)){
+			else if (perc==(n*50)){
 				printProg(50);
 			}
-			else if (perc==((n/100)*60)){
+			else if (perc==(n*60)){
 				printProg(60);
 			}
-			else if (perc==((n/100)*75)){
+			else if (perc==(n*75)){
 				printProg(75);
 			}
-			else if (perc==((n/100)*85)){
+			else if (perc==(n*85)){
 				printProg(85);
 			}
-			else if (perc==((n/100)*98)){
+			else if (perc==(n*98)){
 				printProg(99);
 			}
-			else if (perc==n-1){
+			else if (perc==numOss-1){
 				printProg(100);
 			}
 		}

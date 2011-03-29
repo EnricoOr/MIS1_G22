@@ -23,7 +23,7 @@ import org.mis.sim.Simulatore;
 public class Terminale extends Processo{
 
 	private static int id = 0;
-	private static int identificatore; 
+	private int identificatore; 
 	private Random rand = new Random(Seme.getSeme());
 	private GeneratoreIperEsponenziale genIper3;
 	private final double tx = 10;
