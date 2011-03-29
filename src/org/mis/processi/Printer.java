@@ -38,12 +38,12 @@ public class Printer extends Processo{
 		return genUn2_78.nextNumber2_78();
 	}
 	
-	public void setCurJob(Job c){
+	public final void setCurJob(Job c){
 		current=c;
 	}
 
 
-	public Job getJobCorrente(){
+	public final Job getJobCorrente(){
 		
 		return current;
 	}

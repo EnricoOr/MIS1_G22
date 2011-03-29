@@ -78,7 +78,7 @@ public class Cpu extends Processo {
 	 * @return code vuote
 	 */
 	
-	public boolean codeVuote() {
+	public final boolean codeVuote() {
 		return (coda1.getDimensione()==0 && coda2.getDimensione()==0 && coda3.getDimensione()==0);
 	}
 
@@ -89,7 +89,7 @@ public class Cpu extends Processo {
 	 */
 	
 
-	public double getTempoCentro() {
+	public final double getTempoCentro() {
 		return genIpExp_p06;
 	}
 
@@ -101,7 +101,7 @@ public class Cpu extends Processo {
 	 */
 	
 
-	public Job pop() {
+	public final Job pop() {
 		while(true)
 		{
 			int n = (int)(rand.nextNumber() * 3);
@@ -118,7 +118,7 @@ public class Cpu extends Processo {
 	 */
 	
 
-	public void push(Job job) {
+	public final void push(Job job) {
 		if(job.getJobClass() == 2) {
 			coda2.push(job);
 		}
@@ -140,7 +140,7 @@ public class Cpu extends Processo {
 		return rand.nextNumber();
 	}
 	
-	public Job getJobCorrente(){
+	public final Job getJobCorrente(){
 		
 		return current;
 	}
@@ -149,7 +149,7 @@ public class Cpu extends Processo {
 	 * Questa funzione resetta lo stato del centro
 	 */
 	
-	public void reset()
+	public final void reset()
 	{
 		coda1.resetCoda();
 		coda2.resetCoda();

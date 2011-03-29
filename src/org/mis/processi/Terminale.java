@@ -47,7 +47,7 @@ public class Terminale extends Processo{
 	 * @return id
 	 */
 	
-	public int getId(){
+	public final int getId(){
 		return identificatore;
 	}
 
@@ -64,7 +64,7 @@ public class Terminale extends Processo{
 		return dT;
 	}
 	
-	public double getdT() {
+	public final double getdT() {
 		
 		return dT;
 	}
@@ -76,7 +76,7 @@ public class Terminale extends Processo{
 	 * @see Job
 	 */
 	
-	public Job nextJob() {
+	public final Job nextJob() {
 		job = new Job(this);
 		return job;
 	}
@@ -86,7 +86,7 @@ public class Terminale extends Processo{
 	 * @return job
 	 */
 	
-	public Job getJob()
+	public final Job getJob()
 	{
 		return job;
 	}

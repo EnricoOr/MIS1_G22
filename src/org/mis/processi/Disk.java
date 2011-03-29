@@ -48,7 +48,7 @@ public class Disk extends Processo{
 		return dT;
 	}
 	
-	public double getdT() {
+	public final double getdT() {
 		
 		return dT;
 	}
@@ -60,7 +60,7 @@ public class Disk extends Processo{
 	 */
 
 
-	public Job pop() {
+	public final Job pop() {
 		this.current=coda.pop();
 		return current;
 	}
@@ -72,7 +72,7 @@ public class Disk extends Processo{
 	 */
 	
 
-	public void push(Job job) {
+	public final void push(Job job) {
 		coda.push(job);
 	}
 
@@ -81,7 +81,7 @@ public class Disk extends Processo{
 	 * @return dimensione coda
 	 */
 	
-	public int getCodaSize()
+	public final int getCodaSize()
 	{
 		return coda.getDimensione();
 	}
@@ -91,7 +91,7 @@ public class Disk extends Processo{
 	 * @parm tempo
 	 */
 	
-	public void setTempoRisposta(double tempo)
+	public final void setTempoRisposta(double tempo)
 	{
 		TotTempoRisp+=tempo;
 	}
@@ -101,12 +101,12 @@ public class Disk extends Processo{
 	 * @return tempo totale risposta disk
 	 */
 	
-	public double getTempoRisposta()
+	public final double getTempoRisposta()
 	{
 		return TotTempoRisp;
 	}
 	
-	public Job getJobCorrente(){
+	public final Job getJobCorrente(){
 		
 		return this.current;
 	}
@@ -124,7 +124,7 @@ public class Disk extends Processo{
 	 * Questa funzione resetta lo stato del centro
 	 */
 	
-	public void reset()
+	public final void reset()
 	{
 		coda.resetCoda();
 		this.passivate();

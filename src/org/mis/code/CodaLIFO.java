@@ -19,7 +19,6 @@ public class CodaLIFO extends Coda {
 	 * del metodo della superclasse coda. 
 	 * @return job pop
 	 */
-	
 	@Override
 	public Job pop() {
 		Job pop = coda.lastElement();

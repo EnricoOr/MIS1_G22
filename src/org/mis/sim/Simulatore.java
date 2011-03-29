@@ -1,5 +1,6 @@
 package org.mis.sim;
 
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
@@ -33,11 +34,11 @@ public class Simulatore {
 	private Random rand= new Random(Seme.getSeme());
 
 	private static Log log;
-	private double tau;
+	private static double tau;
 	private int nOsser;
 	
 	public PriorityQueue<Processo> hold;
-	public Vector<Processo> passivate;
+	public ArrayList<Processo> passivate;
 	public Vector<Job> jobSis;
 	
 	private static boolean stab = false;
@@ -49,17 +50,17 @@ public class Simulatore {
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = log;
-		this.tau=5;
+		tau=5;
 		this.nOsser=n;
 		
 	}
 	
-	public Simulatore(int nClient, boolean stab, boolean log, int n, double tau)
+	public Simulatore(int nClient, boolean stab, boolean log, int n, double t)
 	{
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = log;
-		this.tau=tau;
+		tau=t;
 		this.nOsser=n;
 		
 	}
@@ -67,9 +68,9 @@ public class Simulatore {
 	/**
 	 * Questo metodo inizializza i vari processi e variabii della simulazione
 	 */
-	public void simInit(){
+	public final void simInit(){
 		
-		passivate = new Vector<Processo>();
+		passivate = new ArrayList<Processo>();
 		hold = new PriorityQueue<Processo>();
 		jobSis = new Vector<Job>();
 		creaCentri();
@@ -82,7 +83,7 @@ public class Simulatore {
 	 * che per l'analisi dei risultati
 	 */
 	
-	public void avvia()
+	public final void avvia()
 	{
 		boolean stop=false;
 		
@@ -98,8 +99,7 @@ public class Simulatore {
 		this.end.hold(nOsser*tau+0.001);
 		this.hold.add(osservazione);
 		this.hold.add(end);
-//		Collections.sort(hold);
-		log.print_h(hold);
+	//	log.print_h(hold);
 		
 		//inizio ciclo di simulazione
 		while (!stop){
@@ -129,7 +129,6 @@ public class Simulatore {
 					cpu.hold(time);
 					log.scrivi("hold della cpu per t="+time);
 					this.hold.add(cpu);
-//					Collections.sort(hold);
 					//log.print_h(hold);
 				}
 				else {
@@ -187,7 +186,6 @@ public class Simulatore {
 					double time = clock.getSimTime()+currH.getTempoCentro();
 					currH.hold(time);
 					this.hold.add(currH);
-//					Collections.sort(hold);
 					//log.print_h(hold);
 				}
 				else if (j.getJobClass()==3){
@@ -206,7 +204,6 @@ public class Simulatore {
 						double time = clock.getSimTime()+disk.getTempoCentro();
 						disk.hold(time);
 						this.hold.add(disk);
-//						Collections.sort(hold);
 						
 					}
 					else{
@@ -233,7 +230,6 @@ public class Simulatore {
 						double time = clock.getSimTime()+currP.getTempoCentro();
 						currP.hold(time);
 						this.hold.add(currP);
-//						Collections.sort(hold);
 					}
 				}
 				
@@ -249,7 +245,6 @@ public class Simulatore {
 					double time = clock.getSimTime()+cpu.getTempoCentro(next);
 					cpu.hold(time);
 					this.hold.add(cpu);
-//					Collections.sort(hold);
 				}
 				
 			}//fine processo centro cpu
@@ -270,7 +265,6 @@ public class Simulatore {
 					double time = clock.getSimTime()+cpu.getTempoCentro(workingJob);
 					cpu.hold(time);
 					this.hold.add(cpu);
-//					Collections.sort(hold);
 				}
 				else {
 					cpu.push(workingJob);
@@ -288,7 +282,6 @@ public class Simulatore {
 					double time = clock.getSimTime()+disk.getTempoCentro();
 					disk.hold(time);
 					this.hold.add(disk);
-//					Collections.sort(hold);
 				}
 				log.scrivi(workingJob, disk, clock);			//salva l'uscita del job dal centro disk
 			}//fine processo centro disk
@@ -317,7 +310,6 @@ public class Simulatore {
 				double time = clock.getSimTime()+currP.getTempoCentro();
 				currP.hold(time);
 				this.hold.add(currP);
-//				Collections.sort(hold);
 				log.scrivi(hostJob, ht, clock);			//stampa l'uscita del job dal centro host
 				
 			}//fine processo centro host
@@ -334,7 +326,7 @@ public class Simulatore {
 				pt.passivate();
 				this.passivate.add(pt);
 				jobSis.remove(printJob); //job termina il suo ciclo
-				osservazione.jobCompletato();
+				
 				log.scrivi(printJob, pt, clock);			//stampa l'uscita del job dalla stampante
 				
 				//genero un nuovo job dal primo terminale passivo.
@@ -346,7 +338,6 @@ public class Simulatore {
 						double time = clock.getSimTime()+client[t].getTempoCentro();
 						client[t].hold(time);
 						this.hold.add(client[t]);
-//						Collections.sort(hold);
 						break;
 					}
 				}
@@ -369,8 +360,7 @@ public class Simulatore {
 				if(nOsser!=0){
 					osservazione.hold(clock.getSimTime()+tau);
 					this.hold.add(osservazione);
-//					Collections.sort(hold);
-					log.print_h(hold);
+					//log.print_h(hold);
 				}
 				
 				
@@ -401,7 +391,7 @@ public class Simulatore {
 	 * Funzione che crea i vari centri dell'impianto
 	 */
 	
-	public void creaCentri()
+	public final void creaCentri()
 	{
 		creaTerminali();
 		creaHost();
@@ -416,7 +406,7 @@ public class Simulatore {
 	 * Questa funzione crea i client
 	 */
 	
-	public void creaTerminali()
+	public final void creaTerminali()
 	{
 		client = new Terminale[nClient];
 		for(int t=0; t<nClient; t++)
@@ -430,7 +420,7 @@ public class Simulatore {
 	 * Questa funzione crea gli host
 	 */
 	
-	public void creaHost()
+	public final void creaHost()
 	{
 		host = new Host[nClient];
 		for(int t=0; t<nClient; t++)
@@ -444,7 +434,7 @@ public class Simulatore {
 	 * Questa funzione crea le stampanti
 	 */
 	
-	public void creaStampanti()
+	public final void creaStampanti()
 	{
 		stampanti = new Printer[nClient];
 		for(int t=0; t<nClient; t++)
@@ -458,7 +448,7 @@ public class Simulatore {
 	 * Questa funzione crea un job per ogni client
 	 */
 	
-	public void creaJob()
+	public final void creaJob()
 	{
 		for(int t=0; t<nClient; t++)
 		{
@@ -466,9 +456,7 @@ public class Simulatore {
 			client[t].activate();
 			double time = clock.getSimTime()+client[t].getTempoCentro();
 			client[t].hold(time);
-			this.hold.add(client[t]);
-//			Collections.sort(hold);
-			
+			this.hold.add(client[t]);			
 			
 			log.scrivi("Client "+t+" in hold");
 
@@ -490,7 +478,7 @@ public class Simulatore {
 	 * @return osservazione
 	 */
 	
-	public Osservazione getOsservazioni()
+	public final Osservazione getOsservazioni()
 	{
 		return osservazione;
 	}
@@ -500,11 +488,11 @@ public class Simulatore {
 	 * durante la stabilizzazione
 	 */
 	
-	public void resetSim()
+	public final void resetSim()
 	{
 
 		this.hold.clear();
-		this.passivate.removeAllElements();
+		this.passivate.clear();
 		this.jobSis.removeAllElements();
 		this.cpu.reset();
 		this.passivate.add(cpu);

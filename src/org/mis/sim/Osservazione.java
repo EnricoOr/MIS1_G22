@@ -14,7 +14,6 @@ public class Osservazione extends Processo{
 	private int ncli;
 	public int nOss; 
 	private int n;
-	private int jobCompletati = 0;
 	private int jobToHost=0;
 	private int jobToDisk=0;
 	private double totTempoRisp = 0;
@@ -54,17 +53,9 @@ public class Osservazione extends Processo{
 	}
 	
 	/**
-	 * Questo metodo incrementa il contatore che tiene conto del numero dei Job completati
-	 */
-	public void jobCompletato()
-	{
-		jobCompletati++;
-	}
-	
-	/**
 	 * Questo metodo incrementa il contatore che tiene conto del numero che vanno all'host
 	 */
-	public void jobtoHost()
+	public final void jobtoHost()
 	{
 		jobToHost++;
 	}
@@ -72,7 +63,7 @@ public class Osservazione extends Processo{
 	/**
 	 * Questo metodo incrementa il contatore che tiene conto del numero che vanno al Disk
 	 */
-	public void jobtoDisk()
+	public final void jobtoDisk()
 	{
 		jobToDisk++;
 	}
@@ -80,7 +71,7 @@ public class Osservazione extends Processo{
 	/**
 	 * Questo metodo resetta le varie variabili d'osservazione.
 	 */
-	public void resetOss()
+	public final void resetOss()
 	{
 		jobToDisk=0;
 		totTempoRisp=0;
@@ -93,7 +84,7 @@ public class Osservazione extends Processo{
 	 * @param dT
 	 */
 	
-	public void setThrHost()
+	public final void setThrHost()
 	{
 		
 		throughput = (double)jobToHost/hTime.doubleValue();
@@ -106,14 +97,14 @@ public class Osservazione extends Processo{
 	 * @return throughput
 	 */
 	
-	public double getThrHst()
+	public final double getThrHst()
 	{
 		return throughput;
 	}
 	
 	
 	
-	public void aggTempoR(double tempo)
+	public final void aggTempoR(double tempo)
 	{
 		totTempoRisp += tempo;
 	}
@@ -123,7 +114,7 @@ public class Osservazione extends Processo{
 	 * @return media
 	 */
 	
-	public double getMedia()
+	public final double getMedia()
 	{
 		double med=0.000;
 		for (int i=0;i<nOss;i++){
@@ -137,7 +128,7 @@ public class Osservazione extends Processo{
 	 * @return
 	 */
 	
-	public double getMediaTr()
+	public final double getMediaTr()
 	{
 		double med=0.000;
 		for (int i=0;i<nOss;i++){
@@ -151,7 +142,7 @@ public class Osservazione extends Processo{
 	 * @return
 	 */
 	
-	public double getVarianza()
+	public final double getVarianza()
 	{
 		double campQua=0.000;
 		double medQua=0.000;
@@ -171,7 +162,7 @@ public class Osservazione extends Processo{
 	 * @param oss
 	 */
 	
-	public void aggOssStab()
+	public final void aggOssStab()
 	{
 	
 		this.setThrHost();
@@ -186,7 +177,7 @@ public class Osservazione extends Processo{
 	 * @param oss
 	 */
 	
-	public void aggOss()
+	public final void aggOss()
 	{
 
 		if (ncli==20){

@@ -14,6 +14,11 @@ public class CodaFIFO extends Coda {
 		super(nomeCoda);
 	}
 	
+	/**
+	 * Funzione la quale ritorna l'ultimo job entrato nella coda. E' stato effettuato l'override
+	 * del metodo della superclasse coda. 
+	 * @return job pop
+	 */
 	@Override
 	public Job pop() {
 		Job pop = coda.firstElement();

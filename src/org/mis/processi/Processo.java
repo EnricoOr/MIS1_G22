@@ -26,19 +26,19 @@ public abstract class Processo implements Comparable<Processo>{
 	 * @return nome centro
 	 */
 	
-	public String getNome() {
+	public final String getNome() {
 		return nome;
 	}
 	
-	public Stato getStato() {
+	public final Stato getStato() {
 		return state;
 	}
 	
-	public void setState (Stato s){
+	public final void setState (Stato s){
 		this.state=s;
 	}
 	
-	public void hold(double temp){
+	public final void hold(double temp){
 		hTime=Double.valueOf(temp);
 		this.state=Stato.HOLD;
 	}
@@ -47,16 +47,16 @@ public abstract class Processo implements Comparable<Processo>{
 		this.state=Stato.ATTIVO;
 	}
 	
-	public void passivate(){
+	public final void passivate(){
 		this.state=Stato.PASSIVO;
 	}
 	
-	public Double getTime(){
+	public final Double getTime(){
 		
 		return hTime;
 	}
 	
-	public int compareTo(Processo other) {
+	public final int compareTo(Processo other) {
         return hTime.compareTo(other.hTime);
     }
 	

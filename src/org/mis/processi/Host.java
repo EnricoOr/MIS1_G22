@@ -49,7 +49,7 @@ public class Host extends Processo{
 	}
 
 
-	public Job getJobCorrente(){
+	public final Job getJobCorrente(){
 		
 		return current;
 	}

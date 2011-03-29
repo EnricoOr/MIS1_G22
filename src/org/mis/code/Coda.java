@@ -38,7 +38,7 @@ public abstract class Coda {
 	 * @return dimensione coda
 	 */
 	
-	public int getDimensione() {
+	public final int getDimensione() {
 		return coda.size();
 	}
 	
@@ -47,7 +47,7 @@ public abstract class Coda {
 	 * @param Job push
 	 */
 	
-	public void push(Job push){
+	public final void push(Job push){
 		coda.add(push);
 	}
 	
@@ -56,7 +56,7 @@ public abstract class Coda {
 	 * resettare le code del sistema.
 	 */
 	
-	public void resetCoda() {
+	public final void resetCoda() {
 		coda.removeAllElements();
 	}
 	

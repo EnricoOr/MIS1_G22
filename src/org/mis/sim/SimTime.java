@@ -17,27 +17,27 @@ public class SimTime {
 		setSimTime (0.0);
 	}
 	
-	public void add(double dT){
+	public final void add(double dT){
 		
 		this.timeSim += dT;
 	}
 	
-	public double getSimTime(){
+	public final double getSimTime(){
 		
 		return this.timeSim;
 	}
 	
-	public void setSimTime (double t){
+	public final void setSimTime (double t){
 		
 		this.timeSim = t;
 	}
 	
-	public void stopSimTime(){
+	public final void stopSimTime(){
 		
 		this.timeStop = System.currentTimeMillis();
 	}
 	
-	public double getSimDuration (){
+	public final double getSimDuration (){
 		
 		stopSimTime();
 		return this.timeStop - this.timeStart;
