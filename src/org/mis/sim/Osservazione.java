@@ -14,6 +14,7 @@ public class Osservazione extends Processo{
 	private int ncli;
 	public int nOss; 
 	private int n;
+	private double dT;
 	private int jobToHost=0;
 	private int jobToDisk=0;
 	private double totTempoRisp = 0;
@@ -29,11 +30,12 @@ public class Osservazione extends Processo{
 	 * @param jobT
 	 */
 	
-	public Osservazione(int nOss) {
+	public Osservazione(int nOss, double dT) {
 		
 		super("osservazione");
 		this.nOss=nOss;
 		media = new double[nOss];
+		this.dT=dT;
 
 	}
 	
@@ -42,12 +44,13 @@ public class Osservazione extends Processo{
 	 * @param run
 	 */
 	
-	public Osservazione(int nOss, int ncli) {
+	public Osservazione(int nOss, int ncli, double dT) {
 		
 		super("osservazione");
 		this.ncli = ncli;
 		this.nOss=nOss;
 		this.n=0;
+		this.dT=dT;
 		media = new double[nOss];
 		mediaTr = new double[nOss];
 	}
@@ -87,8 +90,9 @@ public class Osservazione extends Processo{
 	public final void setThrHost()
 	{
 		
-		throughput = (double)jobToHost/hTime.doubleValue();
+		throughput = (double)jobToHost/dT;
 		media[n] = throughput;
+		jobToHost=0;
 
 	}
 	

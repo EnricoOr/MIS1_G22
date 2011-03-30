@@ -1,8 +1,6 @@
 package org.mis;
 
 import org.jfree.ui.RefineryUtilities;
-//import java.util.*;
-//import java.io.*;
 
 import org.mis.gen.*;
 import org.mis.gen.Random;
@@ -28,6 +26,7 @@ public class Main {
 		private static double tx = 0.0333;
 		private static Istogramma ist;
 		private static int numOss;
+		private static int n100;
 		private static boolean stab = false;
 		private static boolean logMode = false;
 		private static boolean testMode = false;
@@ -108,30 +107,7 @@ public class Main {
 			stampaIst(ist, istogramma);
 		}
 		
-		/**
-		 * Funzione che si occupa di eseguire il test del generatore iperesponenziale p=0.3
-		 * e di stamparne i risultati
-		 */
-		
-		private static void TestGenIperesp2() {
-			Random rand = new Random(Seme.getSeme());
-			GeneratoreIperEsponenziale ipexp = new GeneratoreIperEsponenziale(tx, rand, 0.3);
-			double tot = 0;
-			double tot2 = 0;
-			double x;
-			int[] istogramma=new int[range+1];
-//			resetIst();
-			for (int i = 0; i< N; ++i) {
-				x = ipexp.nextIperExp();				
-				istogramma[(int)(x*range)]++;
-				tot += x;
-				tot2 += Math.pow(x,2);
-			}
-			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.3)-1)+")\n");
-			ist = new Istogramma("Test generatore iperesponenziale", N/100.0);
-			stampaIst(ist, istogramma);
-		}
-		
+
 		/*
 		 * Questa funzione si occupa di resettare il vettore istogramma
 		 * per il disegno dei grafici
@@ -170,7 +146,6 @@ public class Main {
 					k = 2;
 					TestGenErlang();
 					TestGenIperesp();
-					TestGenIperesp2();
 					k = 3;
 					TestGenErlang();
 				}
@@ -181,9 +156,7 @@ public class Main {
 						System.out.println("Avviata modalità stabilizzazione");
 						grafMe = new Grafico("Stabilizzazione Gordon - Media", "Media");
 						grafVa = new Grafico("Stabilizzazione Gordon - Varianza", "Varianza");
-						
-						//double s=0.00;
-						
+												
 						for (int n=1; n<numOss;n++){
 							//System.out.println("********INIZIO BLOCCO p RUN********");
 							
@@ -232,7 +205,7 @@ public class Main {
 					
 						for(; clien<=120; clien += 10)
 						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 2000, 5);
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 4000, 6);
 							simulatore.simInit();
 							simulatore.avvia();
 							Seme.chiudi();
@@ -318,42 +291,37 @@ public class Main {
 		 }
 		
 		public static void progress(int perc){
-			int n=numOss/100;
-			/*switch (perc){
-			case (n*5):
-				printProg(5);
+			n100=numOss/100;
 			
-			
-			}*/
-			if (perc==(n*5)){
-				
+			if (perc==(n100*5)){
+					printProg(5);
 				
 			}
-			else if (perc==(n*15)){
+			else if (perc==(n100*15)){
 				printProg(15);
 				
 			}
-			else if (perc==(n*25)){
+			else if (perc==(n100*25)){
 				printProg(25);
 				
 			}
-			else if (perc==(n*35)){
+			else if (perc==(n100*35)){
 				printProg(35);
 				
 			}
-			else if (perc==(n*50)){
+			else if (perc==(n100*50)){
 				printProg(50);
 			}
-			else if (perc==(n*60)){
+			else if (perc==(n100*60)){
 				printProg(60);
 			}
-			else if (perc==(n*75)){
+			else if (perc==(n100*75)){
 				printProg(75);
 			}
-			else if (perc==(n*85)){
+			else if (perc==(n100*85)){
 				printProg(85);
 			}
-			else if (perc==(n*98)){
+			else if (perc==(n100*99)){
 				printProg(99);
 			}
 			else if (perc==numOss-1){

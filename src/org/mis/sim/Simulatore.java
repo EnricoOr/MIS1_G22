@@ -3,9 +3,6 @@ package org.mis.sim;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-
-import org.mis.gen.Random;
-import org.mis.gen.Seme;
 import org.mis.processi.*;
 
 /**
@@ -31,7 +28,6 @@ public class Simulatore {
 	private Osservazione osservazione;
 	private SimTime clock;
 	private FineSim end;
-	private Random rand= new Random(Seme.getSeme());
 
 	private static Log log;
 	private static double tau;
@@ -40,7 +36,6 @@ public class Simulatore {
 	
 	public PriorityQueue<Processo> hold;
 	public ArrayList<Processo> passivate;
-	//public Vector<Job> jobSis;
 	
 	private static boolean stab = false;
 	private boolean logging = false;
@@ -51,7 +46,7 @@ public class Simulatore {
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = logi;
-		tau=5;
+		tau=6;
 		this.nOsser=n;
 		log = new Log((int)System.currentTimeMillis(), logging);
 		
@@ -91,8 +86,8 @@ public class Simulatore {
 		
 		clock = new SimTime();
 		end = new FineSim();
-		if(stab) osservazione = new Osservazione(nOsser);
-		else osservazione = new Osservazione(nOsser, nClient);
+		if(stab) osservazione = new Osservazione(nOsser, tau);
+		else osservazione = new Osservazione(nOsser, nClient, tau);
 		creaJob();
 		
 		if(!stab) System.out.println("***Inizio Simulazione " + nClient +" client ***");
@@ -152,8 +147,7 @@ public class Simulatore {
 				//da classe 1 il job cambia classe 2 con p=0.3, 3 con p=0.7
 				if (j.getJobClass()==1){
 					
-					double n = rand.nextNumber();
-					if (n<=0.3){ 
+					if (cpu.nextRand()<=0.3){ 
 						j.setJobClass(2);
 						log.scrivi( j, 2, clock);				//salva il cambio di classe
 						cpu.push(j);
@@ -193,8 +187,7 @@ public class Simulatore {
 				else if (j.getJobClass()==3){
 					log.scrivi(j, cpu, clock);					//stampa l'uscita dal centro di cpu
 					//il job di classe tre va con p=0.1 alla stampante e con p=0.9 al disk
-					double n = rand.nextNumber();
-					if (n>0.1){
+					if (cpu.nextRand()>0.1){
 					
 					//se il disk è passivo il job l'attiva altrimenti si mette in coda
 					if (disk.getStato()==Stato.PASSIVO){
