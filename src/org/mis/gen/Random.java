@@ -31,8 +31,7 @@ public class Random {
 	}
 	
 	public final int nextNumber2_78(){
-		
-	    return (int)((76*(this.nextNumber()))+2);               
+		return (int)((76*(this.nextNumber()))+2);               
 	} 
 	 
 }

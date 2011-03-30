@@ -24,7 +24,7 @@ public class Main {
 		private static final int N =1000000;
 		private static int ix;
 		private static int range=100;
-		private static int[] istogramma=new int[range+1];
+//		private static int[] istogramma=new int[range+1];
 		private static double tx = 0.0333;
 		private static Istogramma ist;
 		private static int numOss;
@@ -44,17 +44,18 @@ public class Main {
 			Random gen = new Random(ix);
 			double tot = 0;
 			double tot2 = 0;	
-			double x;
-			resetIst();
+			int x;
+			int[] istogramma = new int[78+1];
+//			resetIst();
 			for (int i = 0; i< N; ++i) {
-				x = gen.nextNumber();
-				istogramma[(int)(x*range)]++;
+				x = gen.nextNumber2_78();
+				istogramma[(int)x]++;
 				tot += x;
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore random\nmedia:    "+tot/N+" (0.5)\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" (0.0)\n");
-			ist = new Istogramma("Test generatore random");
-			stampaIst(ist);
+			ist = new Istogramma("Test generatore random", N/76.0);
+			stampaIst(ist, istogramma);
 		}
 		
 		
@@ -69,7 +70,8 @@ public class Main {
 			double tot = 0;
 			double tot2 = 0;
 			double x;
-			resetIst();
+			int[] istogramma=new int[range+1];
+//			resetIst();
 			
 			for (int i = 0; i< N; ++i) {
 				x = erl.nextErlang();
@@ -78,8 +80,8 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore " + k + "-erlangiano\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)/k+")\n");
-			ist = new Istogramma("Test generatore " + k + "-erlangiano");
-			stampaIst(ist);
+			ist = new Istogramma("Test generatore " + k + "-erlangiano", N/100.0);
+			stampaIst(ist, istogramma);
 		}
 
 		/**
@@ -93,7 +95,8 @@ public class Main {
 			double tot = 0;
 			double tot2 = 0;
 			double x;
-			resetIst();
+			int[] istogramma=new int[range+1];
+//			resetIst();
 			for (int i = 0; i< N; ++i) {
 				x = ipexp.nextIperExp();
 				istogramma[(int)(x*range)]++;
@@ -101,8 +104,8 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.6)-1)+")\n");
-			ist = new Istogramma("Test generatore iperesponenziale");
-			stampaIst(ist);
+			ist = new Istogramma("Test generatore iperesponenziale", N/100.0);
+			stampaIst(ist, istogramma);
 		}
 		
 		/**
@@ -116,16 +119,17 @@ public class Main {
 			double tot = 0;
 			double tot2 = 0;
 			double x;
-			resetIst();
+			int[] istogramma=new int[range+1];
+//			resetIst();
 			for (int i = 0; i< N; ++i) {
-				x = ipexp.nextIperExp();
+				x = ipexp.nextIperExp();				
 				istogramma[(int)(x*range)]++;
 				tot += x;
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.3)-1)+")\n");
-			ist = new Istogramma("Test generatore iperesponenziale");
-			stampaIst(ist);
+			ist = new Istogramma("Test generatore iperesponenziale", N/100.0);
+			stampaIst(ist, istogramma);
 		}
 		
 		/*
@@ -133,12 +137,12 @@ public class Main {
 		 * per il disegno dei grafici
 		 */
 		
-		public static void resetIst()
-		{
-			for(int i =0;i<istogramma.length;i++){
-				istogramma[i]=0;
-			}
-		}
+//		public static void resetIst()
+//		{
+//			for(int i =0;i<istogramma.length;i++){
+//				istogramma[i]=0;
+//			}
+//		}
 		
 		/*
 		 * Classe main del nostro simulatore
@@ -261,7 +265,7 @@ public class Main {
 		 * @param Istogramma ist
 		 */
 		
-		public static void stampaIst(Istogramma ist)
+		public static void stampaIst(Istogramma ist, int[] istogramma)
 		{
 			System.out.println("I valori per disegnare l'istogramma sono: ");
 			System.out.print("[");

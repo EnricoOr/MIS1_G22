@@ -1,7 +1,9 @@
 package org.mis.sim;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GradientPaint;
 
 import org.jfree.chart.ChartFactory;
@@ -12,23 +14,29 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.RectangleAnchor;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.TextAnchor;
 
 public class Istogramma extends ApplicationFrame {
 
 	private static final long serialVersionUID = 1L;
 	 public final DefaultCategoryDataset dataset;
+	 public final double media;
 	/**
      * Creates a new demo instance.
      * @param title  the frame title.
      */
-    public Istogramma(final String title) {
+    public Istogramma(final String title, double media) {
 
         super(title);
         dataset = new DefaultCategoryDataset();
+        this.media = media;
         final CategoryDataset dataset = createDataset();
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
@@ -44,15 +52,15 @@ public class Istogramma extends ApplicationFrame {
     private CategoryDataset createDataset() {
         
         // row keys...
-        final String serie1 = "First";
+//        final String serie1 = "First";
         //final String series2 = "Second";
         //final String series3 = "Third";
 
         // column keys...
-        final String categoria1 = "media";
+//        final String categoria1 = "media";
 
         // create the dataset...
-        dataset.addValue(1.0, serie1, categoria1);
+//        dataset.addValue(1.0, serie1, categoria1);
         return dataset;
     }
     public void addvalues(int value,String category)
@@ -81,6 +89,20 @@ public class Istogramma extends ApplicationFrame {
             false                     // URLs?
         );
 
+
+        CategoryPlot cp = (CategoryPlot)chart.getPlot();
+        ValueMarker vm = new ValueMarker (media);
+        vm.setLabel("Media");
+        vm.setLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
+        vm.setLabelOffset(new RectangleInsets(5,20,5,200));
+//        vm.setLabelOffset(RectangleInsets.ZERO_INSETS);
+//        vm.setLabelOffsetType(LengthAdjustmentType.CONTRACT);
+        vm.setLabelTextAnchor(TextAnchor.BASELINE_CENTER);
+        vm.setPaint(Color.yellow);
+        vm.setStroke(new BasicStroke(2.0f));
+        cp.addRangeMarker(vm);
+
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
         // set the background color for the chart...
@@ -95,7 +117,7 @@ public class Istogramma extends ApplicationFrame {
         // set the range axis to display integers only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
+                
         // disable bar outlines...
         final BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
@@ -119,7 +141,7 @@ public class Istogramma extends ApplicationFrame {
 
         final CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setCategoryLabelPositions(
-            CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0)
+            CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 2.0)
         );
         // OPTIONAL CUSTOMISATION COMPLETED.
         
