@@ -161,8 +161,8 @@ public class Main {
 							//System.out.println("********INIZIO BLOCCO p RUN********");
 							
 							double[] xn=new double[50]; //medie campionarie di ogni run
-							double xjn=0.00; //variabile appoggio per stima media gordon
-							double var=0.00; //variabile appoggio per stima varianza gordon
+							double xjn=0; //variabile appoggio per stima media gordon
+							double var=0; //variabile appoggio per stima varianza gordon
 							Simulatore simulatore = new Simulatore(clien, stab, logMode, n);
 							simulatore.simInit();
 							
@@ -205,7 +205,7 @@ public class Main {
 					
 						for(; clien<=120; clien += 10)
 						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 4000, 6);
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 4000, 5);
 							simulatore.simInit();
 							simulatore.avvia();
 							Seme.chiudi();

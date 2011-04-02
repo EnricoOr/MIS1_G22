@@ -8,12 +8,14 @@ public class Job extends Processo {
 	private Terminale generatoDa;
 	private double tempoIngrSist; //istante in cui il job è entrato nel sistema
 	private double tempoIngrCoda; //istante in cui il job si accoda ad un centro
+	private boolean stampa;
 	
 	public Job(Terminale t){
 		super("job " + identificatore++);
 		id=identificatore;
 		jobClass = 1;
 		generatoDa = t;
+		setStampa(false);
 
 	}
 	
@@ -94,6 +96,24 @@ public class Job extends Processo {
 	public double getIngCoda()
 	{
 		return this.tempoIngrCoda;
+	}
+
+
+	/**
+	 * Metodo per settare la stampa o meno del job
+	 * @param stampa the stampa to set
+	 */
+	public void setStampa(boolean stampa) {
+		this.stampa = stampa;
+	}
+
+
+	/**
+	 * Getter per il valore di stampa
+	 * @return the stampa
+	 */
+	public boolean getStampa() {
+		return stampa;
 	}
 
 }

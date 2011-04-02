@@ -90,7 +90,7 @@ public class Osservazione extends Processo{
 	public final void setThrHost()
 	{
 		
-		throughput = (double)jobToHost/dT;
+		throughput = jobToHost/dT;
 		media[n] = throughput;
 		jobToHost=0;
 
@@ -120,11 +120,11 @@ public class Osservazione extends Processo{
 	
 	public final double getMedia()
 	{
-		double med=0.000;
+		double med=0;
 		for (int i=0;i<nOss;i++){
 			med+=media[i];
 		}
-		return (double)(med/nOss);
+		return (med/nOss);
 	}
 	
 	/**
@@ -134,11 +134,11 @@ public class Osservazione extends Processo{
 	
 	public final double getMediaTr()
 	{
-		double med=0.000;
+		double med=0;
 		for (int i=0;i<nOss;i++){
 			med+=mediaTr[i];
 		}
-		return (double)(med/nOss);
+		return (med/nOss);
 	}
 	
 	/**

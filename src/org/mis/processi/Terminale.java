@@ -77,7 +77,9 @@ public class Terminale extends Processo{
 	 */
 	
 	public final Job nextJob() {
+		if (job==null)
 		job = new Job(this);
+		
 		return job;
 	}
 
