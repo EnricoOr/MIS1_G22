@@ -6,6 +6,8 @@ public class GeneratoreIperEsponenziale extends GeneratoreEsponenziale {
 		private double tx;
 		private double P;
 		private Random ran;
+		private double molt1;
+		private double molt2;
 		
 		/**
 		 * Il primo parametro è il seme, il secondo parametro è il tempo 
@@ -18,6 +20,8 @@ public class GeneratoreIperEsponenziale extends GeneratoreEsponenziale {
 			this.tx = tx;
 			this.P = p;
 			ran = rand;
+			molt1 = this.tx / (2 * (1 - P));
+			molt2 = this.tx / (2 * P);
 		}
 		
 		/**
@@ -28,8 +32,10 @@ public class GeneratoreIperEsponenziale extends GeneratoreEsponenziale {
 		 */
 		
 		public double nextIperExp() {
-			if (ran.nextNumber()>P) return (super.nextExp()*(tx/(2*(1-P))));
-			else return (super.nextExp()*(tx/(2*P)));
+			if (ran.nextNumber()>P) 
+				return (super.nextExp()*molt1);
+			else 
+				return (super.nextExp()*molt2);
 		}
 
 	}

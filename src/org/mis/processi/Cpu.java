@@ -1,7 +1,5 @@
 package org.mis.processi;
 
-import java.util.Vector;
-
 import org.mis.code.CodaFIFO;
 import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;

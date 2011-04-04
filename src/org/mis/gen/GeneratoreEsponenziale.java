@@ -11,7 +11,7 @@ public class GeneratoreEsponenziale{
 	
 	
 	public GeneratoreEsponenziale(double tx, Random rand) {
-		this.tx =tx;
+		this.tx = tx;
 		ran = rand;
 	}
 	
@@ -23,7 +23,7 @@ public class GeneratoreEsponenziale{
 	 */
 	
 	public double nextExp() {
-		double temp=(-tx*Math.log(1-ran.nextNumber()));
+		double temp = (-tx*Math.log(ran.nextNumber()));
 		return temp;
 	}
   

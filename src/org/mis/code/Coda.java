@@ -1,6 +1,6 @@
 package org.mis.code;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import org.mis.processi.Job;
 
 /**
@@ -11,7 +11,7 @@ import org.mis.processi.Job;
 
 public abstract class Coda {
 	
-	public Vector<Job> coda = new Vector<Job>();
+	public ArrayList<Job> coda = new ArrayList<Job>();
 	public String nomeCoda;
 	
 	/**
@@ -57,7 +57,7 @@ public abstract class Coda {
 	 */
 	
 	public final void resetCoda() {
-		coda.removeAllElements();
+		coda.clear();
 	}
 	
 	/**

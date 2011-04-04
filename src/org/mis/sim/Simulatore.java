@@ -99,7 +99,7 @@ public class Simulatore {
 		this.end.hold(nOsser*tau+0.001);
 		this.hold.add(osservazione);
 		this.hold.add(end);
-		log.print_h(hold);
+//		log.print_h(hold);
 		
 		//inizio ciclo di simulazione
 		while (!stop){
@@ -118,8 +118,8 @@ public class Simulatore {
 				log.scrivi("Job generato dal terminale: "+term.getId());
 				term.passivate();
 				this.passivate.add(term);
-				//log.print_p(passivate);
-
+//				log.print_p(passivate);
+				
 				//se la cpu è passiva il job l'attiva altrimenti si mette in coda
 				if (cpu.getStato()==Stato.PASSIVO){
 					this.passivate.remove(cpu);
@@ -129,7 +129,7 @@ public class Simulatore {
 					cpu.hold(time);
 					log.scrivi("hold della cpu per t="+time);
 					this.hold.add(cpu);
-					log.print_h(hold);
+//					log.print_h(hold);
 				}
 				else {
 					cpu.push(j);
@@ -145,18 +145,16 @@ public class Simulatore {
 				clock.add(cpu.getTempoCentro());
 				
 				Job j = cpu.getJobCorrente();
-				log.print_h(hold);
-
+				
 				
 				//da classe 1 il job cambia classe
 				if (j.getJobClass()==1){
 
 					if (rand.nextNumber()<0.4){ 
-						this.osservazione.jobtoHost();
-
 						j.setJobClass(2);
 						log.scrivi( j, 2, clock);				//salva il cambio di classe
 						cpu.push(j);
+						this.osservazione.jobtoHost();
 						log.scrivi(j, cpu, cpu, clock);			//salva l'accodamento
 					}
 					else {
@@ -180,8 +178,8 @@ public class Simulatore {
 					
 					double time = clock.getSimTime()+currH.getTempoCentro();
 					currH.hold(time);
-					this.hold.add(currH);
-					log.print_h(hold);
+					this.hold.add(currH);						
+					//log.print_h(hold);
 				}
 				else if (j.getJobClass()==3){
 					log.scrivi(j, cpu, clock);					//stampa l'uscita dal centro di cpu

@@ -60,7 +60,7 @@ public class Osservazione extends Processo{
 	 */
 	public final void jobtoHost()
 	{
-		jobToHost++;
+		++jobToHost;
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class Osservazione extends Processo{
 	 */
 	public final void jobtoDisk()
 	{
-		jobToDisk++;
+		++jobToDisk;
 	}
 	
 	/**
@@ -170,7 +170,7 @@ public class Osservazione extends Processo{
 	{
 	
 		this.setThrHost();
-		if(n<nOss) n++;
+		n++;
 			
 	
 	}
@@ -189,7 +189,7 @@ public class Osservazione extends Processo{
 			
 		}
 		this.setThrHost();
-		if(n<nOss) n++;
+		n++;
 		
 	}
 			
