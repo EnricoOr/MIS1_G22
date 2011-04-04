@@ -23,7 +23,7 @@ public class GeneratoreEsponenziale{
 	 */
 	
 	public double nextExp() {
-		double temp=(-tx*Math.log(ran.nextNumber()));
+		double temp=(-tx*Math.log(1-ran.nextNumber()));
 		return temp;
 	}
   

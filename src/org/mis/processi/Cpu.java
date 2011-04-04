@@ -31,9 +31,7 @@ public class Cpu extends Processo {
 	private CodaFIFO coda1 = new CodaFIFO("Coda1" + super.getNome());
 	private CodaFIFO coda2 = new CodaFIFO("Coda2" + super.getNome());
 	private CodaFIFO coda3 = new CodaFIFO("Coda3" + super.getNome());
-	public Vector<Job> coda1s;
-	public Vector<Job> coda2s;
-	public Vector<Job> coda3s;
+
 	private Job current;
 
 	
