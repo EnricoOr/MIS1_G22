@@ -17,7 +17,7 @@ import org.mis.gen.Seme;
 
 public class Disk extends Processo{
 
-	private CodaLIFO coda = new CodaLIFO("Coda" + super.getNome());
+	private CodaLIFO coda = new CodaLIFO("Coda " + super.getNome());
 	public Vector<Job> codas;
 	private GeneratoreKerlangiano gen2erl;
 	private final int k = 2;
@@ -32,7 +32,7 @@ public class Disk extends Processo{
 	 */
 	
 	public Disk(){
-		super("Disk");
+		super("Disk", TipoProcesso.Disk);
 		gen2erl = new GeneratoreKerlangiano(Seme.getSeme(), this.tx, this.k);
 	}
 

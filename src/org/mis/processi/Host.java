@@ -29,7 +29,7 @@ public class Host extends Processo{
 	 */
 	
 	public Host(){
-		super("Host");
+		super("Host", TipoProcesso.Host);
 		kerl = new GeneratoreKerlangiano(Seme.getSeme(),this.tx, 3);
 	}
 

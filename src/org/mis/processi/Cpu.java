@@ -26,9 +26,9 @@ public class Cpu extends Processo {
 	private final double txc2 = 0.074;
 	private final double txc3 = 0.0285;
 	private Random rand = new Random(Seme.getSeme());
-	private CodaFIFO coda1 = new CodaFIFO("Coda1" + super.getNome());
-	private CodaFIFO coda2 = new CodaFIFO("Coda2" + super.getNome());
-	private CodaFIFO coda3 = new CodaFIFO("Coda3" + super.getNome());
+	private CodaFIFO coda1 = new CodaFIFO("Coda1 " + super.getNome());
+	private CodaFIFO coda2 = new CodaFIFO("Coda2 " + super.getNome());
+	private CodaFIFO coda3 = new CodaFIFO("Coda3 " + super.getNome());
 
 	private Job current;
 
@@ -39,7 +39,7 @@ public class Cpu extends Processo {
 	 */
 	
 	public Cpu(){
-		super("CPU");
+		super("CPU", TipoProcesso.CPU);
 		genIpExp_p06c1 = new GeneratoreIperEsponenziale(txc1, rand, 0.6);
 		genIpExp_p06c2 = new GeneratoreIperEsponenziale(txc2, rand, 0.6);
 		genIpExp_p06c3 = new GeneratoreIperEsponenziale(txc3, rand, 0.6);

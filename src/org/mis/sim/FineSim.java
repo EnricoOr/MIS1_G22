@@ -17,7 +17,7 @@ public class FineSim extends Processo{
 	 * @param nome
 	 */
 	public FineSim() {
-		super("Fine Simulazione");
+		super("Fine Simulazione", TipoProcesso.FineSimulazione);
 		
 	}
 

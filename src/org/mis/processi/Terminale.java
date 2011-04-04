@@ -36,7 +36,7 @@ public class Terminale extends Processo{
 	 */
 	
 	public Terminale(){
-		super("Terminale");
+		super("Terminale", TipoProcesso.Terminale);
 		identificatore=(id++) % Simulatore.getNClient();
 		genIper3 = new GeneratoreIperEsponenziale(tx, rand, 0.3);
 

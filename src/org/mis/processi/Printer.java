@@ -24,7 +24,7 @@ public class Printer extends Processo{
 	 */
 	
 	public Printer(){
-		super("Stampante");
+		super("Stampante", TipoProcesso.Stampante);
 		genUn2_78 = new Random(Seme.getSeme());
 	}
 

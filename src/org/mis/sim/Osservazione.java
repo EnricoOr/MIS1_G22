@@ -32,7 +32,7 @@ public class Osservazione extends Processo{
 	
 	public Osservazione(int nOss, double dT) {
 		
-		super("osservazione");
+		super("Osservazione", TipoProcesso.Osservazione);
 		this.nOss=nOss;
 		media = new double[nOss];
 		this.dT=dT;
@@ -46,7 +46,7 @@ public class Osservazione extends Processo{
 	
 	public Osservazione(int nOss, int ncli, double dT) {
 		
-		super("osservazione");
+		super("Osservazione", TipoProcesso.Osservazione);
 		this.ncli = ncli;
 		this.nOss=nOss;
 		this.n=0;

@@ -11,12 +11,11 @@ public class Job extends Processo {
 	private boolean stampa;
 	
 	public Job(Terminale t){
-		super("job " + identificatore++);
+		super("job " + identificatore++, TipoProcesso.Job);
 		id=identificatore;
 		jobClass = 1;
 		generatoDa = t;
 		setStampa(false);
-
 	}
 	
 	
