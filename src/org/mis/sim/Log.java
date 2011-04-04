@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
-import java.util.Vector;
 
 import org.mis.processi.Job;
 import org.mis.processi.Processo;
@@ -172,7 +172,7 @@ public class Log {
 	}
 	
 	public void print_h(PriorityQueue<Processo> hold){
-		Vector<Processo> holdtmp = new Vector<Processo>(hold);
+		ArrayList<Processo> holdtmp = new ArrayList<Processo>(hold);
 		Collections.sort(holdtmp);
 		scrivi("----lista oggetti in hold----");
 		for (int i=0; i<holdtmp.size();i++){
@@ -181,7 +181,7 @@ public class Log {
 		scrivi("----Fine lista oggetti in hold----");
 	}
 	
-	public void print_p(Vector <Processo> passivate){
+	public void print_p(ArrayList<Processo> passivate){
 		
 		scrivi("----lista oggetti passivi----");
 		for (int i=0; i<passivate.size();i++){
