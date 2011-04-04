@@ -49,7 +49,7 @@ public class Simulatore {
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = logi;
-		tau=5;
+		tau=6;
 		this.nOsser=n;
 		log = new Log((int)System.currentTimeMillis(), logging);
 		
@@ -149,7 +149,6 @@ public class Simulatore {
 				
 				//da classe 1 il job cambia classe
 				if (j.getJobClass()==1){
-					
 					if (rand.nextNumber()<0.4){ 
 						j.setJobClass(2);
 						log.scrivi( j, 2, clock);				//salva il cambio di classe

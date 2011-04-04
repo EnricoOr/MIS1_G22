@@ -21,8 +21,8 @@ public class CodaLIFO extends Coda {
 	 */
 	@Override
 	public Job pop() {
-		Job pop = coda.lastElement();
-		coda.remove(coda.size()-1);
+		Job pop = coda.remove(coda.size()-1);
+		
 		return pop;
 	} 
 

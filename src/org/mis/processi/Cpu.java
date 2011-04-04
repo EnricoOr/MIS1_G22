@@ -102,12 +102,16 @@ public class Cpu extends Processo {
 	
 
 	public final Job pop() {
+		int n = (int)((rand.nextNumber() * 3)+1);
 		while(true)
 		{
-			int n = (int)(rand.nextNumber() * 3);
 			if(n==1 && coda1.getDimensione() != 0) return coda1.pop();
-			else if ((n==2 || n==3) && coda2.getDimensione() != 0) return coda2.pop();
-			else if(n==0 && coda3.getDimensione() != 0) return coda3.pop();
+			else if (n==2 && coda2.getDimensione()!= 0) return coda2.pop();
+			else if (n==3 && coda3.getDimensione()!= 0) return coda3.pop();
+			else{
+				if (n<=3) n++;
+				else n=1;
+			}
 		}
 	}
 
