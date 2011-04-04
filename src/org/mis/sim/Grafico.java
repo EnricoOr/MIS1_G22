@@ -70,7 +70,7 @@ public class Grafico extends ApplicationFrame {
         // create the chart...
     	
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "Throughput acceso Host",	// titolo grafico
+            "Throughput accesso Host",	// titolo grafico
             "nOsservazioni",									// etichetta asse x
             "job/sec",									// etichetta asse y
             dataset,								// data
