@@ -52,7 +52,6 @@ public class Simulatore {
 		tau=6;
 		this.nOsser=n;
 		log = new Log((int)System.currentTimeMillis(), logging);
-		
 	}
 	
 	public Simulatore(int nClient, boolean stab, boolean logi, int n, double t)
@@ -476,7 +475,7 @@ public class Simulatore {
 			this.passivate.add(stampanti[t]);
 		}
 		this.nOsser=this.osservazione.nOss;
-
+		log = new Log((int)System.currentTimeMillis(), logging);
 	}
 	
 	/**
