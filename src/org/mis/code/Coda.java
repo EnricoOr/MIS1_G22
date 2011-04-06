@@ -43,6 +43,15 @@ public abstract class Coda {
 	}
 	
 	/**
+	 * Funzione la quale ritorna true se la coda è vuota.
+	 * @return coda vuota
+	 */
+	
+	public final boolean isEmpty() {
+		return coda.isEmpty();
+	}
+	
+	/**
 	 * Prende come parametro un job, il quale verrà aggiunto nella coda.
 	 * @param Job push
 	 */

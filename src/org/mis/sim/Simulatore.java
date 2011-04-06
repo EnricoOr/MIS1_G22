@@ -268,7 +268,7 @@ public class Simulatore {
 				}
 				
 				//se la coda del disk è vuota l'oggetto si passiva
-				if(disk.getCodaSize()==0)
+				if(disk.getCodaVuota())
 				{
 					disk.passivate();
 					this.passivate.add(disk);

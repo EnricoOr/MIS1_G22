@@ -87,6 +87,16 @@ public class Disk extends Processo{
 	}
 	
 	/**
+	 * Funzione la quale ritorna se la coda di tipo lifo del centro disk è vuota.
+	 * @return coda vuota
+	 */
+	
+	public final boolean getCodaVuota()
+	{
+		return coda.isEmpty();
+	}
+	
+	/**
 	 * Metodo che incrementa tempo totale di risposta per il centro disk.
 	 * @parm tempo
 	 */

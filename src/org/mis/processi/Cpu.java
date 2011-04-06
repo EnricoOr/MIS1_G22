@@ -19,16 +19,10 @@ import org.mis.gen.Seme;
 public class Cpu extends Processo {
 
 	private double genIpExp_p06;
-	private GeneratoreIperEsponenziale genIpExp_p06c1;
-	private GeneratoreIperEsponenziale genIpExp_p06c2;
-	private GeneratoreIperEsponenziale genIpExp_p06c3;
-	private final double txc1 = 0.058;
-	private final double txc2 = 0.074;
-	private final double txc3 = 0.0285;
+	private GeneratoreIperEsponenziale[] genIpExp_p06c = new GeneratoreIperEsponenziale[3];
+	private final double[] txc = { 0.058, 0.074, 0.0285 };
 	private Random rand = new Random(Seme.getSeme());
-	private CodaFIFO coda1 = new CodaFIFO("Coda1 " + super.getNome());
-	private CodaFIFO coda2 = new CodaFIFO("Coda2 " + super.getNome());
-	private CodaFIFO coda3 = new CodaFIFO("Coda3 " + super.getNome());
+	private CodaFIFO[] coda = new CodaFIFO[3];
 
 	private Job current;
 
@@ -38,12 +32,14 @@ public class Cpu extends Processo {
 	 * La legge di distribuzione nel tempo è iperesponnziale con probabilità 0,6.
 	 */
 	
-	public Cpu(){
+	public Cpu()
+	{
 		super("CPU", TipoProcesso.CPU);
-		genIpExp_p06c1 = new GeneratoreIperEsponenziale(txc1, rand, 0.6);
-		genIpExp_p06c2 = new GeneratoreIperEsponenziale(txc2, rand, 0.6);
-		genIpExp_p06c3 = new GeneratoreIperEsponenziale(txc3, rand, 0.6);
-
+		for  (int i = 0; i < txc.length; i++)
+		{
+			genIpExp_p06c[i] = new GeneratoreIperEsponenziale(txc[i], rand, 0.6);
+			coda[i] = new CodaFIFO("Coda" + i + " " + super.getNome());
+		}
 	}
 	
 	/**
@@ -56,17 +52,8 @@ public class Cpu extends Processo {
 		
 		this.current=jobCorrente;
 
-		if(jobCorrente.getJobClass() == 2) {
-			return genIpExp_p06 = genIpExp_p06c2.nextIperExp();
-		}
-		else if(jobCorrente.getJobClass() == 3) {
-			genIpExp_p06 = genIpExp_p06c3.nextIperExp();
-			return genIpExp_p06;
-		}
-		else {
-			genIpExp_p06 = genIpExp_p06c1.nextIperExp();
-			return genIpExp_p06;
-		}
+		genIpExp_p06 = genIpExp_p06c[jobCorrente.getJobClass() - 1].nextIperExp();
+		return genIpExp_p06;
 	}
 	
 	/**
@@ -74,8 +61,14 @@ public class Cpu extends Processo {
 	 * @return code vuote
 	 */
 	
-	public final boolean codeVuote() {
-		return (coda1.getDimensione()==0 && coda2.getDimensione()==0 && coda3.getDimensione()==0);
+	public final boolean codeVuote()
+	{
+		boolean empty = true;
+		for (CodaFIFO c: coda)
+		{
+			empty = (empty & c.isEmpty());
+		}
+		return empty;
 	}
 
 	/**
@@ -97,16 +90,17 @@ public class Cpu extends Processo {
 	 */
 	
 
-	public final Job pop() {
-		int n = (int)((rand.nextNumber() * 3)+1);
+	public final Job pop()
+	{
+		int n = (int)(rand.nextNumber() * (coda.length - 1));
 		while(true)
 		{
-			if(n==1 && coda1.getDimensione() != 0) return coda1.pop();
-			else if (n==2 && coda2.getDimensione()!= 0) return coda2.pop();
-			else if (n==3 && coda3.getDimensione()!= 0) return coda3.pop();
-			else{
-				if (n<=3) n++;
-				else n=1;
+			if(!coda[n].isEmpty())
+				return coda[n].pop();
+			else
+			{
+				if (n < 2) n++;
+				else n = 0;
 			}
 		}
 	}
@@ -118,16 +112,9 @@ public class Cpu extends Processo {
 	 */
 	
 
-	public final void push(Job job) {
-		if(job.getJobClass() == 2) {
-			coda2.push(job);
-		}
-		else if(job.getJobClass() == 3) {
-			coda3.push(job);
-		}
-		else {
-			coda1.push(job);
-		}
+	public final void push(Job job)
+	{
+		coda[job.getJobClass() - 1].push(job);
 	}
 
 	/**
@@ -151,9 +138,9 @@ public class Cpu extends Processo {
 	
 	public final void reset()
 	{
-		coda1.resetCoda();
-		coda2.resetCoda();
-		coda3.resetCoda();
+		for (CodaFIFO c: coda)
+			c.resetCoda();
+
 		this.passivate();
 	}
 }
