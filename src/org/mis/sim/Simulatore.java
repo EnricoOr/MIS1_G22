@@ -275,7 +275,7 @@ public class Simulatore {
 				else
 				{
 					disk.pop();
-					log.scrivi(workingJob, clock);			//salva estrazione del job dalla coda del disk
+//					log.scrivi(workingJob, clock);			//salva estrazione del job dalla coda del disk
 					time = clock.getSimTime()+disk.getTempoCentro();
 					disk.hold(time);
 					this.hold.add(disk);
@@ -361,6 +361,7 @@ public class Simulatore {
 				stop = true;
 				break;
 			}
+			log.scrivi("CODE: " + cpu.getLenCode() + " - Coda DISK = " + disk.getCodaSize());
 		}
 	}
 	
