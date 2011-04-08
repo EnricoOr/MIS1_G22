@@ -200,11 +200,11 @@ public class Main {
 					stampaGraf(grafVa);
 					}
 					else if (!stab){
-						clien = 120;
+						clien = 20;
 					
-						for(; clien<=120; clien += 10)
-						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 600, 5);
+//						for(; clien<=120; clien += 10)
+//						{
+							Simulatore simulatore = new Simulatore(clien, stab, logMode, 300, 5);
 							simulatore.simInit();
 							simulatore.avvia();
 							
@@ -217,7 +217,7 @@ public class Main {
 							
 							Seme.chiudi();
 							Seme.apri();
-						}
+//						}
 					}
 				}
 			}

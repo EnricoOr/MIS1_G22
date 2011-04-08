@@ -6,8 +6,8 @@ public class GeneratoreIperEsponenziale extends GeneratoreEsponenziale {
 		private double tx;
 		private double P;
 		private Random ran;
-		private static double molt1;
-		private static double molt2;
+		private  double molt1;
+		private  double molt2;
 		
 		/**
 		 * Il primo parametro è il seme, il secondo parametro è il tempo 

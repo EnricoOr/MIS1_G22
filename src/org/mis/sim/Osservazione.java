@@ -36,7 +36,6 @@ public class Osservazione extends Processo{
 		super("Osservazione", TipoProcesso.Osservazione);
 		this.nOss=nOss;
 		media = new double[nOss];
-		distDisk = new int[20 * 100];
 	}
 	
 	/**
@@ -53,7 +52,7 @@ public class Osservazione extends Processo{
 		this.dT=dT;
 		media = new double[nOss];
 		mediaTr = new double[nOss];
-		distDisk = new int[20 * 100];
+		distDisk = new int[160];
 	}
 	
 	/**

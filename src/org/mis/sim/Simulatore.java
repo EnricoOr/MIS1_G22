@@ -43,7 +43,7 @@ public class Simulatore {
 	
 	private static boolean stab = false;
 	private boolean logging = false;
-	
+	private boolean observing = false;
 	
 	public Simulatore(int nClient, boolean stab, boolean logi, int n)
 	{
@@ -114,13 +114,14 @@ public class Simulatore {
 			//estraggo sempre l'oggetto in testa alla lista ordinata di hold
 			Processo curr = this.hold.poll();
 			double time;
-			
+		
 			switch(curr.getTipo())
 			{
 			case Terminale:
 				log.scrivi("TERMINALE TERMINA HOLD");
 				Terminale term = (Terminale) curr;
-				clock.add(term.getdT());				
+//				clock.add(term.getdT());		
+				clock.setSimTime(term.getTime().doubleValue());
 
 				Job jt = term.nextJob();
 				jobSis[term.getId()] = jt;
@@ -151,7 +152,8 @@ public class Simulatore {
 
 			case CPU:
 				log.scrivi("CPU TERMINA HOLD");
-				clock.add(cpu.getTempoCentro());
+//				clock.add(cpu.getTempoCentro());
+				clock.setSimTime(cpu.getTime().doubleValue());
 				
 				Job jc = cpu.getJobCorrente();
 				
@@ -251,14 +253,21 @@ public class Simulatore {
 				break;
 				
 			case Disk:
-				clock.add(disk.getdT());
+//				clock.add(disk.getdT());
+				clock.setSimTime(disk.getTime().doubleValue());
 				log.scrivi("DISK TERMINA HOLD");
 
 				Job workingJob = disk.getJobCorrente();
 				if (nClient == 20) 
 				{
 					osservazione.jobtoDisk();
+//					double somma = clock.getSimTime() - workingJob.getIngresso();
+//					System.out.println(workingJob.getId() + " - " +
+//							clock.getSimTime()+ " - "+
+//							workingJob.getIngresso() + " = "+
+//							somma + " -> " +((int)(somma*100)) );
 					osservazione.aggTempoR(clock.getSimTime() - workingJob.getIngresso());
+					workingJob.setIngresso(0);
 				}
 				
 				workingJob.setJobClass(3);
@@ -346,19 +355,27 @@ public class Simulatore {
 				clock.setSimTime(osservazione.getTime().doubleValue());
 				log.scrivi("**OSSERVAZIONE....");
 			
-				if (stab) osservazione.aggOssStab();
-				else osservazione.aggOss();
+				if (stab)
+					osservazione.aggOssStab();
+				else if (observing)
+					osservazione.aggOss();
+				
 				log.scrivi("****Thruoghput Host corr = "+ osservazione.getThrHst());
+				
 				if (stab) nOsser--;
-				else nOssAn--;
+				else if (observing)
+					nOssAn--;
+				
 				if(nOsser!=0 && stab)
 				{
 					osservazione.hold(clock.getSimTime()+tau);
 					this.hold.add(osservazione);
 				}
 				else if (nOssAn!=0 && !stab){
-					osservazione.hold(clock.getSimTime()+((300-1)*tau));
+					osservazione.resetOss();
+					osservazione.hold((observing ? clock.getSimTime()+(nOsser-1)*tau : clock.getSimTime()+tau));
 					this.hold.add(osservazione);
+					observing = !observing;
 				}
 				break;
 				
