@@ -5,7 +5,7 @@ public abstract class Processo implements Comparable<Processo>
 	private String nome;
 	private TipoProcesso tipo;
 	private Stato state;
-	protected Double hTime;
+	protected double hTime;
 	
 	public enum TipoProcesso
 	{
@@ -75,13 +75,13 @@ public abstract class Processo implements Comparable<Processo>
 		this.state=Stato.PASSIVO;
 	}
 	
-	public final Double getTime()
+	public final double getTime()
 	{
 		return hTime;
 	}
 	
 	public final int compareTo(Processo other)
 	{
-        return hTime.compareTo(other.hTime);
+        return Double.compare(hTime, other.hTime);
     }	
 }

@@ -121,7 +121,7 @@ public class Simulatore {
 				log.scrivi("TERMINALE TERMINA HOLD");
 				Terminale term = (Terminale) curr;
 //				clock.add(term.getdT());		
-				clock.setSimTime(term.getTime().doubleValue());
+				clock.setSimTime(term.getTime());
 
 				Job jt = term.nextJob();
 				jobSis[term.getId()] = jt;
@@ -153,7 +153,7 @@ public class Simulatore {
 			case CPU:
 				log.scrivi("CPU TERMINA HOLD");
 //				clock.add(cpu.getTempoCentro());
-				clock.setSimTime(cpu.getTime().doubleValue());
+				clock.setSimTime(cpu.getTime());
 				
 				Job jc = cpu.getJobCorrente();
 				
@@ -254,7 +254,7 @@ public class Simulatore {
 				
 			case Disk:
 //				clock.add(disk.getdT());
-				clock.setSimTime(disk.getTime().doubleValue());
+				clock.setSimTime(disk.getTime());
 				log.scrivi("DISK TERMINA HOLD");
 
 				Job workingJob = disk.getJobCorrente();
@@ -308,7 +308,7 @@ public class Simulatore {
 			
 			case Host:
 				Host ht = (Host) curr;
-				clock.setSimTime(ht.getTime().doubleValue());
+				clock.setSimTime(ht.getTime());
 				log.scrivi("HOST TERMINA HOLD");
 				ht.passivate();
 				this.passivate.add(ht);
@@ -329,7 +329,7 @@ public class Simulatore {
 				
 			case Stampante:
 				Printer pt = (Printer) curr;
-				clock.setSimTime(pt.getTime().doubleValue());
+				clock.setSimTime(pt.getTime());
 				log.scrivi("STAMPANTE TERMINA HOLD");
 				
 				Job printJob = pt.getJobCorrente();
@@ -352,7 +352,7 @@ public class Simulatore {
 				break;
 								
 			case Osservazione:
-				clock.setSimTime(osservazione.getTime().doubleValue());
+				clock.setSimTime(osservazione.getTime());
 				log.scrivi("**OSSERVAZIONE....");
 			
 				if (stab)
@@ -380,7 +380,7 @@ public class Simulatore {
 				break;
 				
 			case FineSimulazione:
-				clock.setSimTime(end.getTime().doubleValue());
+				clock.setSimTime(end.getTime());
 				clock.stopSimTime();
 				
 				if(!stab)
