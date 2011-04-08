@@ -38,7 +38,7 @@ public class Cpu extends Processo {
 		for  (int i = 0; i < txc.length; i++)
 		{
 			genIpExp_p06c[i] = new GeneratoreIperEsponenziale(txc[i], rand, 0.6);
-			coda[i] = new CodaFIFO("Coda" + i + " " + super.getNome());
+			coda[i] = new CodaFIFO("Coda " + i + " " + super.getNome());
 		}
 	}
 	
@@ -57,7 +57,7 @@ public class Cpu extends Processo {
 	}
 	
 	/**
-	 * Funzione la quale ritorna il valore delle code per il centro cpu con valore nullo. 
+	 * Funzione che indica se le code per il centro cpu sono vuote. 
 	 * @return code vuote
 	 */
 	
@@ -69,6 +69,22 @@ public class Cpu extends Processo {
 			empty = (empty & c.isEmpty());
 		}
 		return empty;
+	}
+	
+	/**
+	 * Funzione la quale ritorna il valore delle code per il centro cpu. SOLO PER TEST - DA RIMUOVERE
+	 * @return code vuote
+	 */
+	
+	public final String getLenCode()
+	{
+		String lenCode = "";
+		
+		for (CodaFIFO c: coda)
+		{
+			lenCode += c.getNome() + " = " + c.getDimensione() + ", ";
+		}
+		return lenCode;
 	}
 
 	/**
@@ -92,7 +108,11 @@ public class Cpu extends Processo {
 
 	public final Job pop()
 	{
+<<<<<<< HEAD
 		int n = (int)(rand.nextNumber() * (coda.length));
+=======
+		int n = (int)(rand.nextNumber() * coda.length);
+>>>>>>> origin/master
 		while(true)
 		{
 			if(!coda[n].isEmpty())

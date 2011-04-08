@@ -52,7 +52,6 @@ public class Simulatore {
 		tau=6;
 		this.nOsser=n;
 		log = new Log((int)System.currentTimeMillis(), logging);
-		
 	}
 	
 	public Simulatore(int nClient, boolean stab, boolean logi, int n, double t)
@@ -276,6 +275,10 @@ public class Simulatore {
 				else
 				{
 					disk.pop();
+<<<<<<< HEAD
+=======
+//					log.scrivi(workingJob, clock);			//salva estrazione del job dalla coda del disk
+>>>>>>> origin/master
 					time = clock.getSimTime()+disk.getTempoCentro();
 					disk.hold(time);
 					this.hold.add(disk);
@@ -361,6 +364,7 @@ public class Simulatore {
 				stop = true;
 				break;
 			}
+			log.scrivi("CODE: " + cpu.getLenCode() + " - Coda DISK = " + disk.getCodaSize());
 		}
 	}
 	
@@ -467,7 +471,7 @@ public class Simulatore {
 			
 		}
 		this.nOsser=this.osservazione.nOss;
-
+		log = new Log((int)System.currentTimeMillis(), logging);
 	}
 	
 	/**

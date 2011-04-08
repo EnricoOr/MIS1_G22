@@ -157,7 +157,7 @@ public class Main {
 						grafMe = new Grafico("Stabilizzazione Gordon - Media", "Media");
 						grafVa = new Grafico("Stabilizzazione Gordon - Varianza", "Varianza");
 												
-						for (int n=1; n<numOss;n++){
+						for (int n=100; n<=numOss;n++){
 							//System.out.println("********INIZIO BLOCCO p RUN********");
 							
 							double[] xn=new double[50]; //medie campionarie di ogni run
@@ -173,7 +173,6 @@ public class Main {
 
 								xn[k]=ossN.getMedia();
 								simulatore.resetSim();
-							
 							}
 							
 							for (int j=0;j<50;j++){
