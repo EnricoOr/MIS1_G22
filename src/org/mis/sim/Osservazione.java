@@ -92,6 +92,7 @@ public class Osservazione extends Processo{
 		
 		throughput = jobToHost/dT;
 		media[n] = throughput;
+		//System.out.println("job="+jobToHost+"th="+throughput);
 		jobToHost=0;
 
 	}

@@ -189,7 +189,7 @@ public class Simulatore {
 				case 3:
 					log.scrivi(jc, cpu, clock);					//stampa l'uscita dal centro di cpu
 					
-					if (!jc.getStampa())
+					if (rand.nextNumber()>0.2)
 					{
 						//se il disk è passivo il job l'attiva altrimenti si mette in coda
 						if (disk.getStato()==Stato.PASSIVO)
@@ -249,7 +249,7 @@ public class Simulatore {
 
 				Job workingJob = disk.getJobCorrente();
 				workingJob.setJobClass(3);
-				if (rand.nextNumber()<=0.1) workingJob.setStampa(true);
+				//if (rand.nextNumber()<=0.1) workingJob.setStampa(true);
 				
 				//se la cpu è passiva il job l'attiva altrimenti si mette in coda
 				if (cpu.getStato()==Stato.PASSIVO)
@@ -276,7 +276,6 @@ public class Simulatore {
 				else
 				{
 					disk.pop();
-					log.scrivi(workingJob, clock);			//salva estrazione del job dalla coda del disk
 					time = clock.getSimTime()+disk.getTempoCentro();
 					disk.hold(time);
 					this.hold.add(disk);
@@ -461,19 +460,11 @@ public class Simulatore {
 
 		this.hold.clear();
 		this.passivate.clear();
-		this.cpu.reset();
-		this.passivate.add(cpu);
-		this.disk.reset();
-		this.passivate.add(disk);
+		this.creaCentri();
 		for(int t=0; t<nClient; t++)
 		{
 			jobSis[t]=null;
-			client[t].passivate();
-			this.passivate.add(client[t]);
-			host[t].passivate();
-			this.passivate.add(host[t]);
-			stampanti[t].passivate();
-			this.passivate.add(stampanti[t]);
+			
 		}
 		this.nOsser=this.osservazione.nOss;
 

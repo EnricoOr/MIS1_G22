@@ -34,7 +34,6 @@ public class Terminale extends Processo{
 	 * E' il costruttore della classe il quale istanzia un terminale con un id univoco incrementale.
 	 *
 	 */
-	
 	public Terminale(){
 		super("Terminale", TipoProcesso.Terminale);
 		identificatore=(id++) % Simulatore.getNClient();
@@ -46,7 +45,6 @@ public class Terminale extends Processo{
 	 * La funzione ritorna l'id univoco del terminale.
 	 * @return id
 	 */
-	
 	public final int getId(){
 		return identificatore;
 	}
@@ -56,8 +54,6 @@ public class Terminale extends Processo{
 	 * l'override del metodo della superclasse centro. 
 	 * @return genIper3
 	 */
-	
-
 	public double getTempoCentro() {
 		
 		dT=genIper3.nextIperExp();
@@ -75,7 +71,6 @@ public class Terminale extends Processo{
 	 * @return nuovo job
 	 * @see Job
 	 */
-	
 	public final Job nextJob() {
 		if (job==null)
 		job = new Job(this);
@@ -87,7 +82,6 @@ public class Terminale extends Processo{
 	 * Funzione la quale restituisce il job
 	 * @return job
 	 */
-	
 	public final Job getJob()
 	{
 		return job;
