@@ -108,11 +108,7 @@ public class Cpu extends Processo {
 
 	public final Job pop()
 	{
-<<<<<<< HEAD
-		int n = (int)(rand.nextNumber() * (coda.length));
-=======
 		int n = (int)(rand.nextNumber() * coda.length);
->>>>>>> origin/master
 		while(true)
 		{
 			if(!coda[n].isEmpty())

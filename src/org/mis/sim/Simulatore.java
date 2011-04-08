@@ -275,10 +275,8 @@ public class Simulatore {
 				else
 				{
 					disk.pop();
-<<<<<<< HEAD
-=======
 //					log.scrivi(workingJob, clock);			//salva estrazione del job dalla coda del disk
->>>>>>> origin/master
+
 					time = clock.getSimTime()+disk.getTempoCentro();
 					disk.hold(time);
 					this.hold.add(disk);
