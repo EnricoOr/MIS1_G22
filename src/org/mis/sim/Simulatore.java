@@ -255,6 +255,12 @@ public class Simulatore {
 				log.scrivi("DISK TERMINA HOLD");
 
 				Job workingJob = disk.getJobCorrente();
+				if (nClient == 20) 
+				{
+					osservazione.jobtoDisk();
+					osservazione.aggTempoR(clock.getSimTime() - workingJob.getIngresso());
+				}
+				
 				workingJob.setJobClass(3);
 				
 				//se la cpu è passiva il job l'attiva altrimenti si mette in coda
@@ -367,6 +373,7 @@ public class Simulatore {
 					System.out.println("****Varianza: "+osservazione.getVarianza()+"\n");
 					log.scrivi(clock);				//stampa la fine della simulazione
 					log.scrivi("***Media: "+osservazione.getMedia()+"***\n"+"***Varianza: "+osservazione.getVarianza()+"***\n");
+					log.scrivi("****Media tempo Risp Disk = "+ osservazione.getMediaTr());
 				}
 
 				if(logging) log.close();

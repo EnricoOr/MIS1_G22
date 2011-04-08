@@ -1,7 +1,5 @@
 package org.mis.processi;
 
-import java.util.Vector;
-
 import org.mis.code.CodaLIFO;
 import org.mis.gen.GeneratoreKerlangiano;
 import org.mis.gen.Seme;
@@ -18,7 +16,6 @@ import org.mis.gen.Seme;
 public class Disk extends Processo{
 
 	private CodaLIFO coda = new CodaLIFO("Coda " + super.getNome());
-	public Vector<Job> codas;
 	private GeneratoreKerlangiano gen2erl;
 	private final int k = 2;
 	private final double tx = 0.033;

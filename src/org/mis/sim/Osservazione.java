@@ -20,6 +20,7 @@ public class Osservazione extends Processo{
 	private double totTempoRisp = 0;
 	private double[] media;
 	private double[] mediaTr;
+	private int[] distDisk;
 	private double varianza;
 	private double throughput=0;
 
@@ -35,8 +36,7 @@ public class Osservazione extends Processo{
 		super("Osservazione", TipoProcesso.Osservazione);
 		this.nOss=nOss;
 		media = new double[nOss];
-		this.dT=dT;
-
+		distDisk = new int[20 * 100];
 	}
 	
 	/**
@@ -53,6 +53,7 @@ public class Osservazione extends Processo{
 		this.dT=dT;
 		media = new double[nOss];
 		mediaTr = new double[nOss];
+		distDisk = new int[20 * 100];
 	}
 	
 	/**
@@ -79,7 +80,6 @@ public class Osservazione extends Processo{
 		jobToDisk=0;
 		totTempoRisp=0;
 		jobToHost=0;
-		
 	}
 	
 	/**
@@ -88,13 +88,11 @@ public class Osservazione extends Processo{
 	 */
 	
 	public final void setThrHost()
-	{
-		
+	{	
 		throughput = jobToHost/dT;
 		media[n] = throughput;
 		//System.out.println("job="+jobToHost+"th="+throughput);
 		jobToHost=0;
-
 	}
 	
 	/**
@@ -108,12 +106,37 @@ public class Osservazione extends Processo{
 	}
 	
 	
-	
+	/**
+	 * Funzione che serve per accumulare i tempi di risposta ai Job nel Centro Disk
+	 * @return void
+	 */
 	public final void aggTempoR(double tempo)
 	{
+		distDisk[(int)(tempo * 100)]++;
 		totTempoRisp += tempo;
 	}
 	
+	
+	/**
+	 * Getter per il vettore della distribuzione tempi risposta disk
+	 * @return int[] vettore tempi risposta Disk
+	 */
+	public final int[] getDistDisk()
+	{
+		return distDisk;
+	}
+	
+	/**
+	 * Questa funzione si occupa di memorizzare i dati relativi al throughput in entrata al Disk.
+	 * @param dT
+	 */
+	
+	public final void setThrDisk()
+	{
+		mediaTr[n] = totTempoRisp/jobToDisk;
+	}
+	
+		
 	/**
 	 * Funzione che serve per prelevare la media del throughtput host
 	 * @return media

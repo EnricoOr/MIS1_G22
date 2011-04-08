@@ -207,6 +207,14 @@ public class Main {
 							Simulatore simulatore = new Simulatore(clien, stab, logMode, 600, 5);
 							simulatore.simInit();
 							simulatore.avvia();
+							
+							if (clien == 20)
+							{
+								int[] istogramma = simulatore.getOsservazioni().getDistDisk();
+								ist = new Istogramma("Distribuzione tempi di risposta Disk", simulatore.getOsservazioni().getMediaTr());
+								stampaIst(ist, istogramma);	
+							}							
+							
 							Seme.chiudi();
 							Seme.apri();
 						}
