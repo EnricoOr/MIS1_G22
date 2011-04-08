@@ -35,6 +35,7 @@ public class Simulatore {
 	private static Log log;
 	private static double tau;
 	private int nOsser;
+	private int nOssAn;
 	private Job[] jobSis;
 	
 	public PriorityQueue<Processo> hold;
@@ -49,7 +50,7 @@ public class Simulatore {
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = logi;
-		tau=6;
+		tau=5;
 		this.nOsser=n;
 		log = new Log((int)System.currentTimeMillis(), logging);
 	}
@@ -61,6 +62,7 @@ public class Simulatore {
 		this.logging = logi;
 		tau=t;
 		this.nOsser=n;
+		this.nOssAn=50;
 		log = new Log((int)System.currentTimeMillis(), logging);
 		
 	}
@@ -89,13 +91,19 @@ public class Simulatore {
 		clock = new SimTime();
 		end = new FineSim();
 		if(stab) osservazione = new Osservazione(nOsser, tau);
-		else osservazione = new Osservazione(nOsser, nClient, tau);
+		else osservazione = new Osservazione(50, nClient, tau);
 		creaJob();
 		
 		if(!stab) System.out.println("***Inizio Simulazione " + nClient +" client ***");
 		//aggiungo il processo fine simulazione alla lista degli oggetti hold
-		this.osservazione.hold(tau);
-		this.end.hold(nOsser*tau+0.001);
+		if (stab)
+			this.osservazione.hold(tau);
+		else
+			this.osservazione.hold(tau*(nOsser+((nOsser-1)/2.0)));
+		if (stab) 
+			this.end.hold(nOsser*tau+0.001);
+		else
+			this.end.hold((nOsser*tau*51)+0.001);
 		this.hold.add(osservazione);
 		this.hold.add(end);
 //		log.print_h(hold);
@@ -151,7 +159,7 @@ public class Simulatore {
 				switch(jc.getJobClass())
 				{
 				case 1:
-					if (rand.nextNumber()<0.4)
+					if (rand.nextNumber()<=0.3)
 					{ 
 						jc.setJobClass(2);
 						log.scrivi(jc, 2, clock);				//salva il cambio di classe
@@ -188,7 +196,7 @@ public class Simulatore {
 				case 3:
 					log.scrivi(jc, cpu, clock);					//stampa l'uscita dal centro di cpu
 					
-					if (rand.nextNumber()>0.2)
+					if (rand.nextNumber()>0.1)
 					{
 						//se il disk è passivo il job l'attiva altrimenti si mette in coda
 						if (disk.getStato()==Stato.PASSIVO)
@@ -248,7 +256,6 @@ public class Simulatore {
 
 				Job workingJob = disk.getJobCorrente();
 				workingJob.setJobClass(3);
-				//if (rand.nextNumber()<=0.1) workingJob.setStampa(true);
 				
 				//se la cpu è passiva il job l'attiva altrimenti si mette in coda
 				if (cpu.getStato()==Stato.PASSIVO)
@@ -336,12 +343,16 @@ public class Simulatore {
 				if (stab) osservazione.aggOssStab();
 				else osservazione.aggOss();
 				log.scrivi("****Thruoghput Host corr = "+ osservazione.getThrHst());
-				nOsser--;
-				if(nOsser!=0)
+				if (stab) nOsser--;
+				else nOssAn--;
+				if(nOsser!=0 && stab)
 				{
 					osservazione.hold(clock.getSimTime()+tau);
 					this.hold.add(osservazione);
-					//log.print_h(hold);
+				}
+				else if (nOssAn!=0 && !stab){
+					osservazione.hold(clock.getSimTime()+((300-1)*tau));
+					this.hold.add(osservazione);
 				}
 				break;
 				
@@ -362,7 +373,7 @@ public class Simulatore {
 				stop = true;
 				break;
 			}
-			log.scrivi("CODE: " + cpu.getLenCode() + " - Coda DISK = " + disk.getCodaSize());
+			//log.scrivi("CODE: " + cpu.getLenCode() + " - Coda DISK = " + disk.getCodaSize());
 		}
 	}
 	

@@ -20,7 +20,7 @@ public class Cpu extends Processo {
 
 	private double genIpExp_p06;
 	private GeneratoreIperEsponenziale[] genIpExp_p06c = new GeneratoreIperEsponenziale[3];
-	private final double[] txc = { 0.058, 0.074, 0.0285 };
+	private final double[] txc = { 0.058, 0.07, 0.028 };
 	private Random rand = new Random(Seme.getSeme());
 	private CodaFIFO[] coda = new CodaFIFO[3];
 
@@ -108,7 +108,8 @@ public class Cpu extends Processo {
 
 	public final Job pop()
 	{
-		int n = (int)(rand.nextNumber() * coda.length);
+		return coda[0].pop();
+		/*int n = (int)(rand.nextNumber() * coda.length);
 		while(true)
 		{
 			if(!coda[n].isEmpty())
@@ -118,7 +119,7 @@ public class Cpu extends Processo {
 				if (n < 2) n++;
 				else n = 0;
 			}
-		}
+		}*/
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class Cpu extends Processo {
 
 	public final void push(Job job)
 	{
-		coda[job.getJobClass() - 1].push(job);
+		coda[0].push(job);
 	}
 
 	/**
