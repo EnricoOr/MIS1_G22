@@ -35,6 +35,7 @@ public class Osservazione extends Processo{
 		
 		super("Osservazione", TipoProcesso.Osservazione);
 		this.nOss=nOss;
+		this.dT=dT;
 		media = new double[nOss];
 	}
 	
@@ -60,7 +61,7 @@ public class Osservazione extends Processo{
 	 */
 	public final void jobtoHost()
 	{
-		++jobToHost;
+		jobToHost++;
 	}
 	
 	/**
@@ -68,7 +69,7 @@ public class Osservazione extends Processo{
 	 */
 	public final void jobtoDisk()
 	{
-		++jobToDisk;
+		jobToDisk++;
 	}
 	
 	/**
@@ -208,7 +209,7 @@ public class Osservazione extends Processo{
 	{
 
 		if (ncli==20){
-			
+			this.setThrDisk();
 			
 		}
 		this.setThrHost();
