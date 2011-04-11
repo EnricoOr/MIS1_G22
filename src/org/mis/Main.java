@@ -1,9 +1,12 @@
 package org.mis;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.jfree.chart.ChartUtilities;
 import org.jfree.ui.RefineryUtilities;
 
 import org.mis.gen.*;
-import org.mis.gen.Random;
 import org.mis.sim.*;
 
 
@@ -53,7 +56,7 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore random\nmedia:    "+tot/N+" (0.5)\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" (0.0)\n");
-			ist = new Istogramma("Test generatore random", N/76.0);
+			ist = new Istogramma("Test generatore random", N/76.0, false);
 			stampaIst(ist, istogramma);
 		}
 		
@@ -79,7 +82,7 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore " + k + "-erlangiano\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)/k+")\n");
-			ist = new Istogramma("Test generatore " + k + "-erlangiano", N/100.0);
+			ist = new Istogramma("Test generatore " + k + "-erlangiano", N/100.0, false);
 			stampaIst(ist, istogramma);
 		}
 
@@ -103,7 +106,7 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.6)-1)+")\n");
-			ist = new Istogramma("Test generatore iperesponenziale", N/100.0);
+			ist = new Istogramma("Test generatore iperesponenziale", N/100.0, false);
 			stampaIst(ist, istogramma);
 		}
 		
@@ -211,9 +214,26 @@ public class Main {
 							if (clien == 20)
 							{
 								int[] istogramma = simulatore.getOsservazioni().getDistDisk();
-								ist = new Istogramma("Distribuzione tempi di risposta Disk", simulatore.getOsservazioni().getMediaTr());
+								ist = new Istogramma("Distribuzione tempi di risposta Disk", Math.round(simulatore.getOsservazioni().getMediaTr() * 100), true);
 								stampaIst(ist, istogramma);	
 							}							
+	
+							Osservazione oss = simulatore.getOsservazioni();
+							
+							long tot = 0;
+							for (int ccc = 0; ccc < oss.getDistDisk().length; ccc++)
+								tot += oss.getDistDisk()[ccc];
+							System.out.println("TOTALE JOBS:\t" + tot);
+							
+							
+							System.out.println("Media:\t" + oss.getMedia());
+							System.out.println("Varianza:\t" + oss.getVarianza());
+							System.out.println("Intervallo di confidenza:\tda " + oss.getIntervConfid()[0] + " a " + oss.getIntervConfid()[1]);
+							
+							System.out.println("MediaTr:\t" + oss.getMediaTr());
+							System.out.println("VarianzaTr:\t" + oss.getVarianzaTr());
+							System.out.println("Intervallo di confidenzaTr:\tda " + oss.getIntervConfidTr()[0] + " a " + oss.getIntervConfidTr()[1]);
+							
 							
 							Seme.chiudi();
 							Seme.apri();
@@ -260,6 +280,12 @@ public class Main {
 			
 			ist.pack();
 			RefineryUtilities.centerFrameOnScreen(ist);
+			File f = new File(ist.getTitle() + ".png");
+			try {
+				ChartUtilities.saveChartAsPNG(f, ist.getChart(), 2000, 1000);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			ist.setVisible(true);
 		}
 		
@@ -273,7 +299,13 @@ public class Main {
 			
 			graf.pack();
 			RefineryUtilities.centerFrameOnScreen(graf);
-			graf.setVisible(true);
+			File f = new File(graf.getTitle() + ".png");
+			try {
+				ChartUtilities.saveChartAsPNG(f, graf.getChart(), 2000, 1000);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			graf.setVisible(true);			
 		}
 		
 		/**

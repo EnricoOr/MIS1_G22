@@ -53,7 +53,7 @@ public class Osservazione extends Processo{
 		this.dT=dT;
 		media = new double[nOss];
 		mediaTr = new double[nOss];
-		distDisk = new int[160];
+		distDisk = new int[30];
 	}
 	
 	/**
@@ -133,7 +133,10 @@ public class Osservazione extends Processo{
 	
 	public final void setThrDisk()
 	{
-		mediaTr[n] = totTempoRisp/jobToDisk;
+		if (jobToDisk != 0)
+			mediaTr[n] = totTempoRisp/jobToDisk;
+		else
+			mediaTr[n] = 0;
 	}
 	
 		
@@ -172,18 +175,39 @@ public class Osservazione extends Processo{
 	
 	public final double getVarianza()
 	{
-		double campQua=0.000;
-		double medQua=0.000;
-		for (int i=0;i<nOss;i++){
-			campQua += (double)Math.pow(media[i], 2);
-			medQua+=media[i];
+		double med = getMedia();
+		double campQua=0.0;
+				
+		for (int i=0;i<nOss;i++)
+		{
+			campQua += Math.pow(media[i] - med, 2);
 		}
 		
-		varianza = (double)(campQua/nOss)-Math.pow((double)(medQua/nOss), 2);
+		varianza = (1.0/(nOss-1.0)) * campQua;
 		
 		return varianza;
 	}
 	
+	
+	/**
+	 * Funzione che serve per prelevare la varianza del tempo di risposta Disk
+	 * @return
+	 */
+	
+	public final double getVarianzaTr()
+	{
+		double med = getMediaTr();
+		double campQua=0.0;
+				
+		for (int i=0;i<nOss;i++)
+		{
+			campQua += (double)Math.pow(mediaTr[i] - med, 2);
+		}
+		
+		varianza = (double)(1.0/(nOss-1.0)) * campQua;
+		
+		return varianza;
+	}
 	
 	/**
 	 * Questa funzione si occupa di memorizzare i dati relativi alle osservazioni durante la stabilizzazione
@@ -192,13 +216,36 @@ public class Osservazione extends Processo{
 	
 	public final void aggOssStab()
 	{
-	
 		this.setThrHost();
-		n++;
-			
-	
+		n++;	
 	}
 
+	/**
+	 * Funzione che serve per prelevare l'intervallo di confidenza
+	 * @return double[]
+	 */
+	
+	public final double[] getIntervConfid()
+	{
+		double min = getMedia() - 1.645 * Math.sqrt(getVarianza() / nOss);
+		double max = getMedia() + 1.645 * Math.sqrt(getVarianza() / nOss);
+		return new double[]{min, max};
+	}
+	
+
+	/**
+	 * Funzione che serve per prelevare l'intervallo di confidenza per il tempo di risposta Disk
+	 * @return double[]
+	 */
+	
+	public final double[] getIntervConfidTr()
+	{
+		double min = getMediaTr() - 1.645 * Math.sqrt(getVarianzaTr() / nOss);
+		double max = getMediaTr() + 1.645 * Math.sqrt(getVarianzaTr() / nOss);
+		return new double[]{min, max};
+	}
+	
+	
 	/**
 	 * Questa funzione si occupa di memorizzare i dati relativi al tempo medio di risposta
 	 * e di creare l'evento di fine simulazione nel caso tutti i dati necessari siano stati ottenuti

@@ -4,7 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GradientPaint;
+import java.awt.Paint;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -16,6 +16,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
@@ -26,23 +27,28 @@ import org.jfree.ui.TextAnchor;
 public class Istogramma extends ApplicationFrame {
 
 	private static final long serialVersionUID = 1L;
-	 public final DefaultCategoryDataset dataset;
-	 public final double media;
+	public final DefaultCategoryDataset dataset;
+	public final double media;
+	public final boolean columnMedia;
+	private final JFreeChart chart;
+	private final String title;
+
 	/**
      * Creates a new demo instance.
      * @param title  the frame title.
      */
-    public Istogramma(final String title, double media) {
-
+    public Istogramma(final String title, double media, boolean columnMedia)
+    {
         super(title);
+        this.title = title;
         dataset = new DefaultCategoryDataset();
         this.media = media;
+        this.columnMedia = columnMedia;
         final CategoryDataset dataset = createDataset();
-        final JFreeChart chart = createChart(dataset);
+        chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(1000, 540));
         setContentPane(chartPanel);
-
     }
 
     /**
@@ -76,7 +82,6 @@ public class Istogramma extends ApplicationFrame {
      * @return The chart.
      */
     private JFreeChart createChart(final CategoryDataset dataset) {
-        
         // create the chart...
         final JFreeChart chart = ChartFactory.createBarChart(
             "Istogramma",         // chart title
@@ -91,18 +96,21 @@ public class Istogramma extends ApplicationFrame {
 
 
         CategoryPlot cp = (CategoryPlot)chart.getPlot();
-        ValueMarker vm = new ValueMarker (media);
-        vm.setLabel("Media");
-        vm.setLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-        vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
-        vm.setLabelOffset(new RectangleInsets(5,20,5,200));
-//        vm.setLabelOffset(RectangleInsets.ZERO_INSETS);
-//        vm.setLabelOffsetType(LengthAdjustmentType.CONTRACT);
-        vm.setLabelTextAnchor(TextAnchor.BASELINE_CENTER);
-        vm.setPaint(Color.yellow);
-        vm.setStroke(new BasicStroke(2.0f));
-        cp.addRangeMarker(vm);
-
+        if (!columnMedia)
+        {
+        	ValueMarker vm = new ValueMarker (media);
+	        vm.setLabel("Media");
+	        vm.setLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+	        vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
+	        vm.setLabelOffset(new RectangleInsets(5,20,5,200));
+	//        vm.setLabelOffset(RectangleInsets.ZERO_INSETS);
+	//        vm.setLabelOffsetType(LengthAdjustmentType.CONTRACT);
+	        vm.setLabelTextAnchor(TextAnchor.BASELINE_CENTER);
+	        vm.setPaint(Color.yellow);
+	        vm.setStroke(new BasicStroke(2.0f));
+	        cp.addRangeMarker(vm);
+        }
+        
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
         // set the background color for the chart...
@@ -119,27 +127,18 @@ public class Istogramma extends ApplicationFrame {
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
                 
         // disable bar outlines...
+        if (columnMedia)
+        	plot.setRenderer(new CustomRenderer(Color.BLUE, Color.YELLOW, (int)this.media));
         final BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setBarPainter(new StandardBarPainter());
         renderer.setDrawBarOutline(false);
+       
+        final Color c = new Color(0, 0, 255);
+        renderer.setSeriesPaint(0, c);
+        renderer.setShadowVisible(false);
         
-        // set up gradient paints for series...
-        final GradientPaint gp0 = new GradientPaint(
-            0.0f, 0.0f, Color.blue, 
-            0.0f, 0.0f, Color.lightGray
-        );
-        final GradientPaint gp1 = new GradientPaint(
-            0.0f, 0.0f, Color.green, 
-            0.0f, 0.0f, Color.lightGray
-        );
-        final GradientPaint gp2 = new GradientPaint(
-            0.0f, 0.0f, Color.red, 
-            0.0f, 0.0f, Color.lightGray
-        );
-        renderer.setSeriesPaint(0, gp0);
-        renderer.setSeriesPaint(1, gp1);
-        renderer.setSeriesPaint(2, gp2);
-
         final CategoryAxis domainAxis = plot.getDomainAxis();
+
         domainAxis.setCategoryLabelPositions(
             CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 2.0)
         );
@@ -147,5 +146,56 @@ public class Istogramma extends ApplicationFrame {
         
         return chart;
         
+    }
+    
+	public JFreeChart getChart()
+	{
+		return chart;
+	}
+	
+	public String getTitle()
+	{
+		return title;
+	}
+	
+	
+	
+	
+	class CustomRenderer extends BarRenderer {
+
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		/** The colors. */
+        private Paint color, hColor;
+        private int hColumn;
+
+        /**
+         * Creates a new renderer.
+         *
+         * @param colors  the colors.
+         */
+        public CustomRenderer(final Paint color, final Paint hColor, int hColumn) {
+            this.color = color;
+            this.hColor = hColor;
+            this.hColumn = hColumn;
+        }
+
+        /**
+         * Returns the paint for an item.  Overrides the default behaviour inherited from
+         * AbstractSeriesRenderer.
+         *
+         * @param row  the series.
+         * @param column  the category.
+         *
+         * @return The item color.
+         */
+        public Paint getItemPaint(final int row, final int column) {
+        	if (column == hColumn)
+        		return this.hColor;
+        	else
+        		return this.color;
+        }
     }
 }

@@ -23,7 +23,9 @@ import org.jfree.ui.ApplicationFrame;
 public class Grafico extends ApplicationFrame {
 	final XYSeries serie1;
 	//final XYSeries serie2;
-    
+	private final JFreeChart chart;
+	private final String title;
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -31,13 +33,13 @@ public class Grafico extends ApplicationFrame {
      * @param title  the frame title.
      */
     public Grafico(final String title, final String valName) {
-
         super(title);
+        this.title = title;
 
         serie1 = new XYSeries(valName);
         //serie2 = new XYSeries("Varianza");
         final XYDataset dataset = createDataset();
-        final JFreeChart chart = createChart(dataset);
+        chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(900, 450));
         setContentPane(chartPanel);
@@ -115,4 +117,15 @@ public class Grafico extends ApplicationFrame {
 	{
 		this.serie2.add(a, b);	
 	}*/
+	
+
+	public JFreeChart getChart()
+	{
+		return chart;
+	}
+	
+	public String getTitle()
+	{
+		return title;
+	}
 }

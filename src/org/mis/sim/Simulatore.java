@@ -258,14 +258,9 @@ public class Simulatore {
 				log.scrivi("DISK TERMINA HOLD");
 
 				Job workingJob = disk.getJobCorrente();
-				if (nClient == 20) 
+				if (observing && nClient == 20) 
 				{
 					osservazione.jobtoDisk();
-//					double somma = clock.getSimTime() - workingJob.getIngresso();
-//					System.out.println(workingJob.getId() + " - " +
-//							clock.getSimTime()+ " - "+
-//							workingJob.getIngresso() + " = "+
-//							somma + " -> " +((int)(somma*100)) );
 					osservazione.aggTempoR(clock.getSimTime() - workingJob.getIngresso());
 					workingJob.setIngresso(0);
 				}
