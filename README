@@ -1,1 +1,29 @@
-Readme
+Sia dato il sistema di cui Fig. 9.14 del testo 1, con relative assunzioni di impianto e carico software dei cui alle Fig. 9.15. Sviluppare un modello di simulazione discreta con caratteristiche operative P, D di cui in leggenda usando i metodi M, R, S  e il linguaggio L per ottenere quanto segue:
+b1) Stima del throughput medio per le richieste che accedono a host remto per  N= 10, 20, …., 120 client.
+b2) Stima della distibuzione del tempo di risposta del Disk e stima della sua media.
+
+1.1. Leggenda
+P) Leggi di probabilità in gioco
+f(tsT) = Iperesp_p03 (distribuzione del tempo di servizio ai terminali)
+f(tsHOST) = 3-Erlangiana (distribuzione del tempo di servizio all'host)
+f(tsCPU) = Iperesp_p06 (distribuzione del tempo di servizio alla Cpu)
+f(tsDisk) = 2-Erlangiana (distribuzione del tempo di servizio al Disk)
+f(tsST) = Uniforme 2-78 (distribuzione del tempo di servizio alla Stampante)
+
+D) Discipline in gioco
+dDISK = LIFO (disciplina della coda dell'Http server)
+	L'ultimo arrivato in coda sarà il primo servito.
+dCPU = FIFO (disciplina della coda della CPU)
+	Il job servito verrà scelto a caso tra quelli in coda.
+
+L) Linguaggio
+Il Linguaggio scelto per la codifica del simulatore è il Java.
+
+M) Organizzazione
+L'organizzazione della simulazione scelta è per iterazione di processi dove il comportamento del sistema è descritto da una collezione di programmi, uno per ciascuna entità del modello.
+
+R) Analisi Risultati
+Per l'analisi dei risultati è stato scelto il metodo batch, cioè un metodo per ottenere osservazioni indipendenti e identicamente distribuite. 
+
+S) Stima medie e Stima Distribuzioni 
+La stima delle medie verrà effettuata utilizzando un intervallo di confidenza al 90%. La stima delle distribuzioni verrà effettuata utilizzando la media campionaria.
