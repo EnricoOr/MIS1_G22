@@ -237,7 +237,7 @@ public class Simulatore {
 				}
 				
 				//se la coda della cpu è vuota l'oggetto si passiva
-				if (cpu.codeVuote())
+				if (cpu.codaVuota())
 				{
 					cpu.passivate();
 					this.passivate.add(cpu);

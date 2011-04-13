@@ -2,11 +2,13 @@ package org.mis.code;
 
 import org.mis.processi.Job;
 
-
+/**
+ * La classe CodaLIFO estende la classe Coda e implementa una coda LIFO
+ */
 public class CodaLIFO extends Coda {
 
 	/**
-	 * Prende come parametro il nome della coda e si effettua una chiamata al costrutture della 
+	 * Prende come parametro il nome della coda e si effettua una chiamata al costruttore della 
 	 * classe madre coda. 
 	 */
 	

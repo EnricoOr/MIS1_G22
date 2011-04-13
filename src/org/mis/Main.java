@@ -1,9 +1,5 @@
 package org.mis;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.jfree.chart.ChartUtilities;
 import org.jfree.ui.RefineryUtilities;
 
 import org.mis.gen.*;
@@ -25,7 +21,6 @@ public class Main {
 		private static final int N =1000000;
 		private static int ix;
 		private static int range=100;
-//		private static int[] istogramma=new int[range+1];
 		private static double tx = 0.0333;
 		private static Istogramma ist;
 		private static int numOss;
@@ -48,7 +43,6 @@ public class Main {
 			double tot2 = 0;	
 			int x;
 			int[] istogramma = new int[78+1];
-//			resetIst();
 			for (int i = 0; i< N; ++i) {
 				x = gen.nextNumber2_78();
 				istogramma[(int)x]++;
@@ -56,7 +50,7 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore random\nmedia:    "+tot/N+" (0.5)\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" (0.0)\n");
-			ist = new Istogramma("Test generatore random", N/76.0, false);
+			ist = new Istogramma("Test generatore random", "Valore estratto", "Occorrenze", N/76.0, false, true);
 			stampaIst(ist, istogramma);
 		}
 		
@@ -73,7 +67,6 @@ public class Main {
 			double tot2 = 0;
 			double x;
 			int[] istogramma=new int[range+1];
-//			resetIst();
 			
 			for (int i = 0; i< N; ++i) {
 				x = erl.nextErlang();
@@ -82,7 +75,7 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore " + k + "-erlangiano\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)/k+")\n");
-			ist = new Istogramma("Test generatore " + k + "-erlangiano", N/100.0, false);
+			ist = new Istogramma("Test generatore " + k + "-erlangiano","Valore estratto", "Occorrenze", N/100.0, false, true);
 			stampaIst(ist, istogramma);
 		}
 
@@ -98,7 +91,6 @@ public class Main {
 			double tot2 = 0;
 			double x;
 			int[] istogramma=new int[range+1];
-//			resetIst();
 			for (int i = 0; i< N; ++i) {
 				x = ipexp.nextIperExp();
 				istogramma[(int)(x*range)]++;
@@ -106,22 +98,9 @@ public class Main {
 				tot2 += Math.pow(x,2);
 			}
 			System.out.println("Test generatore iperesponenziale\nmedia:    "+tot/N+" ("+(tx)+")\nvarianza: "+(tot2/N-Math.pow((tot/N),2))+" ("+Math.pow(tx,2)*(1/(2*0.4*0.6)-1)+")\n");
-			ist = new Istogramma("Test generatore iperesponenziale", N/100.0, false);
+			ist = new Istogramma("Test generatore iperesponenziale", "Valore estratto", "Occorrenze",N/100.0, false, true);
 			stampaIst(ist, istogramma);
 		}
-		
-
-		/*
-		 * Questa funzione si occupa di resettare il vettore istogramma
-		 * per il disegno dei grafici
-		 */
-		
-//		public static void resetIst()
-//		{
-//			for(int i =0;i<istogramma.length;i++){
-//				istogramma[i]=0;
-//			}
-//		}
 		
 		/*
 		 * Classe main del nostro simulatore
@@ -157,8 +136,8 @@ public class Main {
 					int clien = 120; //se stabilizzazione la simulazione parte solo con 120 client altrimenti prova da 10 a 120
 					if(stab){
 						System.out.println("Avviata modalità stabilizzazione");
-						grafMe = new Grafico("Stabilizzazione Gordon - Media", "Media");
-						grafVa = new Grafico("Stabilizzazione Gordon - Varianza", "Varianza");
+						grafMe = new Grafico("Stabilizzazione Gordon - Media", "Osservazioni", "Jobs/s", "Media");
+						grafVa = new Grafico("Stabilizzazione Gordon - Varianza", "Osservazioni", "Jobs/s", "Varianza");
 												
 						for (int n=1; n<=numOss;n++){
 							//System.out.println("********INIZIO BLOCCO p RUN********");
@@ -203,10 +182,10 @@ public class Main {
 					stampaGraf(grafVa);
 					}
 					else if (!stab){
-						clien = 20;
+						clien = 10;
 					
-//						for(; clien<=120; clien += 10)
-//						{
+						for(; clien<=120; clien += 10)
+						{
 							Simulatore simulatore = new Simulatore(clien, stab, logMode, 300, 5);
 							simulatore.simInit();
 							simulatore.avvia();
@@ -214,30 +193,23 @@ public class Main {
 							if (clien == 20)
 							{
 								int[] istogramma = simulatore.getOsservazioni().getDistDisk();
-								ist = new Istogramma("Distribuzione tempi di risposta Disk", Math.round(simulatore.getOsservazioni().getMediaTr() * 100), true);
+								ist = new Istogramma("Distribuzione tempi di risposta Disk", "Raggruppamento in intervalli da 1/100 s dei tempi di risposta","Jobs", Math.round(simulatore.getOsservazioni().getMediaTr() * 100), true, false);
 								stampaIst(ist, istogramma);	
-							}							
-	
-							Osservazione oss = simulatore.getOsservazioni();
 							
-							long tot = 0;
-							for (int ccc = 0; ccc < oss.getDistDisk().length; ccc++)
-								tot += oss.getDistDisk()[ccc];
-							System.out.println("TOTALE JOBS:\t" + tot);
-							
-							
-							System.out.println("Media:\t" + oss.getMedia());
-							System.out.println("Varianza:\t" + oss.getVarianza());
-							System.out.println("Intervallo di confidenza:\tda " + oss.getIntervConfid()[0] + " a " + oss.getIntervConfid()[1]);
-							
-							System.out.println("MediaTr:\t" + oss.getMediaTr());
-							System.out.println("VarianzaTr:\t" + oss.getVarianzaTr());
-							System.out.println("Intervallo di confidenzaTr:\tda " + oss.getIntervConfidTr()[0] + " a " + oss.getIntervConfidTr()[1]);
-							
+								Osservazione oss = simulatore.getOsservazioni();
+								
+								System.out.println("Media:\t" + oss.getMedia());
+								System.out.println("Varianza:\t" + oss.getVarianza());
+								System.out.println("Intervallo di confidenza:\tda " + oss.getIntervConfid()[0] + " a " + oss.getIntervConfid()[1]);
+								
+								System.out.println("MediaTr:\t" + oss.getMediaTr());
+								System.out.println("VarianzaTr:\t" + oss.getVarianzaTr());
+								System.out.println("Intervallo di confidenzaTr:\tda " + oss.getIntervConfidTr()[0] + " a " + oss.getIntervConfidTr()[1]);
+							}
 							
 							Seme.chiudi();
 							Seme.apri();
-//						}
+						}
 					}
 				}
 			}
@@ -271,7 +243,7 @@ public class Main {
 			System.out.print("[");
 			for(int i = 0; i<istogramma.length;i++){
 				System.out.print(istogramma[i]);
-				ist.addvalues(istogramma[i], Integer.toString(i));
+				ist.addvalues(istogramma[i], "Asse X", Integer.toString(i));
 				if(i!=istogramma.length-1)
 					System.out.print(" , ");
 			}
@@ -280,12 +252,7 @@ public class Main {
 			
 			ist.pack();
 			RefineryUtilities.centerFrameOnScreen(ist);
-			File f = new File(ist.getTitle() + ".png");
-			try {
-				ChartUtilities.saveChartAsPNG(f, ist.getChart(), 2000, 1000);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			ist.exportChartAsSVG(1000, 500);
 			ist.setVisible(true);
 		}
 		
@@ -299,12 +266,8 @@ public class Main {
 			
 			graf.pack();
 			RefineryUtilities.centerFrameOnScreen(graf);
-			File f = new File(graf.getTitle() + ".png");
-			try {
-				ChartUtilities.saveChartAsPNG(f, graf.getChart(), 2000, 1000);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			graf.exportChartAsSVG(1000, 500);
 			graf.setVisible(true);			
 		}
 		

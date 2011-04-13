@@ -2,11 +2,20 @@ package org.mis.sim;
 
 
 import java.awt.Color;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -14,6 +23,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 /**
  * A simple demonstration application showing how to create a line chart using data from an
@@ -25,6 +36,8 @@ public class Grafico extends ApplicationFrame {
 	//final XYSeries serie2;
 	private final JFreeChart chart;
 	private final String title;
+	private final String xLabel;
+	private final String yLabel;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -32,16 +45,18 @@ public class Grafico extends ApplicationFrame {
      * Creates a new demo
      * @param title  the frame title.
      */
-    public Grafico(final String title, final String valName) {
+    public Grafico(final String title, final String xLabel, final String yLabel, final String valName) {
         super(title);
         this.title = title;
-
-        serie1 = new XYSeries(valName);
+        this.xLabel = xLabel;
+        this.yLabel = yLabel;
+        this.serie1 = new XYSeries(valName);
         //serie2 = new XYSeries("Varianza");
         final XYDataset dataset = createDataset();
         chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(900, 450));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1000, 500));
+        chart.removeLegend();
         setContentPane(chartPanel);
     }
     
@@ -72,9 +87,9 @@ public class Grafico extends ApplicationFrame {
         // create the chart...
     	
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "Throughput accesso Host",	// titolo grafico
-            "nOsservazioni",									// etichetta asse x
-            "job/sec",									// etichetta asse y
+            title,	// titolo grafico
+            xLabel,									// etichetta asse x
+            yLabel,									// etichetta asse y
             dataset,								// data
             PlotOrientation.VERTICAL,
             true,                     // include legend
@@ -85,10 +100,6 @@ public class Grafico extends ApplicationFrame {
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
         chart.setBackgroundPaint(Color.white);
 
-//        final StandardLegend legend = (StandardLegend) chart.getLegend();
-  //      legend.setDisplaySeriesShapes(true);
-        
-        // get a reference to the plot for further customisation...
         final XYPlot plot = chart.getXYPlot();
         plot.setBackgroundPaint(Color.lightGray);
     //    plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
@@ -97,7 +108,7 @@ public class Grafico extends ApplicationFrame {
         
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         renderer.setSeriesLinesVisible(1, true);
-        renderer.setSeriesShapesVisible(0, false);
+        renderer.setSeriesShapesVisible(1, true);
         plot.setRenderer(renderer);
 
         // change the auto tick unit selection to integer units only...
@@ -105,27 +116,51 @@ public class Grafico extends ApplicationFrame {
         rangeAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
         // OPTIONAL CUSTOMISATION COMPLETED.
                 
-        return chart;
+        final ValueAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        domainAxis.setTickLabelFont(domainAxis.getTickLabelFont().deriveFont(new Float(16.0)));
+        rangeAxis.setTickLabelFont(rangeAxis.getTickLabelFont().deriveFont(new Float(16.0)));
         
+        return chart;        
     }
 
 	public void addValue(double a, double b)
 	{
 		this.serie1.add(a, b);
 	}
-	/*public void addVariance(double a, double b)
+		
+	/**
+	 * Exports a JFreeChart to a SVG file.
+	 * 
+	 * @param bounds the dimensions of the viewport
+	 * @throws IOException if writing the svgFile fails.
+	 */
+	public void exportChartAsSVG(int width, int height) 
 	{
-		this.serie2.add(a, b);	
-	}*/
+		try
+		{
+			File svgFile = new File(title + ".svg");
+	        // Get a DOMImplementation and create an XML document
+	        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+	        Document document = domImpl.createDocument(null, "svg", null);
 	
-
-	public JFreeChart getChart()
-	{
-		return chart;
-	}
+	        // Create an instance of the SVG Generator
+	        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
 	
-	public String getTitle()
-	{
-		return title;
+	        // draw the chart in the SVG generator
+	        Rectangle r = new Rectangle(width, height);
+	        chart.draw(svgGenerator, r);
+	
+	        // Write svg file
+	        OutputStream outputStream = new FileOutputStream(svgFile);
+	        Writer out = new OutputStreamWriter(outputStream, "UTF-8");
+	        svgGenerator.stream(out, true /* use css */);						
+	        outputStream.flush();
+	        outputStream.close();
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
