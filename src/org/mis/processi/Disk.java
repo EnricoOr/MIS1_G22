@@ -4,17 +4,12 @@ import org.mis.code.CodaLIFO;
 import org.mis.gen.GeneratoreKerlangiano;
 import org.mis.gen.Seme;
 
-
 /**
- * La classe disk e' una classe derivata dalla classe astratta centro. La classe rappresenta 
- * un centro con coda di tipo last-in first-out e tempo con distribuzione 3-erlagiana. 
- * @author 
- * @author 
- * @author 
+ * La classe disk e' una classe derivata dalla classe astratta Processo. La
+ * classe rappresenta un centro con coda di tipo LIFO e tempo di servizio con
+ * distribuzione 2-erlagiana.
  */
-
-public class Disk extends Processo{
-
+public class Disk extends Processo {
 	private CodaLIFO coda = new CodaLIFO("Coda " + super.getNome());
 	private GeneratoreKerlangiano gen2erl;
 	private final int k = 2;
@@ -22,120 +17,117 @@ public class Disk extends Processo{
 	private double TotTempoRisp;
 	private double dT;
 	private Job current;
-	
+
 	/**
-	 * E' il costruttore della classe il quale istanzia un disk.
-	 * La legge di distribuzione nel tempo è la 3-erlangiana.
+	 * Costruttore della classe il quale istanzia un Disk. La legge di
+	 * distribuzione del tempo di servizio è 2-erlangiana.
 	 */
-	
-	public Disk(){
+	public Disk() {
 		super("Disk", TipoProcesso.Disk);
 		gen2erl = new GeneratoreKerlangiano(Seme.getSeme(), this.tx, this.k);
 	}
 
 	/**
-	 * Funzione la quale ritorna un tempo con distribuzione 2-erlagiana. E' stato effettuato 
-	 * l'override del metodo della superclasse centro. 
-	 * @return 3-Erl
+	 * Metodo che genera e ritorna un tempo con distribuzione 2-Erlagiana.
+	 * 
+	 * @return tempo con distribuzione 2-Erlagiana
 	 */
-	
-
 	public double getTempoCentro() {
-		dT=gen2erl.nextErlang();
-		return dT;
-	}
-	
-	public final double getdT() {
-		
+		dT = gen2erl.nextErlang();
 		return dT;
 	}
 
 	/**
-	 * Funzione la quale estrae dalla coda un job in base alla disciplina in gioco 
-	 * last-in first-out. E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return job
+	 * Metodo che ritorna un tempo con distribuzione 2-Erlagiana.
+	 * 
+	 * @return tempo con distribuzione 2-Erlagiana
 	 */
+	public final double getdT() {
+		return dT;
+	}
 
-
+	/**
+	 * Metodo che estrae dalla coda un job in base alla disciplina LIFO
+	 * 
+	 * @return il Job estratto secondo disciplina FIFO
+	 */
 	public final Job pop() {
-		this.current=coda.pop();
+		this.current = coda.pop();
 		return current;
 	}
 
 	/**
-	 * Funzione la quale inserisce un job in coda. E' stato effettuato l'override 
-	 * del metodo della superclasse centro.
-	 * @param job
+	 * Metodo che inserisce un job in coda.
+	 * 
+	 * @param il
+	 *            Job da inserire in coda
 	 */
-	
-
 	public final void push(Job job) {
 		coda.push(job);
 	}
 
 	/**
-	 * Funzione la quale ritorna la dimensione della coda di tipo lifo del centro disk.
-	 * @return dimensione coda
+	 * Metodo che ritorna la dimensione della coda.
+	 * 
+	 * @return dimensione della coda
 	 */
-	
-	public final int getCodaSize()
-	{
+	public final int getCodaSize() {
 		return coda.getDimensione();
-	}
-	
-	/**
-	 * Funzione la quale ritorna se la coda di tipo lifo del centro disk è vuota.
-	 * @return coda vuota
-	 */
-	
-	public final boolean getCodaVuota()
-	{
-		return coda.isEmpty();
-	}
-	
-	/**
-	 * Metodo che incrementa tempo totale di risposta per il centro disk.
-	 * @parm tempo
-	 */
-	
-	public final void setTempoRisposta(double tempo)
-	{
-		TotTempoRisp+=tempo;
 	}
 
 	/**
-	 * Funzione la quale ritorna il tempo totale di risposta per il centro disk.
-	 * @return tempo totale risposta disk
+	 * Metodo che ritorna se la coda è vuota.
+	 * 
+	 * @return true se la coda è vuota
 	 */
-	
-	public final double getTempoRisposta()
-	{
+	public final boolean getCodaVuota() {
+		return coda.isEmpty();
+	}
+
+	/**
+	 * Metodo che incrementa tempo totale di risposta per il centro Disk.
+	 * 
+	 * @parm tempo intervallo di tempo da aggiungere al tempo di risposta
+	 */
+	public final void setTempoRisposta(double tempo) {
+		TotTempoRisp += tempo;
+	}
+
+	/**
+	 * Metodo che ritorna il tempo totale di risposta per il centro Disk.
+	 * 
+	 * @return tempo totale di risposta Disk
+	 */
+	public final double getTempoRisposta() {
 		return TotTempoRisp;
 	}
-	
-	public final Job getJobCorrente(){
-		
+
+	/**
+	 * Metodo che restituisce il Job in esecuzione nel centro
+	 * 
+	 * @return il job corrente
+	 */
+	public final Job getJobCorrente() {
 		return this.current;
 	}
 
 	/**
+	 * Metodo che implementa la primitiva ACTIVATE. E' stato effettuato
+	 * l'override del metodo nella classe astratta Processo.
+	 * 
 	 * @param j
+	 *            il nuovo job da elaborare
 	 */
 	public void activate(Job j) {
 		super.activate();
-		current=j;
-		
+		current = j;
 	}
-	
+
 	/**
-	 * Questa funzione resetta lo stato del centro
+	 * Metodo per resettare lo stato del centro
 	 */
-	
-	public final void reset()
-	{
+	public final void reset() {
 		coda.resetCoda();
 		this.passivate();
 	}
-
-
 }

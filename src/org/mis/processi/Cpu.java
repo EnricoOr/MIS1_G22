@@ -5,159 +5,97 @@ import org.mis.gen.GeneratoreIperEsponenziale;
 import org.mis.gen.Random;
 import org.mis.gen.Seme;
 
-
-
 /**
- * La classe cpu e' una classe derivata dalla classe astratta processo. La classe rappresenta 
- * un centro con coda di tipo FIFO e tempo con distribuzione iperesponenziale con 
- * probabilità 0,6. 
- * @author 
- * @author 
- * @author 
+ * La classe Cpu e' una classe derivata dalla classe astratta Processo. La
+ * classe rappresenta un centro con coda di tipo FIFO e tempo di servizio con
+ * distribuzione iperesponenziale con probabilità 0,6.
  */
-
 public class Cpu extends Processo {
-
 	private double genIpExp_p06;
 	private GeneratoreIperEsponenziale[] genIpExp_p06c = new GeneratoreIperEsponenziale[3];
 	private final double[] txc = { 0.058, 0.07, 0.028 };
 	private Random rand = new Random(Seme.getSeme());
-	private CodaFIFO[] coda = new CodaFIFO[3];
-
+	private CodaFIFO coda;
 	private Job current;
 
-	
 	/**
-	 * E' il costruttore della classe il quale istanzia una cpu.
-	 * La legge di distribuzione nel tempo è iperesponnziale con probabilità 0,6.
+	 * Costruttore della classe. I istanzia una cpu. La legge di distribuzione
+	 * nel tempo è iperesponenziale con probabilità 0,6.
 	 */
-	
-	public Cpu()
-	{
+	public Cpu() {
 		super("CPU", TipoProcesso.CPU);
-		for  (int i = 0; i < txc.length; i++)
-		{
+		for (int i = 0; i < txc.length; i++) {
 			genIpExp_p06c[i] = new GeneratoreIperEsponenziale(txc[i], rand, 0.6);
-			coda[i] = new CodaFIFO("Coda " + i + " " + super.getNome());
 		}
+		coda = new CodaFIFO("Coda " + super.getNome());
 	}
-	
+
 	/**
-	 * Funzione la quale ritorna un tempo con distribuzione iperesponeziale con probabilità 0,6. 
-	 * E' stato effettuato l'override del metodo della superclasse centro. 
-	 * @return IpExp_P06
+	 * Metodo che ritorna il tempo di servizio per il Job corrente. E' stato
+	 * effettuato l'override del metodo della superclasse Processo.
+	 * 
+	 * @return tempo di servizio per il Job corrente, con distribuzione
+	 *         iperesponeziale con e probabilità 0,6.
 	 */
-	
 	public double getTempoCentro(Job jobCorrente) {
-		
-		this.current=jobCorrente;
+		this.current = jobCorrente;
 
-		genIpExp_p06 = genIpExp_p06c[jobCorrente.getJobClass() - 1].nextIperExp();
-		return genIpExp_p06;
-	}
-	
-	/**
-	 * Funzione che indica se le code per il centro cpu sono vuote. 
-	 * @return code vuote
-	 */
-	
-	public final boolean codeVuote()
-	{
-		boolean empty = true;
-		for (CodaFIFO c: coda)
-		{
-			empty = (empty & c.isEmpty());
-		}
-		return empty;
-	}
-	
-	/**
-	 * Funzione la quale ritorna il valore delle code per il centro cpu. SOLO PER TEST - DA RIMUOVERE
-	 * @return code vuote
-	 */
-	
-	public final String getLenCode()
-	{
-		String lenCode = "";
-		
-		for (CodaFIFO c: coda)
-		{
-			lenCode += c.getNome() + " = " + c.getDimensione() + ", ";
-		}
-		return lenCode;
-	}
-
-	/**
-	 * Funzione la quale ritorna un tempo con distribuzione iperesponeziale con probabilità 0,6. 
-	 * E' stato effettuato l'override del metodo della superclasse centro. 
-	 * @return IpExp_P06
-	 */
-	
-
-	public final double getTempoCentro() {
+		genIpExp_p06 = genIpExp_p06c[jobCorrente.getJobClass() - 1]
+				.nextIperExp();
 		return genIpExp_p06;
 	}
 
-
 	/**
-	 * Funzione la quale estrae dalla coda un job in base alla disciplina in gioco 
-	 * random. E' stato effettuato l'override del metodo della superclasse centro.
-	 * @return job
+	 * Metodo che indica se la coda per il centro Cpu è vuota.
+	 * 
+	 * @return true se la coda è vuota
 	 */
-	
-
-	public final Job pop()
-	{
-		return coda[0].pop();
-		/*int n = (int)(rand.nextNumber() * coda.length);
-		while(true)
-		{
-			if(!coda[n].isEmpty())
-				return coda[n].pop();
-			else
-			{
-				if (n < 2) n++;
-				else n = 0;
-			}
-		}*/
+	public final boolean codaVuota() {
+		return coda.isEmpty();
 	}
 
 	/**
-	 * Funzione la quale inserisce un job in coda. E' stato effettuato l'override 
-	 * del metodo della superclasse centro.
+	 * Metodo che estrae dalla testa della coda un job.
+	 * 
+	 * @return il Job in testa alla coda
+	 */
+	public final Job pop() {
+		return coda.pop();
+	}
+
+	/**
+	 * Metodo che inserisce un job in coda.
+	 * 
 	 * @param job
+	 *            il Job da inserire in coda
 	 */
-	
-
-	public final void push(Job job)
-	{
-		coda[0].push(job);
+	public final void push(Job job) {
+		coda.push(job);
 	}
 
 	/**
-	 * Questa funzione restituisce il prossimo numero random della sequenza
-	 * @return rand.nextNumber()
+	 * Metodo che restituisce il prossimo numero random della sequenza
+	 * 
+	 * @return un numero random tra 0 e 1
 	 */
-	
-	public double nextRand()
-	{
+	public double nextRand() {
 		return rand.nextNumber();
 	}
-	
-	public final Job getJobCorrente(){
-		
+
+	/**
+	 * Metodo che restituisce il Job in esecuzione nel centro
+	 * 
+	 * @return il job corrente
+	 */
+	public final Job getJobCorrente() {
 		return current;
 	}
-	
-	/**
-	 * Questa funzione resetta lo stato del centro
-	 */
-	
-	public final void reset()
-	{
-		for (CodaFIFO c: coda)
-			c.resetCoda();
 
+	/**
+	 * Metodo per resettare lo stato del centro
+	 */
+	public final void reset() {
+		coda.resetCoda();
 		this.passivate();
 	}
 }

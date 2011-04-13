@@ -9,22 +9,24 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Questa classe provvede a leggere un seme da un file di testo chiamato seme.txt
- * Il seme verrà passato a tutti i metodi delle classi che ne faranno richiesta.
- * @author 
- * @author 
- * @author 
+ * Questa classe provvede a leggere un seme da un file di testo chiamato
+ * seme.txt Il seme verrà passato a tutti i metodi delle classi che ne faranno
+ * richiesta.
  */
-
 public class Seme {
-	
 	private static BufferedReader reader;
 	private static boolean seme = true;
 	private static int s;
-	
+
+	/**
+	 * Metodo che restituisce un seme, il primo viene letto dal file, gli altri
+	 * vengono generati incrementando il primo e verificando che non sia
+	 * divisibile per 5
+	 * 
+	 * @return seme
+	 */
 	public static int getSeme() {
-		if(seme)
-		{
+		if (seme) {
 			String InputString = null;
 			try {
 				InputString = reader.readLine();
@@ -33,28 +35,33 @@ public class Seme {
 			}
 			seme = false;
 			return (s = Integer.parseInt(InputString));
-		}
-		else
-		{
-			if((s+2)%5==0)return (s=s+4);
-			else return (s=s+2);
+		} else {
+			if ((s + 2) % 5 == 0)
+				return (s = s + 4);
+			else
+				return (s = s + 2);
 		}
 	}
 
-	public static void apri()
-	{
+	/**
+	 * Metodo usato per aprire il file contenente il primo seme
+	 */
+	public static void apri() {
 		File f1 = new File("seme.txt");
 		reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(f1))));
+			reader = new BufferedReader(new InputStreamReader(
+					new DataInputStream(new FileInputStream(f1))));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		seme = true;
 	}
-	
-	public static void chiudi()
-	{
+
+	/**
+	 * Metodo usato per chiudere il file contenente il primo seme
+	 */
+	public static void chiudi() {
 		try {
 			reader.close();
 		} catch (IOException e) {
