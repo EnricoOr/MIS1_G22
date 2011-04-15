@@ -2,6 +2,9 @@ package org.mis.gen;
 
 /**
  * La classe GeneratoreEsponenziale implementa un generatore Esponenziale
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class GeneratoreEsponenziale {
 	private double tx;

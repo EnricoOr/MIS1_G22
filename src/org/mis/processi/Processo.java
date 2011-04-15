@@ -2,7 +2,10 @@ package org.mis.processi;
 
 /**
  * La classe Processo è la classe astratta che fa da base per le classi dei
- * centri.
+ * vari processi della simulazione (centri, job, osservazioni, fine simulazione).
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public abstract class Processo implements Comparable<Processo> {
 	private String nome;

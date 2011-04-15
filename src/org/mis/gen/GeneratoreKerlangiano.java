@@ -3,6 +3,9 @@ package org.mis.gen;
 /**
  * La classe GeneratoreKerlangiano estende la classe Random e implementa un
  * generatore k-Erlangiano
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class GeneratoreKerlangiano extends Random {
 	private double tx;

@@ -5,6 +5,9 @@ package org.mis.gen;
  * ingresso, in base ai parametri consigliati da Gordon a=5^31 (1220703125) e
  * m=2^31 (2147483648), genera il successivo numero pseudocasuale della
  * sequenza.
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class Random {
 	private final long a = (long) Math.pow(5, 13);

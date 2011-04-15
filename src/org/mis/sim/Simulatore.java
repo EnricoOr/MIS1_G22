@@ -8,15 +8,10 @@ import org.mis.gen.Seme;
 import org.mis.processi.*;
 
 /**
- * genero il tempo
-aggiungo il tempo al simtime add
-chiamo hold(getSimTime)
-aggiungo alla lista di hold
-
  * La classe si occupa di istanziare tutte le componenti del nostro impianto e di avviare la simulazione
- * @author 
- * @author 
- * @author 
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 
 public class Simulatore {
@@ -42,8 +37,11 @@ public class Simulatore {
 	public ArrayList<Processo> passivate;
 	
 	private static boolean stab = false;
+	private boolean b2 = false;
 	private boolean logging = false;
 	private boolean observing = false;
+	private boolean trObserved =false;
+	
 	
 	public Simulatore(int nClient, boolean stab, boolean logi, int n)
 	{
@@ -55,12 +53,13 @@ public class Simulatore {
 		log = new Log((int)System.currentTimeMillis(), logging);
 	}
 	
-	public Simulatore(int nClient, boolean stab, boolean logi, int n, double t)
+	public Simulatore(int nClient, boolean stab, boolean logi, int n, double t, boolean b2)
 	{
 		Simulatore.nClient = nClient;
 		Simulatore.stab = stab;
 		this.logging = logi;
 		tau=t;
+		this.b2=b2;
 		this.nOsser=n;
 		this.nOssAn=50;
 		log = new Log((int)System.currentTimeMillis(), logging);
@@ -83,7 +82,6 @@ public class Simulatore {
 	 * Questa funzione avvia la simulazione sia per la stabilizzazione
 	 * che per l'analisi dei risultati
 	 */
-	
 	public final void avvia()
 	{
 		boolean stop=false;
@@ -91,6 +89,7 @@ public class Simulatore {
 		clock = new SimTime();
 		end = new FineSim();
 		if(stab) osservazione = new Osservazione(nOsser, tau);
+		else if (b2) osservazione = new Osservazione(1000, nClient, tau);
 		else osservazione = new Osservazione(50, nClient, tau);
 		creaJob();
 		
@@ -102,7 +101,11 @@ public class Simulatore {
 			this.osservazione.hold(tau*(nOsser+((nOsser-1)/2.0)));
 		if (stab) 
 			this.end.hold(nOsser*tau+0.001);
-		else
+		else if (b2){
+			this.end.hold((nOsser*tau*1001)+0.001);
+			this.nOssAn=1000;
+		}
+		else	
 			this.end.hold((nOsser*tau*51)+0.001);
 		this.hold.add(osservazione);
 		this.hold.add(end);
@@ -258,11 +261,12 @@ public class Simulatore {
 				log.scrivi("DISK TERMINA HOLD");
 
 				Job workingJob = disk.getJobCorrente();
-				if (observing && nClient == 20) 
+				if (nClient == 20 && !trObserved && clock.getSimTime()>=(tau*(nOsser+((nOsser-1)/2.0)))) 
 				{
 					osservazione.jobtoDisk();
 					osservazione.aggTempoR(clock.getSimTime() - workingJob.getIngresso());
 					workingJob.setIngresso(0);
+					trObserved=true;
 				}
 				
 				workingJob.setJobClass(3);
@@ -371,6 +375,8 @@ public class Simulatore {
 					osservazione.hold((observing ? clock.getSimTime()+(nOsser-1)*tau : clock.getSimTime()+tau));
 					this.hold.add(osservazione);
 					observing = !observing;
+					if(observing) trObserved=false;
+					
 				}
 				break;
 				
@@ -378,11 +384,11 @@ public class Simulatore {
 				clock.setSimTime(end.getTime());
 				clock.stopSimTime();
 				
-				if(!stab)
+				if(!stab && !b2)
 				{
 					System.out.println("***Fine Simulazione " + nClient +" client ***\n");
-					System.out.println("****Media: "+osservazione.getMedia()+"\n");
-					System.out.println("****Varianza: "+osservazione.getVarianza()+"\n");
+					//System.out.println("****Media: "+osservazione.getMedia()+"\n");
+					//System.out.println("****Varianza: "+osservazione.getVarianza()+"\n");
 					log.scrivi(clock);				//stampa la fine della simulazione
 					log.scrivi("***Media: "+osservazione.getMedia()+"***\n"+"***Varianza: "+osservazione.getVarianza()+"***\n");
 					log.scrivi("****Media tempo Risp Disk = "+ osservazione.getMediaTr());
@@ -398,8 +404,7 @@ public class Simulatore {
 	
 	/**
 	 * Funzione che crea i vari centri dell'impianto
-	 */
-	
+	 */	
 	public final void creaCentri()
 	{
 		creaTerminali();
@@ -413,8 +418,7 @@ public class Simulatore {
 	
 	/**
 	 * Questa funzione crea i client
-	 */
-	
+	 */	
 	public final void creaTerminali()
 	{
 		client = new Terminale[nClient];
@@ -427,8 +431,7 @@ public class Simulatore {
 	
 	/**
 	 * Questa funzione crea gli host
-	 */
-	
+	 */	
 	public final void creaHost()
 	{
 		host = new Host[nClient];
@@ -442,7 +445,6 @@ public class Simulatore {
 	/**
 	 * Questa funzione crea le stampanti
 	 */
-	
 	public final void creaStampanti()
 	{
 		stampanti = new Printer[nClient];
@@ -455,8 +457,7 @@ public class Simulatore {
 		
 	/**
 	 * Questa funzione crea un job per ogni client
-	 */
-	
+	 */	
 	public final void creaJob()
 	{
 		for(int t=0; t<nClient; t++)
@@ -485,8 +486,7 @@ public class Simulatore {
 	/**
 	 * Questo metodo serve per resettare lo stato del sistema ad ogni fine run
 	 * durante la stabilizzazione
-	 */
-	
+	 */	
 	public final void resetSim()
 	{
 
@@ -506,7 +506,6 @@ public class Simulatore {
 	 * Questa funzione restituisce true se è attiva la modalita di stabilizzazione
 	 * @return stab
 	 */
-
 	public static boolean stab()
 	{
 		return stab;
@@ -515,8 +514,7 @@ public class Simulatore {
 	/**
 	 * Questa funzione restituisce il numero dei client della simulazione in esecuzione
 	 * @return nClient
-	 */
-	
+	 */	
 	public static int getNClient()
 	{
 		return nClient;

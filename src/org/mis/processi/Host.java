@@ -9,6 +9,9 @@ import org.mis.processi.Job;
 /**
  * La classe Host è una classe derivata dalla classe astratta Processo. La classe rappresenta 
  * un centro senza coda poiché di tipo IS, cioè ha capacità infinita.
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class Host extends Processo{
 	private GeneratoreKerlangiano kerl;

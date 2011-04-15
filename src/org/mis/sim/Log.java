@@ -16,9 +16,9 @@ import org.mis.processi.Processo;
 /**
  * Si occupa della creazione del file di log sul disco e di registrare gli eventi che vengono eseguiti.
  * Si occupa anche della chiusura dei file quando richiesto.
- * @author Valerio Gentile
- * @author Andrea Giancarli
- * @author Alessandro Mastracci
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class Log {
 	

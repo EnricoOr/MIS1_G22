@@ -4,14 +4,16 @@ import org.mis.processi.Job;
 
 /**
  * La classe CodaLIFO estende la classe Coda e implementa una coda LIFO
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class CodaLIFO extends Coda {
 
 	/**
 	 * Prende come parametro il nome della coda e si effettua una chiamata al costruttore della 
 	 * classe madre coda. 
-	 */
-	
+	 */	
 	public CodaLIFO(String nomeCoda) {
 		super(nomeCoda);
 	}
@@ -29,4 +31,3 @@ public class CodaLIFO extends Coda {
 	} 
 
 }
-

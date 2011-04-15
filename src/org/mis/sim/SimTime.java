@@ -4,8 +4,9 @@
 package org.mis.sim;
 
 /**
- * @author 
- *
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class SimTime {
 	

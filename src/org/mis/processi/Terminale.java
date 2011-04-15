@@ -15,11 +15,10 @@ import org.mis.sim.Simulatore;
  * La classe terminale è una classe derivata dalla classe astratta centro. La classe rappresenta 
  * un centro senza coda poichè i client prodocuno job dai terminali e aspettano che il job 
  * ritorni al centro prima di lanciarne uno nuovo.
- * @author 
- * @author 
- * @author 
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini 
  */
-
 public class Terminale extends Processo{
 
 	private static int id = 0;

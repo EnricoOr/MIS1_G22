@@ -3,6 +3,9 @@ package org.mis.gen;
 /**
  * La classe GeneratoreIperEsponenziale estende la classe GeneratoreEsponenziale
  * e implementa un generatore Iperesponenziale
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class GeneratoreIperEsponenziale extends GeneratoreEsponenziale {
 	private double tx;

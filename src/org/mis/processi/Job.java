@@ -1,5 +1,15 @@
 package org.mis.processi;
 
+
+/**
+ * La classe Job è una classe derivata dalla classe astratta Processo. La
+ * classe rappresenta un Job che viene generato da un Terminale e ad esso ritorna
+ * una volta terminato il suo ciclo di vita all'interno dell'impianto.
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
+ */
+
 public class Job extends Processo {
 	
 	private int id;
@@ -22,8 +32,7 @@ public class Job extends Processo {
 	/**
 	 * Questa funzione restituisce l'id del job
 	 * @return id
-	 */
-	
+	 */	
 	public int getId(){
 		return id;
 	}
@@ -31,8 +40,7 @@ public class Job extends Processo {
 	/**
 	 * Funzione che serve per impostare la classe del Job
 	 * @param int jc
-	 */
-	
+	 */	
 	public void setJobClass(int jc) {
 		jobClass = jc;
 	}
@@ -41,7 +49,6 @@ public class Job extends Processo {
 	 * Funzione che serve per prelevare la classe del Job
 	 * @return
 	 */
-	
 	public int getJobClass() {
 		return jobClass;
 	}
@@ -49,8 +56,7 @@ public class Job extends Processo {
 	/**
 	 * Questa funzione restituisce il terminale che l'ha generato
 	 * @return Terminale generatoDa
-	 */
-	
+	 */	
 	public Terminale getGeneratoDa()
 	{
 		return generatoDa;
@@ -59,8 +65,7 @@ public class Job extends Processo {
 	/**
 	 * Questa funzione memorizza il tempo di ingresso del Job nel sistema
 	 * @param tempo
-	 */
-	
+	 */	
 	public void setIngresso(double tempo)
 	{
 		this.tempoIngrSist = tempo;
@@ -69,8 +74,7 @@ public class Job extends Processo {
 	/**
 	 * Questa funzione preleva il tempo di ingresso del Job nel sistema
 	 * @return tempoIngrSist
-	 */
-	
+	 */	
 	public double getIngresso()
 	{
 		return this.tempoIngrSist;
@@ -80,8 +84,7 @@ public class Job extends Processo {
 	/**
 	 * Questo metodo memorizza l'istante di tempo in cui il job si accoda ad un centro
 	 * @param t
-	 */
-	
+	 */	
 	public void setIngCoda(double t)
 	{
 		this.tempoIngrCoda = t;
@@ -90,8 +93,7 @@ public class Job extends Processo {
 	/**
 	 * Il metodo restituisce l'istante di clock in cui il job si è accodato in un centro.
 	 * @return tempoIngrCoda
-	 */
-	
+	 */	
 	public double getIngCoda()
 	{
 		return this.tempoIngrCoda;

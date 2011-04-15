@@ -6,10 +6,9 @@ package org.mis.sim;
 import org.mis.processi.Processo;
 
 /**
- * @author Battista Daniele
- * @author Dell'Anna Luca
- * @author Orsini Enrico
- *
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class FineSim extends Processo{
 

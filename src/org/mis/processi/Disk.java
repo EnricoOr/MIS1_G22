@@ -8,6 +8,9 @@ import org.mis.gen.Seme;
  * La classe disk e' una classe derivata dalla classe astratta Processo. La
  * classe rappresenta un centro con coda di tipo LIFO e tempo di servizio con
  * distribuzione 2-erlagiana.
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class Disk extends Processo {
 	private CodaLIFO coda = new CodaLIFO("Coda " + super.getNome());

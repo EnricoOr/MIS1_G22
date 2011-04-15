@@ -107,7 +107,7 @@ public class Grafico extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.white);
         
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(1, true);
+       // renderer.setSeriesLinesVisible(1, false);
         renderer.setSeriesShapesVisible(1, true);
         plot.setRenderer(renderer);
 

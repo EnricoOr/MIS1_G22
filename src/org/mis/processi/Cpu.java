@@ -9,6 +9,9 @@ import org.mis.gen.Seme;
  * La classe Cpu e' una classe derivata dalla classe astratta Processo. La
  * classe rappresenta un centro con coda di tipo FIFO e tempo di servizio con
  * distribuzione iperesponenziale con probabilità 0,6.
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
 public class Cpu extends Processo {
 	private double genIpExp_p06;

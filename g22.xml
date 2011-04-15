@@ -3,17 +3,24 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="bin/g22.jar">
+        <jar destfile="/home/enrico/Dropbox/workspace/MIS1_G22/doc/g22.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="org.mis.Main"/>
                 <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ jcommon-1.0.16.jar jfreechart-1.0.13.jar"/>
+                <attribute name="Rsrc-Class-Path" value="./ jcommon-1.0.16.jar jfreechart-1.0.13.jar batik-awt-util.jar batik-dom.jar batik-svggen.jar batik-util.jar batik-xml.jar batik-ext.jar xml-apis.jar"/>
             </manifest>
             <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="bin"/>
-            <zipfileset dir="src/org/mis/lib" includes="jcommon-1.0.16.jar"/>
-            <zipfileset dir="src/org/mis/lib" includes="jfreechart-1.0.13.jar"/>
+            <fileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/bin"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="jcommon-1.0.16.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="jfreechart-1.0.13.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="batik-awt-util.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="batik-dom.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="batik-svggen.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="batik-util.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="batik-xml.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="batik-ext.jar"/>
+            <zipfileset dir="/home/enrico/Dropbox/workspace/MIS1_G22/src/org/mis/lib" includes="xml-apis.jar"/>
         </jar>
     </target>
 </project>

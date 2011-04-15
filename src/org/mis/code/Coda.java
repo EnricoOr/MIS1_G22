@@ -7,8 +7,10 @@ import org.mis.processi.Job;
  * La classe coda e' una classe astratta da cui vengono derivate le altre classi per le code dei
  * centri. E' utile a definire le altre classi come appartenenti alla stessa categoria ed 
  * implementare il polimorfismo su gli oggetti che le conterranno.
+ * @author Daniele Battista
+ * @author Luca Dell'Anna
+ * @author Enrico Orsini
  */
-
 public abstract class Coda {
 	
 	public ArrayList<Job> coda = new ArrayList<Job>();
@@ -18,8 +20,7 @@ public abstract class Coda {
 	 * Prende come parametro il solo nome dell coda del centro, il quale verra' utilizzato 
 	 * nella fase di analisi del log del programma.
 	 * @param nomeCoda
-	 */
-	
+	 */	
 	public Coda(String nomeCoda) {
 		this.nomeCoda = nomeCoda;
 	}
@@ -27,8 +28,7 @@ public abstract class Coda {
 	/**
 	 * Funziona la quale ritorna il nome della coda di un centro.
 	 * @return nomeCoda
-	 */
-	
+	 */	
 	public String getNome(){
 		return nomeCoda;
 	}
@@ -36,8 +36,7 @@ public abstract class Coda {
 	/**
 	 * Funzione la quale ritorna la dimensione della coda di un centro.
 	 * @return dimensione coda
-	 */
-	
+	 */	
 	public final int getDimensione() {
 		return coda.size();
 	}
@@ -45,8 +44,7 @@ public abstract class Coda {
 	/**
 	 * Funzione la quale ritorna true se la coda è vuota.
 	 * @return coda vuota
-	 */
-	
+	 */	
 	public final boolean isEmpty() {
 		return coda.isEmpty();
 	}
@@ -54,8 +52,7 @@ public abstract class Coda {
 	/**
 	 * Prende come parametro un job, il quale verrà aggiunto nella coda.
 	 * @param Job push
-	 */
-	
+	 */	
 	public final void push(Job push){
 		coda.add(push);
 	}
@@ -63,8 +60,7 @@ public abstract class Coda {
 	/**
 	 * Funzione la quale rimuove tutti gli elementi dalla coda di un centro, sarà utile per
 	 * resettare le code del sistema.
-	 */
-	
+	 */	
 	public final void resetCoda() {
 		coda.clear();
 	}
@@ -72,11 +68,7 @@ public abstract class Coda {
 	/**
 	 * Funzione astratta la quale estrae un job dalla coda in base alla disciplia in gioco, 
 	 * sarà necessario fae un override.
-	 */
-	
+	 */	
 	public abstract Job pop();
 	
-	
-
 }
-
