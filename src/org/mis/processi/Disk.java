@@ -88,7 +88,7 @@ public class Disk extends Processo {
 	}
 
 	/**
-	 * Metodo che incrementa tempo totale di risposta per il centro Disk.
+	 * Metodo che incrementa il tempo totale di risposta per il centro Disk.
 	 * 
 	 * @parm tempo intervallo di tempo da aggiungere al tempo di risposta
 	 */

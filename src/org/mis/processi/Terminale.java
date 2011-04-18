@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.mis.processi;
 
 import org.mis.gen.GeneratoreIperEsponenziale;
@@ -12,7 +7,7 @@ import org.mis.sim.Simulatore;
 
 
 /**
- * La classe terminale è una classe derivata dalla classe astratta centro. La classe rappresenta 
+ * La classe terminale è una classe derivata dalla classe astratta Processo. La classe rappresenta 
  * un centro senza coda poichè i client prodocuno job dai terminali e aspettano che il job 
  * ritorni al centro prima di lanciarne uno nuovo.
  * @author Daniele Battista
@@ -41,7 +36,7 @@ public class Terminale extends Processo{
 	}
 
 	/**
-	 * La funzione ritorna l'id univoco del terminale.
+	 * Metodo che ritorna l'id univoco del terminale.
 	 * @return id
 	 */
 	public final int getId(){
@@ -49,9 +44,8 @@ public class Terminale extends Processo{
 	}
 
 	/**
-	 * Funzione la quale ritorna un tempo con distribuzione 2-erlagiana. E' stato effettuato 
-	 * l'override del metodo della superclasse centro. 
-	 * @return genIper3
+	 * Metodo che genera e ritorna un tempo con distribuzione Iperesponenziale p=0.3.
+	 * @return tempo con distribuzione Iperesponenziale p=0.3
 	 */
 	public double getTempoCentro() {
 		
@@ -59,6 +53,10 @@ public class Terminale extends Processo{
 		return dT;
 	}
 	
+	/**
+	 * Metodo che ritorna un tempo con distribuzione Iperesponenziale p=0.3.
+	 * @return tempo con distribuzione Iperesponenziale p=0.3
+	 */
 	public final double getdT() {
 		
 		return dT;
@@ -78,12 +76,11 @@ public class Terminale extends Processo{
 	}
 
 	/**
-	 * Funzione la quale restituisce il job
+	 * Metodo che restituisce il job
 	 * @return job
 	 */
 	public final Job getJob()
 	{
 		return job;
 	}
-
 }

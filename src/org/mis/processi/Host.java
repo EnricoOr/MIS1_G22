@@ -1,6 +1,5 @@
 package org.mis.processi;
 
-
 import org.mis.gen.GeneratoreKerlangiano;
 import org.mis.gen.Seme;
 import org.mis.processi.Job;
@@ -27,22 +26,28 @@ public class Host extends Processo{
 	}
 
 	/**
-	 * Funzione la quale ritorna un tempo con distribuzione esponenziale. E' stato effettuato 
-	 * l'override del metodo della superclasse centro. 
-	 * @return kerl
+	 * Metodo che ritorna un tempo con distribuzione 3-Erlangiana.
+	 * @return tempo con distribuzione 3-Erlangiana
 	 */
 	public double getTempoCentro() {
 		return kerl.nextErlang();
 	}
 	
+	/**
+	 * Metodo per impostare il job corrente del centro
+	 * @param c il job da impostare
+	 */
 	public void setCurJob(Job c){
 		current=c;
 	}
 
 
+	/**
+	 * Metodo che restituisce il job corrente del centro
+	 * @return il job corrente del centro
+	 */
 	public final Job getJobCorrente(){
 		
 		return current;
 	}
-
 }

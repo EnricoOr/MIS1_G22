@@ -31,7 +31,7 @@ public class Main {
 
 		
 		/**
-		 * Funzione che si occupa di eseguire il test del generatore random
+		 * Metodo che si occupa di eseguire il test del generatore random
 		 * e di stamparne i risultati
 		 */
 		private static void TestGenRandom() {
@@ -53,7 +53,7 @@ public class Main {
 		
 		
 		/**
-		 * Funzione che si occupa di eseguire il test del generatore erlangiano
+		 * Metodo che si occupa di eseguire il test del generatore erlangiano
 		 * e di stamparne i risultati
 		 */		
 		private static void TestGenErlang(double tx) {
@@ -76,7 +76,7 @@ public class Main {
 		}
 
 		/**
-		 * Funzione che si occupa di eseguire il test del generatore iperesponenziale p=0.6
+		 * Metodo che si occupa di eseguire il test del generatore iperesponenziale
 		 * e di stamparne i risultati
 		 */		
 		private static void TestGenIperesp(double tx, double p) {
@@ -98,10 +98,9 @@ public class Main {
 			stampaIst(ist, istogramma);
 		}
 		
-		/*
-		 * Classe main del nostro simulatore
-		 * avvia la simulazione
-		 * @param String[] args
+		/**
+		 * Metodo main del nostro simulatore: avvia la simulazione
+		 * @param String[] args I parametri passati
 		 */		
 		public static void main(String[] args) {
 			long Tempo1;
@@ -141,7 +140,7 @@ public class Main {
 							double[] xn=new double[50]; //medie campionarie di ogni run
 							double xjn=0; //variabile appoggio per stima media gordon
 							double var=0; //variabile appoggio per stima varianza gordon
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, n);
+							Simulatore simulatore = new Simulatore(clien, logMode, n);
 							simulatore.simInit();
 							
 							for (int k=0;k<50;k++){
@@ -182,7 +181,7 @@ public class Main {
 					
 						for(; clien<=120; clien += 10)
 						{
-							Simulatore simulatore = new Simulatore(clien, stab, logMode, 200, 5, false);
+							Simulatore simulatore = new Simulatore(clien, logMode, 200, 5, false);
 							simulatore.simInit();
 							simulatore.avvia();
 							Osservazione oss = simulatore.getOsservazioni();
@@ -196,7 +195,7 @@ public class Main {
 							
 							if (clien == 20)
 							{
-								Simulatore simulatore20 = new Simulatore(clien, stab, logMode, 200, 5, true);
+								Simulatore simulatore20 = new Simulatore(clien, logMode, 200, 5, true);
 								simulatore20.simInit();
 								simulatore20.avvia();
 								
@@ -238,7 +237,7 @@ public class Main {
 		}
 		
 		/**
-		 * Funzione che si occupa di stampare nel terminale i valori per disegnare l'istogramma
+		 * Metodo che si occupa di stampare nel terminale i valori per disegnare l'istogramma
 		 * e in una finestra separata visualizza tale grafico
 		 * @param Istogramma ist
 		 */		
@@ -260,11 +259,10 @@ public class Main {
 			ist.exportChartAsSVG(1000, 500);
 			ist.setVisible(true);
 		}
-		
 		/**
-		 * metodo che apre e stampa a video il grafico del run di stabilizzazione
-		 * @param Grafico ist
-		 */		
+		 * Metodo che si occupa di visualizzare in una finestra separata il grafico del run di stabilizzazione
+		 * @param Grafico graf
+		 */
 		public static void stampaGraf(Grafico graf)
 		{
 			
@@ -276,7 +274,7 @@ public class Main {
 		}
 		
 		/**
-		 * metodo per la stampa della percentuale di lavoro completeato della stabilizzazione
+		 * Metodo per la stampa della percentuale di lavoro completato della stabilizzazione
 		 * @param Percentuale
 		 */
 		public static void printProg(int percent){
@@ -296,24 +294,25 @@ public class Main {
 		        System.out.print("\r"+bar.toString());
 		 }
 		
+		
+		/**
+		 * Metodo per calcolare lo step di lavoro completato della stabilizzazione da disegnare nel terminale
+		 * @param perc
+		 */
 		public static void progress(int perc){
 			n100=numOss/100;
 			
 			if (perc==(n100*5)){
-					printProg(5);
-				
+					printProg(5);				
 			}
 			else if (perc==(n100*15)){
-				printProg(15);
-				
+				printProg(15);				
 			}
 			else if (perc==(n100*25)){
-				printProg(25);
-				
+				printProg(25);				
 			}
 			else if (perc==(n100*35)){
-				printProg(35);
-				
+				printProg(35);				
 			}
 			else if (perc==(n100*50)){
 				printProg(50);
@@ -336,7 +335,7 @@ public class Main {
 		}
 		
 		/**
-		 * Questa funzione controlla che i parametri passati in ingresso al programma siano corretti
+		 * Questo metodo fa il parsing e il controllo di coerenza e correttezza dei parametri passati in ingresso al programma.
 		 * @param argomenti passati al programma
 		 * @return ritorna true se il parsing degli argomenti ha avuto successo
 		 */		

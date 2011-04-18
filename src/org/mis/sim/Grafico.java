@@ -26,10 +26,12 @@ import org.jfree.ui.ApplicationFrame;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
+
 /**
- * A simple demonstration application showing how to create a line chart using data from an
- * {@link XYDataset}.
- *
+ * Classe usata per disegnare un grafico.
+ * @author Battista Daniele
+ * @author Dell'Anna Luca
+ * @author Orsini Enrico
  */
 public class Grafico extends ApplicationFrame {
 	final XYSeries serie1;
@@ -41,9 +43,13 @@ public class Grafico extends ApplicationFrame {
 	
 	private static final long serialVersionUID = 1L;
 
-	/**
-     * Creates a new demo
-     * @param title  the frame title.
+	
+    /**
+     * Costruttore della classe.
+     * @param title titolo del grafico
+	 * @param xLabel titolo dell'asse x
+	 * @param yLabel titolo dell'asse y
+     * @param valName nome della serie di valori
      */
     public Grafico(final String title, final String xLabel, final String yLabel, final String valName) {
         super(title);
@@ -59,11 +65,10 @@ public class Grafico extends ApplicationFrame {
         chart.removeLegend();
         setContentPane(chartPanel);
     }
-    
+  
     /**
-     * Creates a sample dataset.
-     * 
-     * @return a sample dataset.
+     * Metodo che crea il dataset per i valori da rappresentare.
+     * @return il dataset
      */
     private XYDataset createDataset() {
 
@@ -76,11 +81,9 @@ public class Grafico extends ApplicationFrame {
     }
     
     /**
-     * Creates a chart.
-     * 
-     * @param dataset  the data for the chart.
-     * 
-     * @return a chart.
+     * Metodo che crea il grafico.
+     * @param dataset il dataset da rappresentare
+	 * @return restituisce l'oggetto che rappresenta il grafico
      */
     private JFreeChart createChart(final XYDataset dataset) {
         
@@ -124,16 +127,20 @@ public class Grafico extends ApplicationFrame {
         return chart;        
     }
 
-	public void addValue(double a, double b)
+	/**
+	 * Metodo che aggiunge un valore al dataset 
+	 * @param x il punto dell'asse x in cui aggiungere il valore
+	 * @param y il valore da aggiungere
+	 */
+	public void addValue(double x, double y)
 	{
-		this.serie1.add(a, b);
+		this.serie1.add(x, y);
 	}
 		
 	/**
-	 * Exports a JFreeChart to a SVG file.
-	 * 
-	 * @param bounds the dimensions of the viewport
-	 * @throws IOException if writing the svgFile fails.
+	 * Metodo che esporta il grafico in formato SVG
+	 * @param width la larghezza del grafico
+	 * @param height l'altezza del grafico
 	 */
 	public void exportChartAsSVG(int width, int height) 
 	{

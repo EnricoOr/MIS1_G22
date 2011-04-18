@@ -13,7 +13,6 @@ import org.mis.processi.*;
  * @author Luca Dell'Anna
  * @author Enrico Orsini
  */
-
 public class Simulatore {
 
 	private static int nClient;
@@ -43,43 +42,54 @@ public class Simulatore {
 	private boolean trObserved =false;
 	
 	
-	public Simulatore(int nClient, boolean stab, boolean logi, int n)
+	/**
+	 * Costruttore della classe. Utilizzato nella fase di stabilizzazione.
+	 * @param nClient il numero di client da usare per la simulazione
+	 * @param logi se true, crea i files di log
+	 * @param n numero di osservazioni
+	 */
+	public Simulatore(int nClient, boolean logi, int n)
 	{
 		Simulatore.nClient = nClient;
-		Simulatore.stab = stab;
+		Simulatore.stab = true;
 		this.logging = logi;
 		tau=5;
 		this.nOsser=n;
 		log = new Log((int)System.currentTimeMillis(), logging);
 	}
 	
-	public Simulatore(int nClient, boolean stab, boolean logi, int n, double t, boolean b2)
+	/**
+	 * Costruttore della classe. Utilizzato nella fase di analisi.
+	 * @param nClient il numero di client da usare per la simulazione
+	 * @param logi se true, crea i files di log
+	 * @param n lunghezza del batch
+	 * @param t tau (durata osservazione)
+	 * @param b2 se true esegue l'analisi del tempo di risposta Disk 
+	 */
+	public Simulatore(int nClient, boolean logi, int n, double t, boolean b2)
 	{
 		Simulatore.nClient = nClient;
-		Simulatore.stab = stab;
 		this.logging = logi;
 		tau=t;
 		this.b2=b2;
 		this.nOsser=n;
 		this.nOssAn=50;
-		log = new Log((int)System.currentTimeMillis(), logging);
-		
+		log = new Log((int)System.currentTimeMillis(), logging);		
 	}
 	
 	/**
-	 * Questo metodo inizializza i vari processi e variabii della simulazione
+	 * Metodo che inizializza i vari processi e variabili della simulazione
 	 */
 	public final void simInit(){
 		
 		passivate = new ArrayList<Processo>();
 		hold = new PriorityQueue<Processo>();
 		jobSis = new Job[nClient];
-		creaCentri();
-		
+		creaCentri();		
 	}
 	
 	/**
-	 * Questa funzione avvia la simulazione sia per la stabilizzazione
+	 * Metodo che avvia la simulazione sia per la stabilizzazione
 	 * che per l'analisi dei risultati
 	 */
 	public final void avvia()
@@ -336,8 +346,7 @@ public class Simulatore {
 				printJob.setJobClass(1);
 				pt.passivate();
 				this.passivate.add(pt);
-				printJob.setStampa(false);//job termina il suo ciclo
-				
+			
 				log.scrivi(printJob, pt, clock);			//stampa l'uscita del job dalla stampante
 				
 				//genero un nuovo job dal terminale passivo da cui quello terminato era stato generato.
@@ -403,7 +412,7 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Funzione che crea i vari centri dell'impianto
+	 * Metodo che crea i vari centri dell'impianto
 	 */	
 	public final void creaCentri()
 	{
@@ -417,7 +426,7 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questa funzione crea i client
+	 * Metodo che crea i client
 	 */	
 	public final void creaTerminali()
 	{
@@ -430,7 +439,7 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questa funzione crea gli host
+	 * Metodo che crea gli host
 	 */	
 	public final void creaHost()
 	{
@@ -443,7 +452,7 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questa funzione crea le stampanti
+	 * Metodo che crea le stampanti
 	 */
 	public final void creaStampanti()
 	{
@@ -456,7 +465,7 @@ public class Simulatore {
 	}
 		
 	/**
-	 * Questa funzione crea un job per ogni client
+	 * Metodo che crea un job per ogni client
 	 */	
 	public final void creaJob()
 	{
@@ -469,13 +478,12 @@ public class Simulatore {
 			this.hold.add(client[t]);			
 			
 			log.scrivi("Client "+t+" in hold");
-
 		}
 	}
 		
 	/**
-	 * Questa funzione restituisce il report delle osservazioni della simulazione
-	 * @return osservazione
+	 * Metodo che restituisce il report delle osservazioni della simulazione
+	 * @return osservazione il report delle osservazioni della simulazione
 	 */
 	
 	public final Osservazione getOsservazioni()
@@ -484,12 +492,11 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questo metodo serve per resettare lo stato del sistema ad ogni fine run
+	 * Metodo che serve per resettare lo stato del sistema ad ogni fine run
 	 * durante la stabilizzazione
 	 */	
 	public final void resetSim()
 	{
-
 		this.hold.clear();
 		this.passivate.clear();
 		this.creaCentri();
@@ -503,8 +510,8 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questa funzione restituisce true se è attiva la modalita di stabilizzazione
-	 * @return stab
+	 * Metodo per verificare se è attiva la modalita di stabilizzazione
+	 * @return stab true se è attiva la modalita di stabilizzazione
 	 */
 	public static boolean stab()
 	{
@@ -512,8 +519,8 @@ public class Simulatore {
 	}
 	
 	/**
-	 * Questa funzione restituisce il numero dei client della simulazione in esecuzione
-	 * @return nClient
+	 * Metodo che restituisce il numero dei client della simulazione in esecuzione
+	 * @return nClient numero dei client della simulazione
 	 */	
 	public static int getNClient()
 	{

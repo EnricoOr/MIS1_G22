@@ -78,7 +78,7 @@ public abstract class Processo implements Comparable<Processo> {
 	 * Metodo che implementa la primitiva HOLD
 	 * 
 	 * @param temp
-	 *            istante di clock in cui il Centro termina l'hold
+	 *            istante di clock in cui il centro termina l'hold
 	 */
 	public final void hold(double temp) {
 		hTime = Double.valueOf(temp);

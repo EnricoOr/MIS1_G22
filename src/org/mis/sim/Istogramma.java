@@ -49,6 +49,13 @@ import org.jfree.ui.TextAnchor;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
+/**
+ * Classe usata per disegnare un istogramma.
+ * @author Battista Daniele
+ * @author Dell'Anna Luca
+ * @author Orsini Enrico
+ *
+ */
 public class Istogramma extends ApplicationFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -61,11 +68,15 @@ public class Istogramma extends ApplicationFrame {
 	private final String yLabel;
 	public final boolean longCategory;
 
+	
 	/**
-	 * Creates a new demo instance.
-	 * 
-	 * @param title
-	 *            the frame title.
+	 * Costruttore della classe.
+	 * @param title titolo dell'istogramma
+	 * @param xLabel titolo dell'asse x
+	 * @param yLabel titolo dell'asse y
+	 * @param media media da disegnare sull'istogramma
+	 * @param columnMedia se true la media evidenzierà una barra dell'istogramma, altrimenti sarà una linea orizzontale
+	 * @param longCategory se true scriverà solo una etichetta ogni 5 per l'asse x
 	 */
 	public Istogramma(final String title, final String xLabel,
 			final String yLabel, double media, boolean columnMedia, boolean longCategory) {
@@ -77,7 +88,6 @@ public class Istogramma extends ApplicationFrame {
 		dataset = new DefaultCategoryDataset();
 		this.media = media;
 		this.columnMedia = columnMedia;
-		final CategoryDataset dataset = createDataset();
 		chart = createChart(dataset);
 		final ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new Dimension(1000, 540));
@@ -86,26 +96,19 @@ public class Istogramma extends ApplicationFrame {
 	}
 
 	/**
-	 * Returns a sample dataset.
-	 * 
-	 * @return The dataset.
+	 * Metodo che aggiunge un valore al dataset dell'istogramma
+	 * @param value valore da aggiungere al dataset
+	 * @param group gruppo al quale aggiungere il valore
+	 * @param category categoria alla quale aggiungere il valore
 	 */
-	private CategoryDataset createDataset() 
-	{
-		return dataset;
-	}
-
 	public void addvalues(int value, String group, String category) {
 		this.dataset.addValue(value, group, category);
 	}
 
 	/**
-	 * Creates a sample chart.
-	 * 
-	 * @param dataset
-	 *            the dataset.
-	 * 
-	 * @return The chart.
+	 * Metodo che crea l'istogramma
+	 * @param dataset il dataset da rappresentare
+	 * @return restituisce l'oggetto che rappresenta l'istogramma
 	 */
 	private JFreeChart createChart(final CategoryDataset dataset) {
 		// create the chart...
@@ -168,12 +171,9 @@ public class Istogramma extends ApplicationFrame {
 	}
 
 	/**
-	 * Exports a JFreeChart to a SVG file.
-	 * 
-	 * @param bounds
-	 *            the dimensions of the viewport
-	 * @throws IOException
-	 *             if writing the svgFile fails.
+	 * Metodo che esporta l'istogramma in formato SVG
+	 * @param width la larghezza dell'istogramma
+	 * @param height l'altezza dell'istogramma
 	 */
 	public void exportChartAsSVG(int width, int height) {
 		try {
@@ -206,18 +206,23 @@ public class Istogramma extends ApplicationFrame {
 	
 	
 	
+	/**
+	 * Classe che implementa un renderer modificato per le barre dell'istogramma. Usata per poter evidenziare una barra dell'istogramma.
+	 * @author Battista Daniele
+	 * @author Dell'Anna Luca
+	 * @author Orsini Enrico
+	 */
 	class CustomRenderer extends BarRenderer 
 	{
 		private static final long serialVersionUID = 1L;
-		/** The colors. */
 		private Paint color, hColor;
 		private int hColumn;
 
 		/**
-		 * Creates a new renderer.
-		 * 
-		 * @param colors
-		 *            the colors.
+		 * Costruttore per la classe.
+		 * @param color colore per la barra normale
+		 * @param hColor colore per la barra evidenziata
+		 * @param hColumn indice della barra da evidenziare
 		 */
 		public CustomRenderer(final Paint color, final Paint hColor, int hColumn) {
 			this.color = color;
@@ -226,15 +231,7 @@ public class Istogramma extends ApplicationFrame {
 		}
 
 		/**
-		 * Returns the paint for an item. Overrides the default behaviour
-		 * inherited from AbstractSeriesRenderer.
-		 * 
-		 * @param row
-		 *            the series.
-		 * @param column
-		 *            the category.
-		 * 
-		 * @return The item color.
+		 * Metodo che restituisce l'oggetto Paint per ogni barra: se la barra è quella da evidenziare, restituisce il colore opportuno.
 		 */
 		public Paint getItemPaint(final int row, final int column) {
 			if (column == hColumn)
@@ -246,6 +243,12 @@ public class Istogramma extends ApplicationFrame {
 
 	
 
+	/**
+	 * Classe che implementa un renderer modificato per le etichette dell'asse x. Usata per consentire di disegnare una etichetta su 5 in caso di un asse x molto denso.
+	 * @author Battista Daniele
+	 * @author Dell'Anna Luca
+	 * @author Orsini Enrico
+	 */
 	private class CustomCategoryAxis extends CategoryAxis 
 	{
 		private static final long serialVersionUID = 1L;
@@ -260,24 +263,7 @@ public class Istogramma extends ApplicationFrame {
 
 	
 		/**
-		 * Draws the category labels and returns the updated axis state.
-		 * 
-		 * @param g2
-		 *            the graphics device (<code>null</code> not permitted).
-		 * @param plotArea
-		 *            the plot area (<code>null</code> not permitted).
-		 * @param dataArea
-		 *            the area inside the axes (<code>null</code> not
-		 *            permitted).
-		 * @param edge
-		 *            the axis location (<code>null</code> not permitted).
-		 * @param state
-		 *            the axis state (<code>null</code> not permitted).
-		 * @param plotState
-		 *            collects information about the plot (<code>null</code>
-		 *            permitted).
-		 * 
-		 * @return The updated axis state (never <code>null</code>).
+		 * Metodo che disegna le etichette dell'asse x e restituisce lo stato aggiornato dell'asse.
 		 */
 		@SuppressWarnings("unchecked")
 		protected AxisState drawCategoryLabels(Graphics2D g2,

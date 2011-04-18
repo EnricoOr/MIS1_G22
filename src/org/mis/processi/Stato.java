@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.mis.processi;
 
 /**

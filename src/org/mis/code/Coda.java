@@ -26,7 +26,7 @@ public abstract class Coda {
 	}
 	
 	/**
-	 * Funziona la quale ritorna il nome della coda di un centro.
+	 * Funzione la quale ritorna il nome della coda di un centro.
 	 * @return nomeCoda
 	 */	
 	public String getNome(){
@@ -58,7 +58,7 @@ public abstract class Coda {
 	}
 	
 	/**
-	 * Funzione la quale rimuove tutti gli elementi dalla coda di un centro, sarà utile per
+	 * Funzione la quale rimuove tutti gli elementi dalla coda di un centro, usata per
 	 * resettare le code del sistema.
 	 */	
 	public final void resetCoda() {
@@ -66,8 +66,8 @@ public abstract class Coda {
 	}
 	
 	/**
-	 * Funzione astratta la quale estrae un job dalla coda in base alla disciplia in gioco, 
-	 * sarà necessario fae un override.
+	 * Funzione astratta la quale estrae un job dalla coda in base alla disciplina in gioco, 
+	 * sarà necessario fare un override.
 	 */	
 	public abstract Job pop();
 	

@@ -22,7 +22,7 @@ public class Cpu extends Processo {
 	private Job current;
 
 	/**
-	 * Costruttore della classe. I istanzia una cpu. La legge di distribuzione
+	 * Costruttore della classe. Istanzia una cpu. La legge di distribuzione
 	 * nel tempo è iperesponenziale con probabilità 0,6.
 	 */
 	public Cpu() {
@@ -34,11 +34,10 @@ public class Cpu extends Processo {
 	}
 
 	/**
-	 * Metodo che ritorna il tempo di servizio per il Job corrente. E' stato
-	 * effettuato l'override del metodo della superclasse Processo.
+	 * Metodo che ritorna il tempo di servizio per il Job corrente.
 	 * 
 	 * @return tempo di servizio per il Job corrente, con distribuzione
-	 *         iperesponeziale con e probabilità 0,6.
+	 *         iperesponeziale con probabilità 0,6.
 	 */
 	public double getTempoCentro(Job jobCorrente) {
 		this.current = jobCorrente;

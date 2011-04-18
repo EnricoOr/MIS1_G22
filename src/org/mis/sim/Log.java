@@ -12,33 +12,37 @@ import java.util.PriorityQueue;
 import org.mis.processi.Job;
 import org.mis.processi.Processo;
 
-
 /**
- * Si occupa della creazione del file di log sul disco e di registrare gli eventi che vengono eseguiti.
- * Si occupa anche della chiusura dei file quando richiesto.
+ * Classe che si occupa della creazione del file di log sul disco, della
+ * registrazione degli eventi che vengono eseguiti e della chiusura dei file
+ * quando richiesto.
+ * 
  * @author Daniele Battista
  * @author Luca Dell'Anna
  * @author Enrico Orsini
  */
 public class Log {
-	
+
 	private String pathName;
 	private PrintWriter fout;
 	private boolean verbose = false;
 	private boolean stab = false;
 	private boolean logR = false;
-	
+
 	/**
-	 * Crea la cartella log, se non esiste, e tutti i file per il log richiesti.
-	 * @param numero di file di log, uno per ogni client
-	 * @param per abilitare il verbose mode.
-	 * @see #creaDir()
+	 * Costruttore della classe. Crea la cartella log, se non esiste, e tutti i
+	 * file per il log richiesti.
+	 * 
+	 * @param n
+	 *            numero di file di log, uno per ogni client
+	 * @param verbose
+	 *            true per abilitare il verbose mode.
 	 */
 	public Log(int n, boolean verbose) {
 		this.verbose = verbose;
 		if (verbose) {
 			creaDir();
-			pathName = "./log/log"+n+".txt";
+			pathName = "./log/log" + n + ".txt";
 			File file = new File(pathName);
 			try {
 				file.createNewFile();
@@ -48,17 +52,21 @@ public class Log {
 			}
 		}
 	}
-	
+
 	/**
-	 * Crea la cartella log, se non esiste, e tutti i file per il log richiesti.
-	 * Inoltre aggiunge una stringa al nome del file per identificare il tipo di log.
-	 * @param numero del client
-	 * @param specifica il tipo di log 
+	 * Costruttore della classe. Crea la cartella log, se non esiste, e tutti i
+	 * file per il log richiesti. Inoltre aggiunge una stringa al nome del file
+	 * per identificare il tipo di log.
+	 * 
+	 * @param n
+	 *            numero del client
+	 * @param tipo
+	 *            specifica il tipo di log
 	 */
 	public Log(int n, String tipo) {
 		creaDir();
-		if(!Simulatore.stab()){
-			pathName = "./log/log"+tipo+n+".txt";
+		if (!Simulatore.stab()) {
+			pathName = "./log/log" + tipo + n + ".txt";
 			File file = new File(pathName);
 			logR = true;
 			try {
@@ -69,12 +77,24 @@ public class Log {
 			}
 		}
 	}
-	
+
+	/**
+	 * Costruttore della classe. Se in fase di stabilizzazione, crea la cartella
+	 * log, se non esiste, e tutti i file per il log richiesti, inoltre aggiunge
+	 * una stringa al nome del file per identificare il tipo di log.
+	 * 
+	 * @param n
+	 *            numero del client
+	 * @param tipo
+	 *            specifica il tipo di log
+	 * @param stab
+	 *            true se in stabilizzazione
+	 */
 	public Log(int n, String tipo, boolean stab) {
 		this.stab = stab;
 		if (stab) {
 			creaDir();
-			pathName = "./log/log"+tipo+n+".txt";
+			pathName = "./log/log" + tipo + n + ".txt";
 			File file = new File(pathName);
 			try {
 				file.createNewFile();
@@ -84,63 +104,69 @@ public class Log {
 			}
 		}
 	}
-	
+
 	/**
-	 * E' una funzione ausiliaria che crea la cartella log nel path di esecuzione se non esiste
-	 * gia'.
+	 * Metodo che crea la cartella log nel path di esecuzione se non esiste già.
 	 */
 	private void creaDir() {
 		File f = new File("./log/");
 		if (!f.exists())
 			f.mkdir();
 	}
-	
+
 	/**
-	 * Ritorna il percorso del file
+	 * Metodo che ritorna il percorso del file di log corrente
+	 * 
+	 * @return il percorso del file di log corrente
 	 */
 	public String getPathName() {
 		return pathName;
 	}
-	
+
 	/**
-	 * chiude il file posseduto dall'oggetto log.
+	 * Metodo che chiude il file posseduto dall'oggetto log.
 	 */
 	public void close() {
 		fout.close();
 	}
-	
+
 	/**
-	 * Imposta la precisione delle cifre decimali nel log alle sole prime cinque.
-	 * @param number
-	 * @return numero con massimo cinque tre decimali.
+	 * Metodo che imposta la precisione delle cifre decimali nel log alle sole
+	 * prime cinque.
+	 * 
+	 * @param n
+	 *            il numero da troncare
+	 * @return numero con massimo tre decimali.
 	 */
 	public double tronca(double n) {
-		return (Math.floor (n * 1000) / 1000);
+		return (Math.floor(n * 1000) / 1000);
 	}
-	
+
 	/**
-	 * Questa funzione restituisce l'istante attuale del tempo simulato in versione troncata
-	 * @return clock
+	 * Metodo che restituisce l'istante attuale del tempo simulato in versione
+	 * troncata
+	 * 
+	 * @return il clock troncato
 	 */
-	
-	public double tempo(SimTime t)
-	{
+	public double tempo(SimTime t) {
 		return tronca(t.getSimTime());
 	}
-	
+
 	/**
-	 * Questa funzione restituisce l'istante attuale del tempo simulato senza troncamenti
-	 * @return clock
+	 * Metodo che restituisce l'istante attuale del tempo simulato senza
+	 * troncamenti
+	 * 
+	 * @return il clock non troncato
 	 */
-	
-	public double tempo2(SimTime time)
-	{
+	public double tempo2(SimTime time) {
 		return time.getSimTime();
 	}
-	
+
 	/**
-	 * Scrive nel file il testo che gli viene passato
-	 * @param testo di log
+	 * Metodo che scrive nel file il testo che gli viene passato
+	 * 
+	 * @param testo
+	 *            di log
 	 */
 	public void scrivi(String log) {
 		if (verbose) {
@@ -149,111 +175,148 @@ public class Log {
 		if (stab) {
 			fout.println(log);
 		}
-		if(logR){
+		if (logR) {
 			fout.println(log);
 		}
-			
 	}
-	
+
 	/**
-	 * Scrive nel file il testo che gli viene passato
-	 * Usato per stampare la matrice di stabilizzazione
-	 * @param testo di log
-	 */
-	public void scriviMat(String log) {
-			fout.print(log);
-	}
-	
-	/**
-	 * Questa funzione stampa l'evento fine simulazione
+	 * Metodo che stampa l'evento fine simulazione
 	 */
 	public void scrivi(SimTime t) {
-			scrivi("{" + tempo(t) + "} La simulazione finisce.\n-->Tempo impiegato dalla simulazione: " + t.getSimDuration()/60000 + " minuti.");
+		scrivi("{"
+				+ tempo(t)
+				+ "} La simulazione finisce.\n-->Tempo impiegato dalla simulazione: "
+				+ t.getSimDuration() / 60000 + " minuti.");
 	}
-	
-	public void print_h(PriorityQueue<Processo> hold){
+
+	/**
+	 * Metodo che stampa la coda di Hold
+	 * 
+	 * @param hold
+	 *            la coda di Hold
+	 */
+	public void print_h(PriorityQueue<Processo> hold) {
 		ArrayList<Processo> holdtmp = new ArrayList<Processo>(hold);
 		Collections.sort(holdtmp);
 		scrivi("----lista oggetti in hold----");
-		for (int i=0; i<holdtmp.size();i++){
-			scrivi("-->"+holdtmp.get(i).getNome()+" htime:"+holdtmp.get(i).getTime());
+		for (int i = 0; i < holdtmp.size(); i++) {
+			scrivi("-->" + holdtmp.get(i).getNome() + " htime:"
+					+ holdtmp.get(i).getTime());
 		}
 		scrivi("----Fine lista oggetti in hold----");
 	}
-	
-	public void print_p(ArrayList<Processo> passivate){
-		
+
+	/**
+	 * Metodo che stampa la coda degli oggetti passivi
+	 * 
+	 * @param passivate
+	 *            la coda degli oggetti passivi
+	 */
+	public void print_p(ArrayList<Processo> passivate) {
+
 		scrivi("----lista oggetti passivi----");
-		for (int i=0; i<passivate.size();i++){
-			scrivi("-->"+passivate.get(i).getNome());
+		for (int i = 0; i < passivate.size(); i++) {
+			scrivi("-->" + passivate.get(i).getNome());
 		}
 		scrivi("----Fine lista oggetti passivi----");
-		
+
 	}
-	
+
 	/**
-	 * Questa funzione stampa il cambio di classe di un job
+	 * Metodo che stampa il cambio di classe di un job
+	 * 
 	 * @param job
+	 *            il job
 	 * @param classe
+	 *            la nuova classe
+	 * @param t
+	 *            il clock della simulazione
 	 */
 	public void scrivi(Job job, int classe, SimTime t) {
-		scrivi("{" + tempo(t) + "} Il " + job.getNome() + " diventa di classe " + classe + ".");
+		scrivi("{" + tempo(t) + "} Il " + job.getNome() + " diventa di classe "
+				+ classe + ".");
 	}
 
 	/**
-	 * Questa funzione stampa le uscite di un job da un centro
-	 * @param job attivo
-	 * @param centro d'uscita
+	 * Metodo che stampa l'uscita di un job da un centro
+	 * 
+	 * @param jobEseguito
+	 *            job attivo
+	 * @param centro
+	 *            centro d'uscita
+	 * @param t
+	 *            il clock della simulazione
 	 */
 	public void scrivi(Job jobEseguito, Processo centro, SimTime t) {
-		scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome() + " esce da <" +
-				centro.getNome() + ">.");
+		scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome() + " esce da <"
+				+ centro.getNome() + ">.");
 	}
 
 	/**
-	 * Questa funzione stampa gli eventi di servizio di job che un centro preleva dalla coda
-	 * @param Evento di servizio
+	 * Metodo che stampa gli eventi di servizio di job che un centro preleva
+	 * dalla coda
+	 * 
+	 * @param e
+	 *            il centro che serve il job
+	 * @param t
+	 *            il clock della simulazione
 	 */
 	public void scrivi(Processo e, SimTime t) {
-		scrivi("{" + tempo(t)+"} <" + e.getNome() +
-				"> preleva il " + e.getNome() + " dalla sua coda e lo serve" +
-				" fino a {" + tronca(e.getTime()) + "}.");
-	}
-	
-	/**
-	 * Questa funzione stampa gli accodamenti
-	 * @param jobEseguito
-	 * @param tempo
-	 * @param centro
-	 */
-	public void scrivi(Job jobEseguito, Processo prov, Processo centro, SimTime t) {
-		
-				scrivi("{" + tempo(t) + "} <" + centro.getNome() + "> occupato. Il "+
-						jobEseguito.getNome() + " da <"+prov.getNome() + "> viene messo in coda <"
-						+ centro.getNome() + ">.");
+		scrivi("{" + tempo(t) + "} <" + e.getNome() + "> preleva il "
+				+ e.getNome() + " dalla sua coda e lo serve" + " fino a {"
+				+ tronca(e.getTime()) + "}.");
 	}
 
 	/**
-	 * Questa funzione stampa l'uscita di un job.
+	 * Metodo che stampa gli accodamenti
+	 * 
 	 * @param jobEseguito
-	 * @param tempo
+	 *            il job attivo
+	 * @param prov
+	 *            il centro di provenienza
+	 * @param centro
+	 *            il centro di destinazione
+	 * @param t
+	 *            il clock della simulazione
+	 */
+	public void scrivi(Job jobEseguito, Processo prov, Processo centro,
+			SimTime t) {
+
+		scrivi("{" + tempo(t) + "} <" + centro.getNome() + "> occupato. Il "
+				+ jobEseguito.getNome() + " da <" + prov.getNome()
+				+ "> viene messo in coda <" + centro.getNome() + ">.");
+	}
+
+	/**
+	 * Metodo che stampa l'uscita di un job dal sistema.
+	 * 
+	 * @param jobEseguito
+	 *            il job attivo
+	 * @param t
+	 *            il clock della simulazione
 	 */
 	public void scrivi(Job jobEseguito, SimTime t) {
-			scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome() + " esce dal sistema"
-					+ " e torna da " + jobEseguito.getGeneratoDa().getNome() + ". Risposta = " +
-					tronca(tempo(t) - jobEseguito.getIngresso()));
+		scrivi("{" + tempo(t) + "} Il " + jobEseguito.getNome()
+				+ " esce dal sistema" + " e torna da "
+				+ jobEseguito.getGeneratoDa().getNome() + ". Risposta = "
+				+ tronca(tempo(t) - jobEseguito.getIngresso()));
 	}
 
 	/**
-	 * Scrive la media del throughput
+	 * Metodo che scrive la media del throughput
+	 * 
 	 * @param tempoInizio
+	 *            clock iniziale dell'osservazione
 	 * @param tempoFine
+	 *            clock finale dell'osservazione
 	 * @param mediaOsservazione
+	 *            media del throughput
 	 */
-	public void scrivi(double tempoInizio, double tempoFine, double mediaOsservazione) {
-		scrivi("{" + tronca(tempoFine) + "} La media del throughput tra {" +
-				tronca(tempoInizio)+"} e {" + tronca(tempoFine) + "} e' <" +
-				tronca(mediaOsservazione) + ">.");
+	public void scrivi(double tempoInizio, double tempoFine,
+			double mediaOsservazione) {
+		scrivi("{" + tronca(tempoFine) + "} La media del throughput tra {"
+				+ tronca(tempoInizio) + "} e {" + tronca(tempoFine) + "} e' <"
+				+ tronca(mediaOsservazione) + ">.");
 	}
-	
 }
