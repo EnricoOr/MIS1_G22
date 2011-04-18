@@ -85,7 +85,6 @@ public class Grafico extends ApplicationFrame {
     private JFreeChart createChart(final XYDataset dataset) {
         
         // create the chart...
-    	
         final JFreeChart chart = ChartFactory.createXYLineChart(
             title,	// titolo grafico
             xLabel,									// etichetta asse x
@@ -107,8 +106,9 @@ public class Grafico extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.white);
         
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-       // renderer.setSeriesLinesVisible(1, false);
-        renderer.setSeriesShapesVisible(1, true);
+        renderer.setSeriesLinesVisible(0, false);
+        renderer.setSeriesShapesVisible(0, true);
+        renderer.setSeriesShape(0, new Rectangle(2, 2));
         plot.setRenderer(renderer);
 
         // change the auto tick unit selection to integer units only...
